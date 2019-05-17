@@ -21,8 +21,8 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to ColApp!</Text>
-        <Text style={styles.instructions}>Proximamente... </Text>
+        <Text style={styles.welcome}>Welcome to ColApp! :-)</Text>
+        <Text style={styles.instructions}>Proximamente!... </Text>
         <Text style={styles.instructions}>{instructions}</Text>
       </View>
     );
@@ -34,17 +34,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'rgb(20,20,20)',
   },
   welcome: {
     fontSize: 25,
     textAlign: 'center',
     margin: 10,
-    color: 'red',
+    color: 'orange',
   },
   instructions: {
     textAlign: 'center',
-    color: '#333333',
+    color: 'white',
     marginBottom: 5,
   },
 });
