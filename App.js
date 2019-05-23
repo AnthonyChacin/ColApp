@@ -37,6 +37,7 @@ export default class App extends Component<Props> {
         /> 
         <Text style={styles.instructions}></Text>
         <Text style={styles.instructions}>Ingresa como:</Text>
+        <Text style={styles.instructions}></Text>
         <Button 
           style = {styles.button}
           title="conductor"
