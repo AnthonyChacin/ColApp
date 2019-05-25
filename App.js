@@ -24,12 +24,19 @@ export default class App extends React.Component {
 }
 
 const AppStackNavigator = createStackNavigator({
+
+//En la izquierda se muestra el nombre por el que llamaremos al componente cuando queramos ir a esa vista
+//Y en la derecha está el nombre verdadero del componente (Nombre de la clase como tal) 
+
   Registry: RegistryView,
   Pasajero: PasajeroView
+
 },{
-  //Aquí determinas qué vista será la primera en mostrarse
+  //Aquí determinas qué vista será la primera en mostrarse. Por defecto puse el login
+  // Fijense que uso el nombre que le definí arriba, cada vez que uses esos nombres, ponlos en comillas simples
   initialRouteName: 'Registry'
 })
+
 
 const AppContainer = createAppContainer(AppStackNavigator);
 
