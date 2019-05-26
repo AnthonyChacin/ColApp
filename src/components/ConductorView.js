@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
 import {Icon} from 'native-base'
 
-class PasajeroView extends React.Component {
+class ConductorView extends React.Component {
 
   static navigationOptions = {
     headerStyle: {
@@ -14,14 +14,14 @@ class PasajeroView extends React.Component {
       <TouchableOpacity
         style = {{marginLeft: 30, backgroundColor: "#E6880F", padding: 20}}
       >
-        <Text style = {{ color: "white", fontSize: 16}}>Pedir cola</Text>
+        <Text style = {{ color: "white", fontSize: 16}}>Aceptar cola</Text>
       </TouchableOpacity>
     ),
     headerRight: (
       <TouchableOpacity
         style = {{marginRight: 30, backgroundColor: "#E6880F", padding: 20}}
       >
-        <Text style = {{ color: "white", fontSize: 16}}>Colas pedidas</Text>
+        <Text style = {{ color: "white", fontSize: 16}}>Colas aceptadas</Text>
       </TouchableOpacity>
     )
   }
@@ -29,7 +29,7 @@ class PasajeroView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Pedir Cola</Text>   
+        <Text style={styles.text}>Aceptar Cola</Text>   
       </View>
     );
   }
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PasajeroView;
+export default ConductorView;
