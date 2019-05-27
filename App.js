@@ -11,6 +11,8 @@ import {AppRegistry, Platform, StyleSheet, Text, View} from 'react-native';
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import RegistryView from './src/components/RegistryView';
 import PasajeroView from './src/components/PasajeroView';
+import ConductorView from './src/components/ConductorView';
+
 
 export default class App extends React.Component {
 
@@ -27,7 +29,8 @@ const AppStackNavigator = createStackNavigator({
 //Y en la derecha está el nombre verdadero del componente (Nombre de la clase como tal) 
 
   Registry: RegistryView,
-  Pasajero: PasajeroView
+  Pasajero: PasajeroView,
+  Conductor: ConductorView
 
 },{
   

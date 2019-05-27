@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
 import {Icon} from 'native-base'
 
-class PasajeroView extends React.Component {
+class ConductorView extends React.Component {
 
   static navigationOptions = {
     headerStyle: {
@@ -14,29 +14,29 @@ class PasajeroView extends React.Component {
       <TouchableOpacity
         style = {{marginLeft: 30, backgroundColor: "#E6880F", padding: 20}}
       >
-        <Text style = {{ color: "white", fontSize: 16}}>Pedir cola</Text>
+        <Text style = {{ color: "white", fontSize: 16}}>Aceptar cola</Text>
       </TouchableOpacity>
     ),
     headerRight: (
       <TouchableOpacity
         style = {{marginRight: 30, backgroundColor: "#E6880F", padding: 20}}
       >
-        <Text style = {{ color: "white", fontSize: 16}}>Colas pedidas</Text>
+        <Text style = {{ color: "white", fontSize: 16}}>Colas aceptadas</Text>
       </TouchableOpacity>
     )
   }
 
   render() {
 
-    const PasajeroId = this.props.navigation.getParam('PasajeroId', 'No-Id');
-    const PasajeroEmail = this.props.navigation.getParam('PasajeroEmail', 'No-Email');
+    const ConductorId = this.props.navigation.getParam('ConductorId', 'No-Id');
+    const ConductorEmail = this.props.navigation.getParam('ConductorEmail', 'No-Email');
 
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Sección para Pedir Cola</Text>
-        <Text style={{fontSize:20, color:"black"}}> Hola pasajero! </Text>
-        <Text style={{fontSize:20, color:"black"}}> Email: {PasajeroEmail} </Text>
-        <Text style={{fontSize:20, color:"black"}}> Id: {PasajeroId} </Text>   
+        <Text style={styles.text}>Sección para Aceptar Colas</Text>
+        <Text style={{fontSize:20, color:"black"}}> Hola conductor! </Text>
+        <Text style={{fontSize:20, color:"black"}}> Email: {ConductorEmail} </Text>
+        <Text style={{fontSize:20, color:"black"}}> Id: {ConductorId} </Text>
       </View>
     );
   }
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PasajeroView;
+export default ConductorView;

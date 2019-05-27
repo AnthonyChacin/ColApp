@@ -6,8 +6,11 @@ import {
   Button, 
   StyleSheet, 
   Text, 
-  View
+  View,
+  TouchableOpacity
 } from 'react-native';
+
+import axios from 'axios';
 
 
 class RegistryView extends React.Component {
@@ -25,25 +28,54 @@ class RegistryView extends React.Component {
     })
   }
 
-  async submit(){
+  async submit(params){
     try{
-      let data = {}
-      data.email = this.state.email
+      switch(params){
+        case 1:
+          var urlP = 'http://10.0.2.2:8080/iniciarPasajero';
 
-      let response = fetch(`http://10.0.2.2:8080/iniciarPasajero`, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: `${data.email}`
-        })
+          let pasajero = await axios.post(urlP, {
+            email: this.state.email
+          })
 
-      });
+          //console.warn(pasajero)
+          
+          if(pasajero.data.success){
+            this.setState({
+              email: ''
+            })
+
+            //console.warn(pasajero.data.pasajero.id)
+            
+            this.props.navigation.navigate('Pasajero', {
+              PasajeroId: pasajero.data.pasajero.id,
+              PasajeroEmail: pasajero.data.pasajero.email
+            });
+          }
+          break;
+        case 2:
+          var urlC = 'http://10.0.2.2:8080/iniciarConductor';
+
+          let conductor = await axios.post(urlC, {
+            email: this.state.email
+          })
+
+          //console.warn(conductor)
+
+          if(conductor.data.success){
+            this.setState({
+              email: ''
+            })
+            this.props.navigation.navigate('Conductor', {
+              ConductorId: conductor.data.conductor.id,
+              ConductorEmail: conductor.data.conductor.email
+            });
+          }
+          break
+      }
      
     }catch(error){
-      console.error(error);
+      this.props.navigation.push('Registry');
     }
   }
 
@@ -57,6 +89,7 @@ class RegistryView extends React.Component {
       <View style={styles.container}>
 
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
+
         <Image
           source={{uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png'}}
           style={{width: 120, height: 58}}
@@ -64,27 +97,27 @@ class RegistryView extends React.Component {
         
         <TextInput
           placeholder = "Correo UNIMET aquí"
-          style={{borderColor: '#E6880F', borderWidth: 2, height: 50, width: 200, color: '#E6880F'}}
+          style={styles.textInput}
           editable =  {true}
-          placeholderTextColor = 'rgba(255,255,255,0.5)'
+          underlineColorAndroid = "transparent"
           onChangeText={(text) => this.updateValue(text)}
+          value={this.state.email}
+          keyboardType="email-address"
         /> 
-        <Text style={styles.instructions}></Text>
-        <Text style={styles.instructions}>Ingresa como:</Text>
-        <Button 
+        
+        <TouchableOpacity 
           style = {styles.button}
-          title="conductor"
-          color="#E6880F"
-          accessibilityLabel="Learn more about this orange button"
-        />
-        <Text style={styles.separador}></Text>
-        <Button 
-          onPress = {() => this.submit()}
+          onPress = {() => this.submit(2)}
+        >
+          <Text style = {{color: "white", fontSize: 20}}>Ingrese como conductor</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
           style = {styles.button}
-          title="pasajero"
-          color="#E6880F"
-          accessibilityLabel="Learn more about this orange button"
-        />
+          onPress = {() => this.submit(1)}
+        >
+          <Text style = {{color: "white", fontSize: 20}}>Ingrese como pasajero</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -100,23 +133,32 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(20,20,20)',
   },
   button: {
-    margin: 10,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: "#E6880F",
+    alignItems: "center",
+    color: "white",
+    alignSelf: "center",
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 25,
+    width: 300
+  },
+  textInput: {
+    alignSelf: 'center',
+    paddingHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 20,
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    width: 300
   },
   welcome: {
     fontSize: 25,
     textAlign: 'center',
-    margin: 10,
+    margin: 20,
     color: '#E6880F',
     fontFamily: 'Arial'
-  },
-  instructions: {
-    textAlign: 'center',
-    color: 'white',
-    marginBottom: 5,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: 'white',
-    marginBottom: 2,
-  },
+  }
 });
