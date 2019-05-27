@@ -27,9 +27,16 @@ class PasajeroView extends React.Component {
   }
 
   render() {
+
+    const PasajeroId = this.props.navigation.getParam('PasajeroId', 'No-Id');
+    const PasajeroEmail = this.props.navigation.getParam('PasajeroEmail', 'No-Email');
+
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Pedir Cola</Text>   
+        <Text style={styles.text}>Sección para Pedir Cola</Text>
+        <Text style={{fontSize:20, color:"black"}}> Hola pasajero! </Text>
+        <Text style={{fontSize:20, color:"black"}}> Email: {PasajeroEmail} </Text>
+        <Text style={{fontSize:20, color:"black"}}> Id: {PasajeroId} </Text>   
       </View>
     );
   }

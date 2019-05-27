@@ -38,11 +38,19 @@ class RegistryView extends React.Component {
             email: this.state.email
           })
 
+          //console.warn(pasajero)
+          
           if(pasajero.data.success){
             this.setState({
               email: ''
             })
-            this.props.navigation.push('Pasajero');
+
+            //console.warn(pasajero.data.pasajero.id)
+            
+            this.props.navigation.navigate('Pasajero', {
+              PasajeroId: pasajero.data.pasajero.id,
+              PasajeroEmail: pasajero.data.pasajero.email
+            });
           }
           break;
         case 2:
@@ -52,11 +60,16 @@ class RegistryView extends React.Component {
             email: this.state.email
           })
 
+          //console.warn(conductor)
+
           if(conductor.data.success){
             this.setState({
               email: ''
             })
-            this.props.navigation.push('Conductor');
+            this.props.navigation.navigate('Conductor', {
+              ConductorId: conductor.data.conductor.id,
+              ConductorEmail: conductor.data.conductor.email
+            });
           }
           break
       }
@@ -89,6 +102,7 @@ class RegistryView extends React.Component {
           underlineColorAndroid = "transparent"
           onChangeText={(text) => this.updateValue(text)}
           value={this.state.email}
+          keyboardType="email-address"
         /> 
         
         <TouchableOpacity 
@@ -119,20 +133,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(20,20,20)',
   },
   button: {
-    padding: 20,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: "#E6880F",
     alignItems: "center",
     color: "white",
-    alignSelf: "stretch",
+    alignSelf: "center",
     marginTop: 10,
     marginBottom: 10,
+    borderRadius: 25,
+    width: 300
   },
   textInput: {
-    alignSelf: 'stretch',
-    padding: 16,
+    alignSelf: 'center',
+    paddingHorizontal: 16,
     marginTop: 10,
     marginBottom: 20,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    width: 300
   },
   welcome: {
     fontSize: 25,

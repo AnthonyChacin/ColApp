@@ -24,17 +24,20 @@ controller.insertConductor = async function (data, callback) {
 
 		if(!!request){
 			console.log(data.email + ' ya existe');
-			result = 'ok'
+
+			result = {id: request._id, email: request.email}
+
 			callback(null, result)
 		}else{
 			let response = await Conductor.insertOne(data);
 			
 			if(response.insertedCount == 1 && !!response.insertedId){
-				result = 'ok'
+
+				result = {id: response.insertedId, email: data.email}
+				
 				callback(null, result)
 			}else{
-				result = 'error'
-				callback(null, result)
+				callback(null, null)
 			}
 		}
 

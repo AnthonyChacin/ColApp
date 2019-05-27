@@ -11,15 +11,15 @@ require('dotenv').config({ path: 'variables.env'});
 router.post('/iniciarPasajero', (req, res) => {
 	if(!!req.body){
 		pasajeroController.insertPasajero( req.body, (err, result) => {
-			if(err){
+			if(err || result == null){
 				res.json({
 		            success: false,
-		            msg: 'error'
+		            pasajero: 'error'
           		});
 			}else{
 				res.json({
-		            success: true,
-		            msg: 'ok'
+			        success: true,
+			        pasajero: result
           		});
 			}
 		})
@@ -32,15 +32,15 @@ router.post('/iniciarPasajero', (req, res) => {
 router.post('/iniciarConductor', (req, res) => {
 	if(!!req.body){
 		conductorController.insertConductor( req.body, (err, result) => {
-			if(err){
+			if(err || result == null){
 				res.json({
 		            success: false,
-		            msg: 'error'
+		            conductor: 'error'
           		});
 			}else{
 				res.json({
 		            success: true,
-		            msg: 'ok'
+		            conductor: result
           		});
 			}
 		})

@@ -27,9 +27,16 @@ class ConductorView extends React.Component {
   }
 
   render() {
+
+    const ConductorId = this.props.navigation.getParam('ConductorId', 'No-Id');
+    const ConductorEmail = this.props.navigation.getParam('ConductorEmail', 'No-Email');
+
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Aceptar Cola</Text>   
+        <Text style={styles.text}>Sección para Aceptar Colas</Text>
+        <Text style={{fontSize:20, color:"black"}}> Hola conductor! </Text>
+        <Text style={{fontSize:20, color:"black"}}> Email: {ConductorEmail} </Text>
+        <Text style={{fontSize:20, color:"black"}}> Id: {ConductorId} </Text>
       </View>
     );
   }
