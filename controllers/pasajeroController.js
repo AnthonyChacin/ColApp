@@ -17,6 +17,7 @@ Client.connect(err => {
 })
 
 
+//Insertar pasajero
 controller.insertPasajero = async function (data, callback) {
 	var result = ''
 	try{
@@ -44,6 +45,24 @@ controller.insertPasajero = async function (data, callback) {
 
 	}catch(error){
 		callback(error, null)
+	}
+}
+
+
+//Pedir cola
+
+controller.pedirCola = async function (data, callback) {
+	try{
+		let request = await Pasajero.insertOne(data);
+		if(request.insertedCount == 1 && !!request.insertedId){
+			callback(null)
+		}else{
+			var error = 'error'
+			callback(error)
+		}
+
+	}catch(error){
+		callback(error)
 	}
 }
 

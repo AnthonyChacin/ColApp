@@ -1,13 +1,16 @@
 require('dotenv').config({ path: 'variables.env'});
 const express = require('express');
+
 const bodyParser = require('body-parser');
 const path = require('path');
+
 const Client = require('./config/db');
 
 var DB;
 
 //Routes
 const index = require("./routes/index");
+const pasajero = require("./routes/pasajero");
 
 const app = express();
 
@@ -17,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Asignación de path a las rutas
 app.use('/', index);
+app.use('/pasajero/', pasajero);
 
 
 Client.connect(err => {
