@@ -13,14 +13,14 @@ router.post('/iniciarPasajero', (req, res) => {
 		pasajeroController.insertPasajero( req.body, (err, result) => {
 			if(err || result == null){
 				res.json({
-		            success: false,
-		            pasajero: 'error'
-          		});
+					success: false,
+					pasajero: 'error'
+				});
 			}else{
 				res.json({
-			        success: true,
-			        pasajero: result
-          		});
+					success: true,
+					pasajero: result
+				});
 			}
 		})
 	}else{
@@ -34,14 +34,14 @@ router.post('/iniciarConductor', (req, res) => {
 		conductorController.insertConductor( req.body, (err, result) => {
 			if(err || result == null){
 				res.json({
-		            success: false,
-		            conductor: 'error'
-          		});
+					success: false,
+					conductor: 'error'
+				});
 			}else{
 				res.json({
-		            success: true,
-		            conductor: result
-          		});
+					success: true,
+					conductor: result
+				});
 			}
 		})
 	}else{
