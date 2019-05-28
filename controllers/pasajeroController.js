@@ -48,22 +48,4 @@ controller.insertPasajero = async function (data, callback) {
 	}
 }
 
-
-//Pedir cola
-
-controller.pedirCola = async function (data, callback) {
-	try{
-		let request = await Pasajero.insertOne(data);
-		if(request.insertedCount == 1 && !!request.insertedId){
-			callback(null)
-		}else{
-			var error = 'error'
-			callback(error)
-		}
-
-	}catch(error){
-		callback(error)
-	}
-}
-
 module.exports = controller;
