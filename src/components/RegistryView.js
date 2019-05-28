@@ -60,8 +60,6 @@ class RegistryView extends React.Component {
             email: this.state.email
           })
 
-          //console.warn(conductor)
-
           if(conductor.data.success){
             this.setState({
               email: ''
@@ -101,7 +99,7 @@ class RegistryView extends React.Component {
           editable =  {true}
           underlineColorAndroid = "transparent"
           onChangeText={(text) => this.updateValue(text)}
-          value={this.state.email}
+          //value={this.state.email}
           keyboardType="email-address"
         /> 
         

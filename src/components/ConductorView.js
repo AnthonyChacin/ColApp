@@ -1,29 +1,31 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
-import {Icon} from 'native-base'
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { Icon } from 'native-base'
+import ListadoColas from './ListadoColas'
 
 class ConductorView extends React.Component {
 
   static navigationOptions = {
-    headerStyle: {
+    header: null,
+    /*headerStyle: {
       backgroundColor: 'rgb(20,20,20)',
       height: 80
     },
     headerTintColor: "white",
     headerLeft: (
       <TouchableOpacity
-        style = {{marginLeft: 30, backgroundColor: "#E6880F", padding: 20}}
+        style={{ marginLeft: 10, backgroundColor: "#E6880F", padding: 20 }}
       >
-        <Text style = {{ color: "white", fontSize: 16}}>Aceptar cola</Text>
+        <Text style={{ color: "white", fontSize: 16 }}>Colas Solicitadas</Text>
       </TouchableOpacity>
     ),
     headerRight: (
       <TouchableOpacity
-        style = {{marginRight: 30, backgroundColor: "#E6880F", padding: 20}}
+        style={{ marginRight: 10, backgroundColor: "#E6880F", padding: 20 }}
       >
-        <Text style = {{ color: "white", fontSize: 16}}>Colas aceptadas</Text>
+        <Text style={{ color: "white", fontSize: 16 }}>Colas aceptadas</Text>
       </TouchableOpacity>
-    )
+    )*/
   }
 
   render() {
@@ -32,12 +34,11 @@ class ConductorView extends React.Component {
     const ConductorEmail = this.props.navigation.getParam('ConductorEmail', 'No-Email');
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Sección para Aceptar Colas</Text>
-        <Text style={{fontSize:20, color:"black"}}> Hola conductor! </Text>
-        <Text style={{fontSize:20, color:"black"}}> Email: {ConductorEmail} </Text>
-        <Text style={{fontSize:20, color:"black"}}> Id: {ConductorId} </Text>
-      </View>
+      <ListadoColas />
+      // <Text style={styles.text}>Sección para Aceptar Colas</Text>
+      //<Text style={{ fontSize: 20, color: "black" }}> Hola conductor! </Text>
+      //<Text style={{ fontSize: 20, color: "black" }}> Email: {ConductorEmail} </Text>
+      //<Text style={{ fontSize: 20, color: "black" }}> Id: {ConductorId} </Text>
     );
   }
 }
