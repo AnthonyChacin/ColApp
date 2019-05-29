@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import {
-    AppRegistry,
-    Platform, 
-    Image,
-    TextInput,
-    Button,
     StyleSheet,
-    View,
     TouchableOpacity,
 } from 'react-native';
-import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body } from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Container, DeckSwiper, Card, CardItem, Text, Left, Body } from 'native-base';
+
 const colas = [
     {
         origen: 'UNIMET',
