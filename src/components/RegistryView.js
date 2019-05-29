@@ -87,7 +87,7 @@ class RegistryView extends React.Component {
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
 
         <Image
-          source={{uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png'}}
+          source={{uri: '../../assets/car-306182_960_720.png'}}
           style={{width: 120, height: 58}}
         />
         
