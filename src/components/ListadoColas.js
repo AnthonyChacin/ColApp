@@ -9,32 +9,35 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import axios from 'axios';
 
-const colas = [
-    {
-        origen: 'UNIMET',
-        destino: 'SANTA FE SUR',
-        tarifa: '2500 Bs',
-        hora: '17:30',
-        vehiculo: 'Carro',
-        cantidadP: 2,
-        banco: 'Provincial',
-        pasajero: 'Arantxa Garcia'
-    },
-    {
-        origen: 'UNIMET',
-        destino: 'HOYO DE LA PUERTA',
-        tarifa: '500 Bs',
-        hora: '17:30',
-        vehiculo: 'Moto',
-        cantidadP: 1,
-        banco: 'Mercantil',
-        pasajero: 'Anthony Chacin'
-    }
-];
+var colas = [];
+
+
+//const {colas} = this.props.navigation.
 
 class ListadoColas extends React.Component {
 
-    async componentWillMount(){
+    constructor() {
+        super();
+    }
+
+    async darCola(id){
+        try{
+
+            var url = 'http://10.0.2.2:8080/conductor/darCola'
+
+            let request = await axios.post(url, {
+                idCola: id,
+                idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
+            })
+            
+            console.warn(request)
+
+        }catch(error){
+            console.warn(error)
+        }
+    }
+
+    async componentDidMount(){
 
         try{
 
@@ -42,10 +45,8 @@ class ListadoColas extends React.Component {
 
             let response = await axios.get(url);
 
-            this.setState({
-                colas: response.data.data  
-            })
-
+            colas = response.data.data
+            console.warn(this.state.colas)
         }catch(error){
             console.warn(error)
         } 
@@ -62,7 +63,7 @@ class ListadoColas extends React.Component {
                                     <Left>
                                         <Body>
                                             <Text>{item.origen} - {item.destino}</Text>
-                                            <Text note>Pasajero: {item.pasajero} </Text>
+                                            <Text note>Pasajero: {item.p.email} </Text>
                                         </Body>
                                     </Left>
                                 </CardItem>
@@ -85,6 +86,7 @@ class ListadoColas extends React.Component {
                                 <CardItem>
                                     <TouchableOpacity 
                                         style = {styles.button}
+                                        onPress = {() => this.darCola(item._id)}
                                     >
                                         <Text style = {{color: "white", fontSize: 20}}>Dar Cola</Text>
                                     </TouchableOpacity>

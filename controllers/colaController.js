@@ -1,5 +1,6 @@
 require('dotenv').config({ path: 'variables.env'});
 const Client = require('../config/db');
+const ObjectID = require('mongodb').ObjectID;
 
 const controller = {};
 
@@ -20,8 +21,31 @@ Client.connect(err => {
 
 controller.pedirCola = async function (data, callback) {
 	try{
+		data.pasajero = new ObjectID(data.pasajero)
 		let request = await Cola.insertOne(data);
 		if(request.insertedCount == 1 && !!request.insertedId){
+			console.log(request)
+			callback(null)
+		}else{
+			console.log('error')
+			var error = 'error'
+			callback(error)
+		}
+
+	}catch(error){
+		callback(error)
+	}
+}
+
+controller.darCola = async function (data, callback) {
+	try{
+		data.idConductor = new ObjectID(data.idConductor)
+		data.idCola = new ObjectID(data.idCola)
+
+		let request = await Cola.updateOne({_id: data.idCola}, {$set: {conductor: data.idConductor, estado: "Aceptada"}});
+		console.log(request)
+
+		if(request.modifiedCount == 1){
 			console.log(request)
 			callback(null)
 		}else{
@@ -41,18 +65,38 @@ controller.getColasPedidas = async function (callback) {
 	try{
 
 		let colas = await Cola.aggregate([
-			{ $lookup:
-				{
+			{
+				$match: {estado: "Pedida"}
+			},{
+				$lookup: {
 					from: 'Pasajero',
 					localField: 'pasajero',
 					foreignField: '_id',
-					as: 'joinPasajero'
+					as: 'p'
+				}
+			},{
+				$unwind: '$p'
+			},{
+				$project: {
+					_id: 1,
+					origen: 1,
+		            destino: 1,
+		            tarifa: 1,
+		            banco: 1,
+		            hora: 1,
+		            cantPasajeros: 1,
+		            vehiculo: 1,
+		            estado: 1,
+		            'p._id': 1,
+		            'p.email': 1
 				}
 			}
-			]).toArray();
-		
+		]).toArray();
+			
+		console.log(colas)
+
 		if(!!colas){
-			console.log(colas[0].joinPasajero)
+			console.log(colas)
 		}else{
 			console.log('No hay Colas')
 		}

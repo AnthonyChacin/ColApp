@@ -25,6 +25,7 @@ class FormColaView extends React.Component {
             tarifa: '',
             banco: '',
             hora: new Date(),
+            vehiculo: '',
             cantPasajeros: ''
         }
     }
@@ -76,6 +77,7 @@ class FormColaView extends React.Component {
             banco: this.state.banco,
             hora: this.state.hora,
             cantPasajeros: this.state.cantPasajeros,
+            vehiculo: this.state.vehiculo,
             estado: "Pedida",
             pasajero: this.props.navigation.getParam('PasajeroId', 'No-Id')
           })
@@ -89,7 +91,8 @@ class FormColaView extends React.Component {
               tarifa: '',
               banco: '',
               hora: new Date(),
-              cantPasajeros: ''
+              cantPasajeros: '',
+              vehiculo: ''
             })
           }
  

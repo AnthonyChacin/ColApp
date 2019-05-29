@@ -24,7 +24,7 @@ class ConductorView extends React.Component {
           source={{ uri: 'https://png.pngtree.com/svg/20170502/91a8305b9c.png' }}
           style={styles.container}
         />
-        <ListadoColas />
+        <ListadoColas {...this.props}/>
       </Container>
     );
   }
