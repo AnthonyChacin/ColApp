@@ -17,7 +17,7 @@ class PasajeroView extends React.Component {
 
     return (
         <ScrollView>
-          <FormColaView />
+          <FormColaView {...this.props}/>
         </ScrollView>
     );
   }

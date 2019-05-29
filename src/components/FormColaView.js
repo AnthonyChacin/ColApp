@@ -66,57 +66,40 @@ class FormColaView extends React.Component {
         }
      }
  
-    /* async submit(params) {
+    async submit() {
          try {
-             switch (params) {
-                 case 1:
-                   //  var urlP = 'http://10.0.2.2:8080/iniciarPasajero';
+
+          var url = 'http://10.0.2.2:8080/pasajero/pedirCola';
  
-                     let pasajero = await axios.post(urlP, {
-                         email: this.state.email
-                     })
+          let cola = await axios.post(url, {
+            origen: this.state.origen,
+            destino: this.state.destino,
+            tarifa: this.state.tarifa,
+            banco: this.state.banco,
+            hora: this.state.hora,
+            cantPasajeros: this.state.cantPasajeros,
+            estado: "Pedida",
+            pasajero: this.props.navigation.getParam('PasajeroId', 'No-Id')
+          })
+
+          console.warn(cola)
  
-                     //console.warn(pasajero)
+          if (cola.data.success) {
+            this.setState({
+              origen: '',
+              destino: '',
+              tarifa: '',
+              banco: '',
+              hora: new Date(),
+              cantPasajeros: ''
+            })
+          }
  
-                     if (pasajero.data.success) {
-                         this.setState({
-                             email: ''
-                         })
- 
-                         //console.warn(pasajero.data.pasajero.id)
- 
-                         this.props.navigation.navigate('Pasajero', {
-                            // PasajeroId: pasajero.data.pasajero.id,
-                            // PasajeroEmail: pasajero.data.pasajero.email
-                         });
-                     }
-                     break;
-                 case 2:
-                     var urlC = 'http://10.0.2.2:8080/iniciarConductor';
- 
-                   //  let conductor = await axios.post(urlC, {
-                         email: this.state.email
-                     //})
- 
-                     //console.warn(conductor)
- 
-                     if (conductor.data.success) {
-                         this.setState({
-                             email: ''
-                         })
-                         this.props.navigation.navigate('Conductor', {
-                             ConductorId: conductor.data.conductor.id,
-                             ConductorEmail: conductor.data.conductor.email
-                         });
-                     }
-                     break
-             }
- 
-         } catch (error) {
-             this.props.navigation.push('Registry');
+         }catch (error) {
+            console.warn('Error al pedir la cola')
          }
      }
-*/
+
     static navigationOptions = {
         header: null
     }
@@ -162,11 +145,10 @@ class FormColaView extends React.Component {
                       value={this.state.banco}
                   />
                   <DatePicker
-                    style = {{width: 200}}
                     date = {this.state.hora}
-                    mode = 'date'
+                    mode = 'datetime'
                     placeholder = 'seleccione fecha y hora'
-                    fromat = "YYYY-MM-DD"
+                    format = "YYYY-MM-DD hh:mm:ss"
                     minDate = {new Date()}
                     confirmBtnText = "Confirm"
                     cancelBtnText = "Cancel"
@@ -203,7 +185,7 @@ class FormColaView extends React.Component {
                   </Picker>
                   <TouchableOpacity 
                     style = {styles.buttonSubmit}
-                    onPress = {() => this.submit(1)}
+                    onPress = {() => this.submit()}
                   >
                     <Text style = {{color: "white", fontSize: 20}}>Pedir Cola</Text>
                   </TouchableOpacity>
