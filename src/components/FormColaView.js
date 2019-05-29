@@ -21,51 +21,48 @@ class FormColaView extends React.Component {
     constructor() {
         super();
         this.state = {
-             origen: '',
-             destino: '',
-             tarifa: '',
-             banco: '',
-             hora: '',
-             cantPasajeros: ''
-         }
+          origen: '',
+          destino: '',
+          tarifa: '',
+          banco: '',
+          hora: '',
+          cantPasajeros: ''
+        }
     }
 
      updateValue(text, i) {
         switch(i){
             case 1:
-                this.setState({
-                    origen: text
-                })
-                break;
+              this.setState({
+                origen: text
+              })
+              break;
             case 2:
-                this.setState({
-                    destino: text
-                    })
-                    break;
+              this.setState({
+                destino: text
+              })
+              break;
             case 3:
-                this.setState({
-                    tarifa: text
-                    })
-                    break;
+              this.setState({
+                tarifa: text
+              })
+              break;
             case 4:
-                    this.setState({
-                    banco: text
-                    })
-                    break;
+              this.setState({
+                banco: text
+              })
+              break;
             case 5:
-                    this.setState({
-                    hora: text
-                    })
-                    break;
+              this.setState({
+                hora: text
+              })
+              break;
             case 6:
-                    this.setState({
-                    cantPasajeros: text
-                    })
-                    break;
-
-            
-        }
-         
+              this.setState({
+                cantPasajeros: text
+              })
+              break;     
+        }   
      }
  
     /* async submit(params) {
@@ -125,7 +122,6 @@ class FormColaView extends React.Component {
 
     render() {
         return (
-
               <View style={styles.container}>
   
                  <TextInput
@@ -162,7 +158,6 @@ class FormColaView extends React.Component {
                       underlineColorAndroid="transparent"
                       onChangeText={(text) => this.updateValue(text, 4)}
                       value={this.state.banco}
-                  //keyboardType="email-address"
                   />
                   <TextInput
                       placeholder="Hora"
@@ -170,7 +165,6 @@ class FormColaView extends React.Component {
                       editable={true}
                       underlineColorAndroid="transparent"
                       onChangeText={(text) => this.updateValue(text, 5)}
-                      //value={this.state.email}
                       keyboardType="numeric"
                   />
                   <TextInput
@@ -184,20 +178,13 @@ class FormColaView extends React.Component {
                   />
                   <Picker
                       selectedValue={this.state.vehiculo}
-                     // style={{backgroundColor: "#fff", height: 50, width: 100 }}
                       style={styles.Picker}
-                      onValueChange={(itemValue, itemIndex) =>
-                          this.setState({ vehiculo: itemValue })
-                      }>
+                      onValueChange={(itemValue, itemIndex) => this.setState({ vehiculo: itemValue })}
+                  >
                       <Picker.Item label="Moto" value="moto" />
                       <Picker.Item label="Carro" value="carro" />
                   </Picker>
-                 
-  
               </View>
-       
-                
-          
         );
     }
 }
