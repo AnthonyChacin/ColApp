@@ -17,6 +17,7 @@ Client.connect(err => {
 })
 
 
+//Insertar pasajero
 controller.insertPasajero = async function (data, callback) {
 	var result = ''
 	try{

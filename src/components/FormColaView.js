@@ -8,14 +8,12 @@ import {
     Text,
     View,
     TouchableOpacity,
-    Picker,
-    ScrollView,
-    TouchableHighlight
+    Picker
 } from 'react-native';
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+
+import DatePicker from 'react-native-datepicker';
 
 import axios from 'axios';
-
 
 class FormColaView extends React.Component {
 
@@ -26,100 +24,83 @@ class FormColaView extends React.Component {
             destino: '',
             tarifa: '',
             banco: '',
-            hora: '',
+            hora: new Date(),
+            vehiculo: '',
             cantPasajeros: ''
         }
     }
 
-    updateValue(text, i) {
+    updateValue(param, i) {
         switch (i) {
             case 1:
                 this.setState({
-                    origen: text
+                    origen: param
                 })
                 break;
             case 2:
                 this.setState({
-                    destino: text
+                    destino: param
                 })
                 break;
             case 3:
                 this.setState({
-                    tarifa: text
+                    tarifa: param
                 })
                 break;
             case 4:
                 this.setState({
-                    banco: text
+                    banco: param
                 })
                 break;
             case 5:
                 this.setState({
-                    hora: text
+                    hora: param
                 })
                 break;
             case 6:
                 this.setState({
-                    cantPasajeros: text
+                    cantPasajeros: param
                 })
                 break;
-
-
         }
+     }
+ 
+    async submit() {
+         try {
 
+          var url = 'http://10.0.2.2:8080/pasajero/pedirCola';
+ 
+          let cola = await axios.post(url, {
+            origen: this.state.origen,
+            destino: this.state.destino,
+            tarifa: this.state.tarifa,
+            banco: this.state.banco,
+            hora: this.state.hora,
+            cantPasajeros: this.state.cantPasajeros,
+            vehiculo: this.state.vehiculo,
+            estado: "Pedida",
+            pasajero: this.props.navigation.getParam('PasajeroId', 'No-Id')
+          })
+
+          console.warn(cola)
+ 
+          if (cola.data.success) {
+            this.setState({
+              origen: '',
+              destino: '',
+              tarifa: '',
+              banco: '',
+              hora: new Date(),
+              cantPasajeros: '',
+              vehiculo: ''
+            })
+          }
+ 
+         }catch (error) {
+            console.warn('Error al pedir la cola')
+         }
     }
 
-    /* async submit(params) {
-         try {
-             switch (params) {
-                 case 1:
-                   //  var urlP = 'http://10.0.2.2:8080/iniciarPasajero';
- 
-                     let pasajero = await axios.post(urlP, {
-                         email: this.state.email
-                     })
- 
-                     //console.warn(pasajero)
- 
-                     if (pasajero.data.success) {
-                         this.setState({
-                             email: ''
-                         })
- 
-                         //console.warn(pasajero.data.pasajero.id)
- 
-                         this.props.navigation.navigate('Pasajero', {
-                            // PasajeroId: pasajero.data.pasajero.id,
-                            // PasajeroEmail: pasajero.data.pasajero.email
-                         });
-                     }
-                     break;
-                 case 2:
-                     var urlC = 'http://10.0.2.2:8080/iniciarConductor';
- 
-                   //  let conductor = await axios.post(urlC, {
-                         email: this.state.email
-                     //})
- 
-                     //console.warn(conductor)
- 
-                     if (conductor.data.success) {
-                         this.setState({
-                             email: ''
-                         })
-                         this.props.navigation.navigate('Conductor', {
-                             ConductorId: conductor.data.conductor.id,
-                             ConductorEmail: conductor.data.conductor.email
-                         });
-                     }
-                     break
-             }
- 
-         } catch (error) {
-             this.props.navigation.push('Registry');
-         }
-     }
-*/
     static navigationOptions = {
         header: null
     }
@@ -130,7 +111,7 @@ class FormColaView extends React.Component {
             <View style={styles.container}>
 
                 <TextInput
-                    placeholder="Orígen"
+                    placeholder="Origen"
                     style={styles.textInput}
                     editable={true}
                     underlineColorAndroid="transparent"
@@ -163,16 +144,27 @@ class FormColaView extends React.Component {
                     underlineColorAndroid="transparent"
                     onChangeText={(text) => this.updateValue(text, 4)}
                     value={this.state.banco}
-                //keyboardType="email-address"
                 />
-                <TextInput
-                    placeholder="Hora"
-                    style={styles.textInput}
-                    editable={true}
-                    underlineColorAndroid="transparent"
-                    onChangeText={(text) => this.updateValue(text, 5)}
-                    //value={this.state.email}
-                    keyboardType="numeric"
+                <DatePicker
+                    date = {this.state.hora}
+                    mode = 'datetime'
+                    placeholder = 'seleccione fecha y hora'
+                    format = "YYYY-MM-DD hh:mm:ss"
+                    minDate = {new Date()}
+                    confirmBtnText = "Confirm"
+                    cancelBtnText = "Cancel"
+                    customStyles = {{
+                      dateIcon: {
+                        position: 'absolute',
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0
+                      },
+                      dateInput: {
+                        marginLeft: 36
+                      }
+                    }}
+                    onDateChange = {(date) => {this.updateValue(date, 5)}}
                 />
                 <TextInput
                     placeholder="Cantidad de Pasajeros"
@@ -183,10 +175,8 @@ class FormColaView extends React.Component {
                     value={this.state.cantPasajeros}
                     keyboardType="numeric"
                 />
-                <Text style={styles.title}>Tipo de vehículo:</Text>
                 <Picker
                     selectedValue={this.state.vehiculo}
-                    // style={{backgroundColor: "#fff", height: 50, width: 100 }}
                     style={styles.Picker}
                     onValueChange={(itemValue, itemIndex) =>
                         this.setState({ vehiculo: itemValue })
@@ -194,19 +184,13 @@ class FormColaView extends React.Component {
                     <Picker.Item label="Moto" value="moto" />
                     <Picker.Item label="Carro" value="carro" />
                 </Picker>
-
-                <TouchableHighlight
-                    style={styles.button}
-                    //onPress={() => this.submit(2)}
+                <TouchableOpacity
+                    style={styles.buttonSubmit}
+                    onPress={() => this.submit(1)}
                 >
-                    <Text style={{ color: "white", fontSize: 20 }}>Pedir Cola</Text>
-                </TouchableHighlight>
-
-
+                    <Text style={{ color: "white", fontSize: 20 }}>Solicitar</Text>
+                </TouchableOpacity>
             </View>
-
-
-
         );
     }
 }
@@ -221,6 +205,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgb(20,20,20)',
 
+    },
+    buttonSubmit: {
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: "#E6880F",
+        alignItems: "center",
+        color: "white",
+        alignSelf: "center",
+        marginTop: 10,
+        marginBottom: 10,
+        borderRadius: 25,
+        width: 300
     },
     button: {
         paddingHorizontal: 16,
