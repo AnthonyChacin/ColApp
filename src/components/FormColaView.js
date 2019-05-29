@@ -12,6 +12,8 @@ import {
     ScrollView
 } from 'react-native';
 
+import DatePicker from 'react-native-datepicker';
+
 import axios from 'axios';
 
 
@@ -24,41 +26,41 @@ class FormColaView extends React.Component {
              destino: '',
              tarifa: '',
              banco: '',
-             hora: '',
+             hora: new Date(),
              cantPasajeros: ''
          }
     }
 
-     updateValue(text, i) {
+     updateValue(param, i) {
         switch(i){
             case 1:
                 this.setState({
-                    origen: text
+                    origen: param
                 })
                 break;
             case 2:
                 this.setState({
-                destino: text
+                destino: param
                 })
                 break;
             case 3:
                 this.setState({
-                  tarifa: text
+                  tarifa: param
                 })
                 break;
             case 4:
                 this.setState({
-                  banco: text
+                  banco: param
                 })
                 break;
             case 5:
                 this.setState({
-                  hora: text
+                  hora: param
                 })
                 break;
             case 6:
                 this.setState({
-                  cantPasajeros: text
+                  cantPasajeros: param
                 })
                 break;
         }
@@ -159,13 +161,27 @@ class FormColaView extends React.Component {
                       onChangeText={(text) => this.updateValue(text, 4)}
                       value={this.state.banco}
                   />
-                  <TextInput
-                      placeholder="Hora"
-                      style={styles.textInput}
-                      editable={true}
-                      underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateValue(text, 5)}
-                      keyboardType="numeric"
+                  <DatePicker
+                    style = {{width: 200}}
+                    date = {this.state.hora}
+                    mode = 'date'
+                    placeholder = 'seleccione fecha y hora'
+                    fromat = "YYYY-MM-DD"
+                    minDate = {new Date()}
+                    confirmBtnText = "Confirm"
+                    cancelBtnText = "Cancel"
+                    customStyles = {{
+                      dateIcon: {
+                        position: 'absolute',
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0
+                      },
+                      dateInput: {
+                        marginLeft: 36
+                      }
+                    }}
+                    onDateChange = {(date) => {this.updateValue(date, 5)}}
                   />
                   <TextInput
                       placeholder="Cantidad de Pasajeros"
@@ -185,12 +201,13 @@ class FormColaView extends React.Component {
                       <Picker.Item label="Moto" value="moto" />
                       <Picker.Item label="Carro" value="carro" />
                   </Picker>
-                 
-  
-              </View>
-       
-                
-          
+                  <TouchableOpacity 
+                    style = {styles.buttonSubmit}
+                    onPress = {() => this.submit(1)}
+                  >
+                    <Text style = {{color: "white", fontSize: 20}}>Pedir Cola</Text>
+                  </TouchableOpacity>
+              </View>   
         );
     }
 }
@@ -205,6 +222,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgb(20,20,20)',
        
+    },
+    buttonSubmit: {
+      paddingHorizontal: 16,
+      paddingTop: 10,
+      paddingBottom: 10,
+      backgroundColor: "#E6880F",
+      alignItems: "center",
+      color: "white",
+      alignSelf: "center",
+      marginTop: 10,
+      marginBottom: 10,
+      borderRadius: 25,
+      width: 300
     },
     button: {
         paddingHorizontal: 16,

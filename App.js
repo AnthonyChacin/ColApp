@@ -9,6 +9,7 @@
 import React, {Component} from 'react';
 import {AppRegistry, Platform, StyleSheet, Text, View} from 'react-native';
 import {createStackNavigator, createAppContainer} from 'react-navigation';
+
 import RegistryView from './src/components/RegistryView';
 import PasajeroView from './src/components/PasajeroView';
 import ConductorView from './src/components/ConductorView';

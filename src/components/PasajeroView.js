@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, View, Button, TouchableOpacity, ScrollView} from 'react-native';
 import {Icon} from 'native-base'
+
+import FormColaView from './FormColaView';
 
 class PasajeroView extends React.Component {
 
@@ -14,8 +16,9 @@ class PasajeroView extends React.Component {
     const PasajeroEmail = this.props.navigation.getParam('PasajeroEmail', 'No-Email');
 
     return (
-      <View style={styles.container}>  
-      </View>
+        <ScrollView>
+          <FormColaView />
+        </ScrollView>
     );
   }
 }
