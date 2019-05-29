@@ -3,9 +3,9 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import { Container, DeckSwiper, Card, CardItem, Text, Left, Body } from 'native-base';
+import { Container, Text } from 'native-base';
 
-class BotonColasSolicitadas extends React.Component {
+class HeaderPasajero extends React.Component {
 
     render() {
         return (
@@ -13,14 +13,14 @@ class BotonColasSolicitadas extends React.Component {
                 <TouchableOpacity
                     style={styles.button}
                 >
-                    <Text style={{ color: "white", fontSize: 20 }}>Colas Solicitadas</Text>
+                    <Text style={{ color: "white", fontSize: 20 }}>Solicita tu cola</Text>
                 </TouchableOpacity>
             </Container>
         )
     }
 }
 
-export default BotonColasSolicitadas;
+export default HeaderPasajero;
 
 const styles = StyleSheet.create({
     container: {
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#C4C9BB',
+        height: 30
     },
     button: {
         alignItems: "center",
@@ -39,4 +40,3 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(20,20,20)'
     }
 })
-
