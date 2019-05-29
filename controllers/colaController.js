@@ -35,4 +35,33 @@ controller.pedirCola = async function (data, callback) {
 	}
 }
 
+
+//Obtener colas pedidas
+controller.getColasPedidas = async function (callback) {
+	try{
+
+		let colas = await Cola.aggregate([
+			{ $lookup:
+				{
+					from: 'Pasajero',
+					localField: 'pasajero',
+					foreignField: '_id',
+					as: 'joinPasajero'
+				}
+			}
+			]).toArray();
+		
+		if(!!colas){
+			console.log(colas[0].joinPasajero)
+		}else{
+			console.log('No hay Colas')
+		}
+
+		callback(null, colas)
+
+	}catch(error){
+		callback(error, null)
+	}
+}
+
 module.exports = controller;
