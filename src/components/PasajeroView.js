@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-
 import {Icon} from 'native-base'
 
 class PasajeroView extends React.Component {
-
+  
   static navigationOptions = {
     header: null
   }
@@ -14,8 +14,10 @@ class PasajeroView extends React.Component {
     const PasajeroEmail = this.props.navigation.getParam('PasajeroEmail', 'No-Email');
 
     return (
+
       <View style={styles.container}>  
       </View>
+
     );
   }
 }

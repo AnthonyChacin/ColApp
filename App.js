@@ -12,7 +12,7 @@ import {createStackNavigator, createAppContainer} from 'react-navigation';
 import RegistryView from './src/components/RegistryView';
 import PasajeroView from './src/components/PasajeroView';
 import ConductorView from './src/components/ConductorView';
-
+import FormColaView from './src/components/FormColaView';
 
 export default class App extends React.Component {
 
@@ -30,7 +30,8 @@ const AppStackNavigator = createStackNavigator({
 
   Registry: RegistryView,
   Pasajero: PasajeroView,
-  Conductor: ConductorView
+  Conductor: ConductorView,
+  Cola: FormColaView
 
 },{
   
