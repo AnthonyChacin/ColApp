@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, TouchableOpacity, ScrollView} from 'react-native';
-import {Icon} from 'native-base'
-
+import React, { Component } from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import HeaderPasajero from './HeaderPasajero';
+import { Container } from 'native-base';
 import FormColaView from './FormColaView';
 
 class PasajeroView extends React.Component {
@@ -16,9 +16,12 @@ class PasajeroView extends React.Component {
     const PasajeroEmail = this.props.navigation.getParam('PasajeroEmail', 'No-Email');
 
     return (
+      <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
         <ScrollView>
+          <HeaderPasajero />
           <FormColaView {...this.props}/>
         </ScrollView>
+      </Container>
     );
   }
 }
