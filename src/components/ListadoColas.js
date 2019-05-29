@@ -23,7 +23,7 @@ class ListadoColas extends React.Component {
     async darCola(id){
         try{
 
-            var url = 'http://10.0.2.2:8080/conductor/darCola'
+            var url = 'https://colapp-is.herokuapp.com/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: id,
@@ -41,7 +41,7 @@ class ListadoColas extends React.Component {
 
         try{
 
-            var url = 'http://10.0.2.2:8080/conductor/verColasPedidas';
+            var url = 'https://colapp-is.herokuapp.com/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
