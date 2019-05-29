@@ -9,7 +9,8 @@ import {
     View,
     TouchableOpacity,
     Picker,
-    ScrollView
+    ScrollView,
+    TouchableHighlight
 } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 
@@ -21,17 +22,17 @@ class FormColaView extends React.Component {
     constructor() {
         super();
         this.state = {
-             origen: '',
-             destino: '',
-             tarifa: '',
-             banco: '',
-             hora: '',
-             cantPasajeros: ''
-         }
+            origen: '',
+            destino: '',
+            tarifa: '',
+            banco: '',
+            hora: '',
+            cantPasajeros: ''
+        }
     }
 
-     updateValue(text, i) {
-        switch(i){
+    updateValue(text, i) {
+        switch (i) {
             case 1:
                 this.setState({
                     origen: text
@@ -40,34 +41,34 @@ class FormColaView extends React.Component {
             case 2:
                 this.setState({
                     destino: text
-                    })
-                    break;
+                })
+                break;
             case 3:
                 this.setState({
                     tarifa: text
-                    })
-                    break;
+                })
+                break;
             case 4:
-                    this.setState({
+                this.setState({
                     banco: text
-                    })
-                    break;
+                })
+                break;
             case 5:
-                    this.setState({
+                this.setState({
                     hora: text
-                    })
-                    break;
+                })
+                break;
             case 6:
-                    this.setState({
+                this.setState({
                     cantPasajeros: text
-                    })
-                    break;
+                })
+                break;
 
-            
+
         }
-         
-     }
- 
+
+    }
+
     /* async submit(params) {
          try {
              switch (params) {
@@ -126,78 +127,86 @@ class FormColaView extends React.Component {
     render() {
         return (
 
-              <View style={styles.container}>
-  
-                 <TextInput
-                      placeholder="Orígen"
-                      style={styles.textInput}
-                      editable={true}
-                      underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateValue(text, 1)}
-                      value={this.state.origen}
-            
-                  />
-                  <TextInput
-                      placeholder="Destino"
-                      style={styles.textInput}
-                      editable={true}
-                      underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateValue(text, 2)}
-                      value={this.state.destino}
-             
-                  />
-                  <TextInput
-                      placeholder="Tarifa"
-                      style={styles.textInput}
-                      editable={true}
-                      underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateValue(text, 3)}
-                      value={this.state.tarifa}
-                      keyboardType="numeric"
-                  />
-                  <TextInput
-                      placeholder="Banco"
-                      style={styles.textInput}
-                      editable={true}
-                      underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateValue(text, 4)}
-                      value={this.state.banco}
-                  //keyboardType="email-address"
-                  />
-                  <TextInput
-                      placeholder="Hora"
-                      style={styles.textInput}
-                      editable={true}
-                      underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateValue(text, 5)}
-                      //value={this.state.email}
-                      keyboardType="numeric"
-                  />
-                  <TextInput
-                      placeholder="Cantidad de Pasajeros"
-                      style={styles.textInput}
-                      editable={true}
-                      underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateValue(text, 6)}
-                      value={this.state.cantPasajeros}
-                      keyboardType="numeric"
-                  />
-                  <Picker
-                      selectedValue={this.state.vehiculo}
-                     // style={{backgroundColor: "#fff", height: 50, width: 100 }}
-                      style={styles.Picker}
-                      onValueChange={(itemValue, itemIndex) =>
-                          this.setState({ vehiculo: itemValue })
-                      }>
-                      <Picker.Item label="Moto" value="moto" />
-                      <Picker.Item label="Carro" value="carro" />
-                  </Picker>
-                 
-  
-              </View>
-       
-                
-          
+            <View style={styles.container}>
+
+                <TextInput
+                    placeholder="Orígen"
+                    style={styles.textInput}
+                    editable={true}
+                    underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.updateValue(text, 1)}
+                    value={this.state.origen}
+
+                />
+                <TextInput
+                    placeholder="Destino"
+                    style={styles.textInput}
+                    editable={true}
+                    underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.updateValue(text, 2)}
+                    value={this.state.destino}
+
+                />
+                <TextInput
+                    placeholder="Tarifa"
+                    style={styles.textInput}
+                    editable={true}
+                    underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.updateValue(text, 3)}
+                    value={this.state.tarifa}
+                    keyboardType="numeric"
+                />
+                <TextInput
+                    placeholder="Banco"
+                    style={styles.textInput}
+                    editable={true}
+                    underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.updateValue(text, 4)}
+                    value={this.state.banco}
+                //keyboardType="email-address"
+                />
+                <TextInput
+                    placeholder="Hora"
+                    style={styles.textInput}
+                    editable={true}
+                    underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.updateValue(text, 5)}
+                    //value={this.state.email}
+                    keyboardType="numeric"
+                />
+                <TextInput
+                    placeholder="Cantidad de Pasajeros"
+                    style={styles.textInput}
+                    editable={true}
+                    underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.updateValue(text, 6)}
+                    value={this.state.cantPasajeros}
+                    keyboardType="numeric"
+                />
+                <Text style={styles.title}>Tipo de vehículo:</Text>
+                <Picker
+                    selectedValue={this.state.vehiculo}
+                    // style={{backgroundColor: "#fff", height: 50, width: 100 }}
+                    style={styles.Picker}
+                    onValueChange={(itemValue, itemIndex) =>
+                        this.setState({ vehiculo: itemValue })
+                    }>
+                    <Picker.Item label="Moto" value="moto" />
+                    <Picker.Item label="Carro" value="carro" />
+                </Picker>
+
+                <TouchableHighlight
+                    style={styles.button}
+                    //onPress={() => this.submit(2)}
+                >
+                    <Text style={{ color: "white", fontSize: 20 }}>Pedir Cola</Text>
+                </TouchableHighlight>
+
+
+            </View>
+
+
+
         );
     }
 }
@@ -205,13 +214,13 @@ class FormColaView extends React.Component {
 export default FormColaView;
 
 const styles = StyleSheet.create({
-    
+
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgb(20,20,20)',
-       
+
     },
     button: {
         paddingHorizontal: 16,
@@ -223,7 +232,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 10,
         marginBottom: 10,
-       // borderRadius: 25,
+        // borderRadius: 25,
         width: 300
     },
     textInput: {
@@ -232,10 +241,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
         backgroundColor: "#fff",
-       // borderRadius: 25,
+        // borderRadius: 25,
         width: 300
     },
-    Picker:{
+    Picker: {
         alignSelf: 'center',
         paddingHorizontal: 16,
         marginTop: 10,
@@ -243,12 +252,12 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderWidth: 1,
         overflow: 'hidden',
-       // borderRadius: 10,
+        // borderRadius: 10,
         width: 300
     },
-    welcome: {
-        fontSize: 25,
-        textAlign: 'center',
+    title: {
+        fontSize: 20,
+        textAlign: 'left',
         margin: 20,
         color: '#E6880F',
         fontFamily: 'Arial'
