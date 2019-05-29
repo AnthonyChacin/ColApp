@@ -1,27 +1,38 @@
 import React, { Component } from 'react';
 import {
-    AppRegistry,
-    Platform, 
-    Image,
-    TextInput,
-    Button,
     StyleSheet,
-    View,
     TouchableOpacity,
 } from 'react-native';
+
 import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import axios from 'axios';
 
-class ListadoColas extends React.Component {
-
-    constructor(){
-        super();
-        this.state = {
-          colas: []
-        }    
+const colas = [
+    {
+        origen: 'UNIMET',
+        destino: 'SANTA FE SUR',
+        tarifa: '2500 Bs',
+        hora: '17:30',
+        vehiculo: 'Carro',
+        cantidadP: 2,
+        banco: 'Provincial',
+        pasajero: 'Arantxa Garcia'
+    },
+    {
+        origen: 'UNIMET',
+        destino: 'HOYO DE LA PUERTA',
+        tarifa: '500 Bs',
+        hora: '17:30',
+        vehiculo: 'Moto',
+        cantidadP: 1,
+        banco: 'Mercantil',
+        pasajero: 'Anthony Chacin'
     }
+];
+
+class ListadoColas extends React.Component {
 
     async componentWillMount(){
 
@@ -41,7 +52,6 @@ class ListadoColas extends React.Component {
     }
 
     render() {
-            const {colas} = this.state;
             return (
                 <Container style={{backgroundColor: 'rgb(20,20,20)'}}>
                     <DeckSwiper
@@ -52,7 +62,7 @@ class ListadoColas extends React.Component {
                                     <Left>
                                         <Body>
                                             <Text>{item.origen} - {item.destino}</Text>
-                                            <Text note>Pasajero: {item.joinPasajero[0].email} </Text>
+                                            <Text note>Pasajero: {item.pasajero} </Text>
                                         </Body>
                                     </Left>
                                 </CardItem>

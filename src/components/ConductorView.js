@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
-import { Icon } from 'native-base'
-import ListadoColas from './ListadoColas'
+import { StyleSheet, View, Image } from 'react-native';
+import ListadoColas from './ListadoColas';
+import BotonColasSolicitadas from './BotonColasSolicitadas';
+import { Container } from 'native-base';
 
 class ConductorView extends React.Component {
 
@@ -15,22 +16,59 @@ class ConductorView extends React.Component {
     const ConductorEmail = this.props.navigation.getParam('ConductorEmail', 'No-Email');
 
     return (
-      <ListadoColas />
+      <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+        <View>
+          <BotonColasSolicitadas />
+        </View>
+        <Image
+          source={{ uri: 'https://png.pngtree.com/svg/20170502/91a8305b9c.png' }}
+          style={styles.container}
+        />
+        <ListadoColas />
+      </Container>
     );
   }
 }
+
+export default ConductorView;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(230,230,230)',
+    backgroundColor: '#82826C',
+    padding: 10,
+    marginTop: 30
   },
-  text: {
-    color: 'orange',
-    fontSize: 20
+  card: {
+    backgroundColor: '#82826C',
+    marginBottom: 10,
+    marginLeft: '2%',
+    width: '96%',
+    shadowColor: '#E6880F',
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    shadowOffset: {
+      width: 3,
+      height: 3
+    }
+  },
+  cardText: {
+    color: 'black',
+    padding: 10,
+    fontSize: 15
+  },
+  button: {
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: "#82826C",
+    alignItems: "center",
+    color: "white",
+    alignSelf: "center",
+    margin: 0,
+    borderRadius: 0,
+    width: 300
   }
-});
-
-export default ConductorView;
+})

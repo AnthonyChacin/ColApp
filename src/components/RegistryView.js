@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {
-  AppRegistry,
-  Platform,Image, 
+  Image, 
   TextInput, 
-  Button, 
   StyleSheet, 
   Text, 
   View,
