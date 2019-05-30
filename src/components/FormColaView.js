@@ -68,7 +68,7 @@ class FormColaView extends React.Component {
     async submit() {
          try {
 
-          var url = 'https://colapp-is.herokuapp.com/pasajero/pedirCola';
+          var url = 'http://10.0.2.2:8080/pasajero/pedirCola';
  
           let cola = await axios.post(url, {
             origen: this.state.origen,

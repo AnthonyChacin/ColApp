@@ -30,7 +30,7 @@ class RegistryView extends React.Component {
     try{
       switch(params){
         case 1:
-          var urlP = 'https://colapp-is.herokuapp.com/iniciarPasajero';
+          var urlP = 'http://10.0.2.2:8080/iniciarPasajero';
 
           let pasajero = await axios.post(urlP, {
             email: this.state.email
@@ -52,7 +52,7 @@ class RegistryView extends React.Component {
           }
           break;
         case 2:
-          var urlC = 'https://colapp-is.herokuapp.com/iniciarConductor';
+          var urlC = 'http://10.0.2.2:8080/iniciarConductor';
 
           let conductor = await axios.post(urlC, {
             email: this.state.email
@@ -87,7 +87,7 @@ class RegistryView extends React.Component {
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
 
         <Image
-          source={{uri: '../../assets/car-306182_960_720.png'}}
+          source={{uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png'}}
           style={{width: 120, height: 58}}
         />
         
