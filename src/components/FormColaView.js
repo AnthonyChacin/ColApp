@@ -68,7 +68,10 @@ class FormColaView extends React.Component {
     async submit() {
          try {
 
-          var url = 'http://10.0.2.2:8080/pasajero/pedirCola';
+          if(this.state.origen != "" && this.state.destino != "" && this.state.tarifa != "" &&
+              this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != ""){
+          
+          var url = 'http://192.168.137.26:8080/pasajero/pedirCola';
  
           let cola = await axios.post(url, {
             origen: this.state.origen,
@@ -95,6 +98,7 @@ class FormColaView extends React.Component {
               vehiculo: ''
             })
           }
+        }
  
          }catch (error) {
             console.warn('Error al pedir la cola')
@@ -112,6 +116,7 @@ class FormColaView extends React.Component {
 
                 <TextInput
                     placeholder="Origen"
+                    placeholderTextColor = 'rgba(20,20,20,0.3)'
                     style={styles.textInput}
                     editable={true}
                     underlineColorAndroid="transparent"
@@ -121,6 +126,7 @@ class FormColaView extends React.Component {
                 />
                 <TextInput
                     placeholder="Destino"
+                    placeholderTextColor = 'rgba(20,20,20,0.3)'
                     style={styles.textInput}
                     editable={true}
                     underlineColorAndroid="transparent"
@@ -130,6 +136,7 @@ class FormColaView extends React.Component {
                 />
                 <TextInput
                     placeholder="Tarifa"
+                    placeholderTextColor = 'rgba(20,20,20,0.3)'
                     style={styles.textInput}
                     editable={true}
                     underlineColorAndroid="transparent"
@@ -139,6 +146,7 @@ class FormColaView extends React.Component {
                 />
                 <TextInput
                     placeholder="Banco"
+                    placeholderTextColor = 'rgba(20,20,20,0.3)'
                     style={styles.textInput}
                     editable={true}
                     underlineColorAndroid="transparent"
@@ -168,6 +176,7 @@ class FormColaView extends React.Component {
                 />
                 <TextInput
                     placeholder="Cantidad de Pasajeros"
+                    placeholderTextColor = 'rgba(20,20,20,0.3)'
                     style={styles.textInput}
                     editable={true}
                     underlineColorAndroid="transparent"

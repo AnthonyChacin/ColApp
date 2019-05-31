@@ -10,6 +10,7 @@ class ConductorView extends React.Component {
     header: null,
   }
 
+
   render() {
 
     const ConductorId = this.props.navigation.getParam('ConductorId', 'No-Id');
