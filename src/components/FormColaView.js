@@ -64,6 +64,10 @@ class FormColaView extends React.Component {
                 break;
         }
      }
+
+    prueba(){
+        return true
+    }
  
     async submit() {
          try {
@@ -97,6 +101,7 @@ class FormColaView extends React.Component {
               cantPasajeros: '',
               vehiculo: ''
             })
+            
           }
         }
  
@@ -110,6 +115,7 @@ class FormColaView extends React.Component {
     }
 
     render() {
+        const {hora} = this.state
         return (
 
             <View style={styles.container}>
@@ -158,7 +164,7 @@ class FormColaView extends React.Component {
                     mode = 'datetime'
                     placeholder = 'seleccione fecha y hora'
                     format = "YYYY-MM-DD hh:mm:ss"
-                    minDate = {new Date()}
+                    minDate = {this.state.hora}
                     confirmBtnText = "Confirm"
                     cancelBtnText = "Cancel"
                     customStyles = {{

@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import ListadoColas from './ListadoColas';
 import BotonColasSolicitadas from './BotonColasSolicitadas';
-import { Container } from 'native-base';
+import { Container, Icon } from 'native-base';
+//import MenuConductor from '../components/MenuConductor';
 
 class ConductorView extends React.Component {
 
   static navigationOptions = {
     header: null,
+    drawerLabel: 'Conductor',
+    drawerIcon: ({tintColor}) => (
+      <Icon name = "car" />
+    )
   }
 
 
@@ -18,14 +23,12 @@ class ConductorView extends React.Component {
 
     return (
       <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
-        <View>
-          <BotonColasSolicitadas />
-        </View>
+        <BotonColasSolicitadas />
         <Image
           source={{ uri: 'https://png.pngtree.com/svg/20170502/91a8305b9c.png' }}
-          style={styles.container}
+          style={styles.img}
         />
-        <ListadoColas {...this.props}/>
+        <ListadoColas {...this.props} />
       </Container>
     );
   }
@@ -41,6 +44,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#82826C',
     padding: 10,
     marginTop: 30
+  },
+  img: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   card: {
     backgroundColor: '#82826C',

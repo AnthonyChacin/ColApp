@@ -2,26 +2,30 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
+    ActivityIndicator,
+    Image
 } from 'react-native';
 
-import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Text, Left, Body } from 'native-base';
+import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Content, View, Text, Left, Body } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import axios from 'axios';
 
-var colas = [];
-
-
-//const {colas} = this.props.navigation.
 
 class ListadoColas extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loaded: false,
+            colas: null
+        }
+
     }
 
-    async darCola(id){
-        try{
+    async darCola(id) {
+        try {
 
             var url = 'http://192.168.137.26:8080/conductor/darCola'
 
@@ -29,34 +33,49 @@ class ListadoColas extends React.Component {
                 idCola: id,
                 idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
             })
-            
+
             console.warn(request)
 
-        }catch(error){
+        } catch (error) {
             console.warn(error)
         }
     }
 
-    async componentDidMount(){
+    async componentDidMount() {
 
-        try{
+        try {
 
             var url = 'http://192.168.137.26:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
-            colas = response.data.data
-            console.warn(this.state.colas)
-        }catch(error){
-            console.warn(error)
-        } 
+            this.setState({
+                loaded: true,
+                colas: response.data.data
+            })
+
+            return response.data.data
+            //console.warn(response.data)
+
+        } catch (error) {
+            console.warn('Hola')
+        }
+
+        //console.warn(this.state.colas)
+
     }
 
     render() {
-            return (
-                <Container style={{backgroundColor: 'rgb(20,20,20)'}}>
+        return (
+            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+                {!this.state.loaded && (
+                    <View style={styles.container}>
+                        <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
+                    </View>
+                )}
+                {this.state.colas != null && (
                     <DeckSwiper
-                        dataSource={colas}
+                        dataSource={this.state.colas}
                         renderItem={item =>
                             <Card style={{ elevation: 3 }}>
                                 <CardItem>
@@ -69,34 +88,34 @@ class ListadoColas extends React.Component {
                                 </CardItem>
 
                                 <CardItem cardBody>
-                                    <Text note style={{marginLeft: 20}}>Tarifa: </Text>
+                                    <Text note style={{ marginLeft: 20 }}>Tarifa: </Text>
                                     <Text>{item.tarifa}</Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
-                                    <Text note style={{marginLeft: 20}}> Hora: </Text>
+                                    <Text note style={{ marginLeft: 20 }}> Hora: </Text>
                                     <Text>{item.hora}</Text>
                                 </CardItem>
-                        
+
                                 <CardItem cardBody>
-                                    <Text note style={{marginLeft: 20, marginBottom: 20}}>Vehiculo: </Text>
+                                    <Text note style={{ marginLeft: 20, marginBottom: 20 }}>Vehiculo: </Text>
                                     <Text style={{ marginBottom: 20 }}>{item.vehiculo}</Text>
                                 </CardItem>
-                        
+
                                 <CardItem>
-                                    <TouchableOpacity 
-                                        style = {styles.button}
-                                        onPress = {() => this.darCola(item._id)}
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() => this.darCola(item._id)}
                                     >
-                                        <Text style = {{color: "white", fontSize: 20}}>Dar Cola</Text>
+                                        <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
                                     </TouchableOpacity>
                                 </CardItem>
                             </Card>
                         }
                     />
-
-                </Container>
-            )
+                )}
+            </Container>
+        )
     }
 }
 
@@ -107,7 +126,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#C4C9BB',
+        //backgroundColor: '#C4C9BB',
     },
     card: {
         backgroundColor: '#82826C',
