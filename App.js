@@ -8,7 +8,7 @@
 
 import React, {Component} from 'react';
 import {AppRegistry, Platform, StyleSheet, Text, View} from 'react-native';
-import {createStackNavigator, createAppContainer} from 'react-navigation';
+import {createStackNavigator, createAppContainer, DrawerNavigator, createDrawerNavigator} from 'react-navigation';
 
 import RegistryView from './src/components/RegistryView';
 import PasajeroView from './src/components/PasajeroView';
@@ -24,7 +24,7 @@ export default class App extends React.Component {
   }
 }
 
-const AppStackNavigator = createStackNavigator({
+const AppDrawerNavigator = createDrawerNavigator({
 
 //En la izquierda se muestra el nombre por el que llamaremos al componente cuando queramos ir a esa vista
 //Y en la derecha está el nombre verdadero del componente (Nombre de la clase como tal) 
@@ -37,10 +37,13 @@ const AppStackNavigator = createStackNavigator({
   
   //Aquí determinas qué vista será la primera en mostrarse. Por defecto puse el login
   // Fijense que uso el nombre que le definí arriba, cada vez que uses esos nombres, ponlos en comillas simples
-  initialRouteName: 'Registry'
+  initialRouteName: 'Registry',
+  drawerPosition: 'right',
+  drawerWidth: 120
+
 })
 
-const AppContainer = createAppContainer(AppStackNavigator);
+const AppContainer = createAppContainer(AppDrawerNavigator);
 
 const styles = StyleSheet.create({
   container: {
@@ -50,3 +53,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(20,20,20)',
   }
 });
+
+/* export const Drawer = DrawerNavigator({
+    Registry: {
+      screen: RegistryView,
+      navigationOptions: {
+        drawer: {
+          label: 'Registry'
+        }
+      }
+    },
+    Pasajero: {
+      screen: PasajeroView,
+      navigationOptions: {
+        drawer: {
+          label: 'Pasajero'
+        }
+      }
+    },
+    Conductor: {
+      screen: ConductorView,
+      navigationOptions: {
+        drawer: {
+          label: 'Conductor'
+        }
+      }
+    }
+}) */

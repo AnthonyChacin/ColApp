@@ -4,4 +4,4 @@ const {DB_URI} = process.env;
 const uri = `${DB_URI}`;
 const Client = new MongoClient(uri, { useNewUrlParser: true });
 
-module.exports = Client;
+module.exports = Client; 

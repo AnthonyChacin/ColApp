@@ -3,19 +3,26 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import { Container, DeckSwiper, Card, CardItem, Text, Left, Body } from 'native-base';
+import { Container, DeckSwiper, Card, CardItem, Text, Left, Right, Body, Header, Icon, Title, Button } from 'native-base';
 
 class BotonColasSolicitadas extends React.Component {
 
     render() {
         return (
-            <Container style={styles.container}>
-                <TouchableOpacity
-                    style={styles.button}
-                >
-                    <Text style={{ color: "white", fontSize: 20 }}>Colas Solicitadas</Text>
-                </TouchableOpacity>
-            </Container>
+            <Header style={styles.header}>
+                <Left>
+                    <Button transparent
+                        onPress = { () => this.props.navigation.navigate("DrawerOpen") }
+                    >
+                        <Icon name='menu' />
+                    </Button>
+                </Left>
+                <Body>
+                    <Title style={styles.title}>
+                        Colas Solicitadas
+                    </Title>
+                </Body>
+            </Header>
         )
     }
 }
@@ -28,6 +35,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#C4C9BB',
+    },
+    header: {
+        backgroundColor: '#E6880F'
+    },
+    title: {
+        fontSize: 18
     },
     button: {
         alignItems: "center",

@@ -11,7 +11,7 @@ var Cola;
 Client.connect(err => {
 
 	if(err){
-		console.log('Error, no se pudo establecer conexión');
+		console.log(err);
 	}
 
 	Cola = Client.db(`${process.env.DB_NAME}`).collection('Cola');

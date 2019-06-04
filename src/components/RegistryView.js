@@ -10,7 +10,6 @@ import {
 
 import axios from 'axios';
 
-
 class RegistryView extends React.Component {
 
   constructor(){
@@ -27,47 +26,51 @@ class RegistryView extends React.Component {
   }
 
   async submit(params){
+
     try{
-      switch(params){
-        case 1:
-          var urlP = 'http://192.168.137.1:8080/iniciarPasajero';
+      if(this.state.email != ""){
+        switch(params){
+          case 1:
 
-          let pasajero = await axios.post(urlP, {
-            email: this.state.email
-          })
+            var urlP = `http://192.168.137.26:8080/iniciarPasajero`;
 
-          //console.warn(pasajero)
-          
-          if(pasajero.data.success){
-            this.setState({
-              email: ''
+            let pasajero = await axios.post(urlP, {
+              email: this.state.email
             })
-
-            //console.warn(pasajero.data.pasajero.id)
+           
+            //console.warn(pasajero)
             
-            this.props.navigation.navigate('Pasajero', {
-              PasajeroId: pasajero.data.pasajero.id,
-              PasajeroEmail: pasajero.data.pasajero.email
-            });
-          }
-          break;
-        case 2:
-          var urlC = 'http://192.168.137.1:8080/iniciarConductor';
+            if(pasajero.data.success){
+              this.setState({
+                email: ''
+              })
 
-          let conductor = await axios.post(urlC, {
-            email: this.state.email
-          })
+              //console.warn(pasajero.data.pasajero.id)
+              
+              this.props.navigation.navigate('Pasajero', {
+                PasajeroId: pasajero.data.pasajero.id,
+                PasajeroEmail: pasajero.data.pasajero.email
+              });
+            }
+            break;
+          case 2:
+            var urlC = 'http://192.168.137.26:8080/iniciarConductor';
 
-          if(conductor.data.success){
-            this.setState({
-              email: ''
+            let conductor = await axios.post(urlC, {
+              email: this.state.email
             })
-            this.props.navigation.navigate('Conductor', {
-              ConductorId: conductor.data.conductor.id,
-              ConductorEmail: conductor.data.conductor.email
-            });
-          }
-          break
+
+            if(conductor.data.success){
+              this.setState({
+                email: ''
+              })
+              this.props.navigation.navigate('Conductor', {
+                ConductorId: conductor.data.conductor.id,
+                ConductorEmail: conductor.data.conductor.email
+              });
+            }
+            break
+        }
       }
      
     }catch(error){
@@ -87,17 +90,17 @@ class RegistryView extends React.Component {
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
 
         <Image
-          source={{uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png'}}
+          source={{uri: '../assets/car-306182_960_720.png'}}
           style={{width: 120, height: 58}}
         />
         
         <TextInput
           placeholder = "Correo UNIMET aquí"
+          placeholderTextColor = 'rgba(20,20,20,0.3)'
           style={styles.textInput}
           editable =  {true}
           underlineColorAndroid = "transparent"
           onChangeText={(text) => this.updateValue(text)}
-          //value={this.state.email}
           keyboardType="email-address"
         /> 
         
