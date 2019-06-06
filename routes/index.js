@@ -8,6 +8,12 @@ require('dotenv').config({ path: 'variables.env'});
 
 //rutas establecidas para la ejecución de los métodos POST y GET
 
+router.get('/', (req, res) => {
+	res.json({
+		message: 'App deploy'
+	})
+})
+
 router.post('/iniciarPasajero', (req, res) => {
 	if(!!req.body){
 		pasajeroController.insertPasajero( req.body, (err, result) => {
