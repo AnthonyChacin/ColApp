@@ -18,6 +18,7 @@ class ListadoColas extends React.Component {
         super(props);
 
         this.state = {
+            updated: false,
             loaded: false,
             colas: null
         }
@@ -27,14 +28,28 @@ class ListadoColas extends React.Component {
     async darCola(id) {
         try {
 
-            var url = 'http://192.168.137.26:8080/conductor/darCola'
+            var url = 'http://192.168.137.1:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: id,
                 idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
             })
 
-            console.warn(request)
+            if(request.data.success){
+                try {
+                    var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
+        
+                    let response = await axios.get(url);
+        
+                    this.setState({
+                        loaded: true,
+                        colas: response.data.data
+                    })
+        
+                } catch (error) {
+                    console.warn('Hola')
+                }
+            }
 
         } catch (error) {
             console.warn(error)
@@ -45,7 +60,7 @@ class ListadoColas extends React.Component {
 
         try {
 
-            var url = 'http://192.168.137.26:8080/conductor/verColasPedidas';
+            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
