@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import ListadoColas from './ListadoColas';
 import BotonColasSolicitadas from './BotonColasSolicitadas';
 import { Container, Icon } from 'native-base';
@@ -10,8 +10,8 @@ class ConductorView extends React.Component {
   static navigationOptions = {
     header: null,
     drawerLabel: 'Conductor',
-    drawerIcon: ({tintColor}) => (
-      <Icon name = "car" />
+    drawerIcon: ({ tintColor }) => (
+      <Icon name="car" />
     )
   }
 
@@ -23,12 +23,15 @@ class ConductorView extends React.Component {
 
     return (
       <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+
         <BotonColasSolicitadas />
         <Image
           source={{ uri: 'https://png.pngtree.com/svg/20170502/91a8305b9c.png' }}
           style={styles.img}
         />
+
         <ListadoColas {...this.props} />
+
       </Container>
     );
   }
