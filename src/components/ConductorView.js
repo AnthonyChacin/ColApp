@@ -1,11 +1,54 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Dimensions, Text } from 'react-native';
 import ListadoColas from './ListadoColas';
 import BotonColasSolicitadas from './BotonColasSolicitadas';
 import { Container, Icon } from 'native-base';
+import MapView from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
 //import MenuConductor from '../components/MenuConductor';
 
+const { width, height } = Dimensions.get('window')
+const SCREEN_HEIGHT = height
+const SCREEN_WIDTH = width
+const ASPECT_RATIO = width / height
+const LATITUDE_DELTA = 0.0922
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
+
+
 class ConductorView extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      loaded: false,
+      initialPosition: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0,
+        longitudeDelta: 0
+      }
+    }
+  }
+
+  async componentDidMount() {
+    await Geolocation.getCurrentPosition((position) => {
+      var lat = parseFloat(position.coords.latitude)
+      var long = parseFloat(position.coords.longitude)
+
+      var initialRegion = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      }
+
+      this.setState({ loaded: true, initialPosition: initialRegion })
+
+    }, (error) => alert(JSON.stringify(error)),
+      { enableHighAccuracy: true, timeout: 200000, maximumAge: 0 })
+
+  }
 
   static navigationOptions = {
     header: null,
@@ -15,21 +58,24 @@ class ConductorView extends React.Component {
     )
   }
 
-
   render() {
-
-    const ConductorId = this.props.navigation.getParam('ConductorId', 'No-Id');
-    const ConductorEmail = this.props.navigation.getParam('ConductorEmail', 'No-Email');
 
     return (
       <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
 
         <BotonColasSolicitadas />
-        <Image
+        {/*  <Image
           source={{ uri: 'https://png.pngtree.com/svg/20170502/91a8305b9c.png' }}
           style={styles.img}
-        />
+        /> */}
 
+        {this.state.loaded && (<View style={styles.container}>
+          <MapView style={styles.map}
+            region={this.state.initialPosition}>
+          </MapView>
+        </View>)}
+
+        {/* this.state.loaded && (<View><Text style={{color: 'white'}}>{JSON.stringify(this.state.initialPosition)}</Text></View>) */}
         <ListadoColas {...this.props} />
 
       </Container>
@@ -44,9 +90,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#82826C',
-    padding: 10,
-    marginTop: 30
+    /* backgroundColor: '#82826C' */
+  },
+  map: {
+    left: 0,
+    right: 0,
+    ...StyleSheet.absoluteFillObject,
   },
   img: {
     flex: 1,

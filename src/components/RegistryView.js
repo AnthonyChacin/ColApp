@@ -64,6 +64,7 @@ class RegistryView extends React.Component {
               this.setState({
                 email: ''
               })
+              
               this.props.navigation.navigate('Conductor', {
                 ConductorId: conductor.data.conductor.id,
                 ConductorEmail: conductor.data.conductor.email
