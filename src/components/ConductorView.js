@@ -27,6 +27,10 @@ class ConductorView extends React.Component {
         longitude: 0,
         latitudeDelta: 0,
         longitudeDelta: 0
+      },
+      initialMarker: {
+        latitude: 0,
+        longitude: 0
       }
     }
   }
@@ -43,7 +47,12 @@ class ConductorView extends React.Component {
         longitudeDelta: LONGITUDE_DELTA
       }
 
-      this.setState({ loaded: true, initialPosition: initialRegion })
+      var marker = {
+        latitude: lat,
+        longitude: long
+      }
+
+      this.setState({ loaded: true, initialPosition: initialRegion, initialMarker: marker })
 
     }, (error) => alert(JSON.stringify(error)),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 0 })
@@ -72,6 +81,9 @@ class ConductorView extends React.Component {
         {this.state.loaded && (<View style={styles.container}>
           <MapView style={styles.map}
             region={this.state.initialPosition}>
+            <MapView.Marker
+              coordinate={this.state.initialMarker}>
+            </MapView.Marker>
           </MapView>
         </View>)}
 
