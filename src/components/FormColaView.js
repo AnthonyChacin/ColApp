@@ -209,6 +209,7 @@ class FormColaView extends React.Component {
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{
+
                                 dateIcon: {
                                     position: 'absolute',
                                     left: 0,
@@ -216,7 +217,8 @@ class FormColaView extends React.Component {
                                     marginLeft: 0
                                 },
                                 dateInput: {
-                                    marginLeft: 36
+                                    marginLeft: 36,
+                                    color: "white",
                                 }
                             }}
                             onDateChange={(date) => { this.updateValue(date, 5) }}
