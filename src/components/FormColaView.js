@@ -197,7 +197,7 @@ class FormColaView extends React.Component {
                             onValueChange={(itemValue, itemIndex) =>
                                 this.setState({ banco: itemValue })
                             }>
-                            <Picker.Item label="Banco" value="No especificó" />
+                            <Picker.Item label="Seleccione el banco..." value="No especificó" />
                             <Picker.Item label="Mercantil" value="Mercantil" />
                             <Picker.Item label="Provincial" value="Provincial" />
                             <Picker.Item label="Banco del Caribe" value="Banco del Caribe" />
@@ -244,7 +244,7 @@ class FormColaView extends React.Component {
                             onValueChange={(itemValue, itemIndex) =>
                                 this.setState({ vehiculo: itemValue })
                             }>
-                            <Picker.Item label="Vehiculo" value="No especificó" />
+                            <Picker.Item label="Seleccione tipo de vehículo..." value="No especificó" />
                             <Picker.Item label="Carro" value="Carro" />
                             <Picker.Item label="Moto" value="Moto" />
                         </Picker>
