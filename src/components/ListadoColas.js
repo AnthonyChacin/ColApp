@@ -3,19 +3,13 @@ import {
     StyleSheet,
     TouchableOpacity,
     ActivityIndicator,
-    Image,
     Dimensions
 } from 'react-native';
 import MapView from 'react-native-maps';
-import Geolocation from 'react-native-geolocation-service';
-import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Content, View, Text, Left, Body } from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Container, Header, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('window')
-const SCREEN_HEIGHT = height
-const SCREEN_WIDTH = width
-const ASPECT_RATIO = width / height
 const halfHeight = height / 2
 
 class ListadoColas extends React.Component {

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import {
-    AppRegistry,
-    Platform, Image,
     TextInput,
-    Button,
     StyleSheet,
     Text,
     View,
@@ -22,8 +19,6 @@ import Geolocation from 'react-native-geolocation-service';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 2
-const SCREEN_HEIGHT = height
-const SCREEN_WIDTH = width
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.0005
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
@@ -79,11 +74,6 @@ class FormColaView extends React.Component {
 
     updateValue(param, i) {
         switch (i) {
-            /*             case 1:
-                            this.setState({
-                                origen: param
-                            })
-                            break; */
             case 2:
                 this.setState({
                     destino: param
