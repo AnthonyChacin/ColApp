@@ -111,13 +111,18 @@ class ListadoColas extends React.Component {
                                 </CardItem>
 
                                 <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}> Hora: </Text>
+                                    <Text note style={{ marginLeft: 20 }}>Hora: </Text>
                                     <Text>{item.hora}</Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20, marginBottom: 20 }}>Vehículo: </Text>
-                                    <Text style={{ marginBottom: 20 }}>{item.vehiculo}</Text>
+                                    <Text note style={{ marginLeft: 20 }}>Vehículo: </Text>
+                                    <Text>{item.vehiculo}</Text>
+                                </CardItem>
+
+                                <CardItem cardBody>
+                                    <Text note style={{ marginLeft: 20, marginBottom: 20 }}>Banco: </Text>
+                                    <Text style={{ marginBottom: 20 }}>{item.banco}</Text>
                                 </CardItem>
 
                                 <CardItem style={{ justifyContent: 'center' }}>

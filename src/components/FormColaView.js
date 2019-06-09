@@ -191,20 +191,25 @@ class FormColaView extends React.Component {
                             value={this.state.tarifa}
                             keyboardType="numeric"
                         />
-                        <TextInput
-                            placeholder="Banco"
-                            placeholderTextColor='rgba(20,20,20,0.3)'
-                            style={styles.textInput}
-                            editable={true}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(text) => this.updateValue(text, 4)}
-                            value={this.state.banco}
-                        />
+                        <Picker
+                            selectedValue={this.state.banco}
+                            style={styles.Picker}
+                            onValueChange={(itemValue, itemIndex) =>
+                                this.setState({ banco: itemValue })
+                            }>
+                            <Picker.Item label="Banco" value="No especificó" />
+                            <Picker.Item label="Mercantil" value="Mercantil" />
+                            <Picker.Item label="Provincial" value="Provincial" />
+                            <Picker.Item label="Banco del Caribe" value="Banco del Caribe" />
+                            <Picker.Item label="Banesco" value="Banesco" />
+                            <Picker.Item label="Banco Fondo Común" value="Banco Fondo Común" />
+                            <Picker.Item label="Banco Venezolano de Crédito" value="Banco Venezolano de Crédito" />
+                        </Picker>
                         <DatePicker
                             date={this.state.hora}
                             mode='datetime'
                             placeholder='seleccione fecha y hora'
-                            format="YYYY-MM-DD hh:mm:ss"
+                            format="DD-MM-YYYY hh:mm"
                             minDate={this.state.hora}
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
@@ -239,8 +244,9 @@ class FormColaView extends React.Component {
                             onValueChange={(itemValue, itemIndex) =>
                                 this.setState({ vehiculo: itemValue })
                             }>
-                            <Picker.Item label="Moto" value="moto" />
-                            <Picker.Item label="Carro" value="carro" />
+                            <Picker.Item label="Vehiculo" value="No especificó" />
+                            <Picker.Item label="Carro" value="Carro" />
+                            <Picker.Item label="Moto" value="Moto" />
                         </Picker>
                         <TouchableOpacity
                             style={styles.buttonSubmit}
@@ -265,23 +271,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width,
         height: halfHeight
-        /* backgroundColor: '#82826C' */
+
     },
     map: {
         left: 0,
         right: 0,
         ...StyleSheet.absoluteFillObject,
         flex: 1,
-        /*  width,
-         height: halfHeight */
+
     },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgb(20,20,20)',
-        /*   width,
-          height */
+
 
     },
     buttonSubmit: {
@@ -307,7 +311,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 10,
         marginBottom: 10,
-        // borderRadius: 25,
         width: 300
     },
     textInput: {
@@ -316,7 +319,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
         backgroundColor: "#fff",
-        // borderRadius: 25,
         width: 300
     },
     Picker: {
@@ -327,7 +329,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderWidth: 1,
         overflow: 'hidden',
-        // borderRadius: 10,
         width: 300
     },
     welcome: {
