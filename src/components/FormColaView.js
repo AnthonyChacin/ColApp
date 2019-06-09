@@ -112,7 +112,7 @@ class FormColaView extends React.Component {
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
                 this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "") {
 
-                var url = 'http://192.168.0.100:8080/pasajero/pedirCola';
+                var url = 'http://192.168.137.35:8080/pasajero/pedirCola';
 
                 let cola = await axios.post(url, {
                     origen: this.state.initialPosition,
