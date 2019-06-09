@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-  Image, 
-  TextInput, 
-  StyleSheet, 
-  Text, 
+  Image,
+  TextInput,
+  StyleSheet,
+  Text,
   View,
   TouchableOpacity
 } from 'react-native';
@@ -12,24 +12,24 @@ import axios from 'axios';
 
 class RegistryView extends React.Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
       email: ''
     }
   }
 
-  updateValue(text){
+  updateValue(text) {
     this.setState({
       email: text
     })
   }
 
-  async submit(params){
+  async submit(params) {
 
-    try{
-      if(this.state.email != ""){
-        switch(params){
+    try {
+      if (this.state.email != "") {
+        switch (params) {
           case 1:
 
             var urlP = `http://192.168.0.100:8080/iniciarPasajero`;
@@ -37,16 +37,16 @@ class RegistryView extends React.Component {
             let pasajero = await axios.post(urlP, {
               email: this.state.email
             })
-           
+
             //console.warn(pasajero)
-            
-            if(pasajero.data.success){
+
+            if (pasajero.data.success) {
               this.setState({
                 email: ''
               })
 
               //console.warn(pasajero.data.pasajero.id)
-              
+
               this.props.navigation.navigate('Pasajero', {
                 PasajeroId: pasajero.data.pasajero.id,
                 PasajeroEmail: pasajero.data.pasajero.email
@@ -60,11 +60,11 @@ class RegistryView extends React.Component {
               email: this.state.email
             })
 
-            if(conductor.data.success){
+            if (conductor.data.success) {
               this.setState({
                 email: ''
               })
-              
+
               this.props.navigation.navigate('Conductor', {
                 ConductorId: conductor.data.conductor.id,
                 ConductorEmail: conductor.data.conductor.email
@@ -73,8 +73,8 @@ class RegistryView extends React.Component {
             break
         }
       }
-     
-    }catch(error){
+
+    } catch (error) {
       this.props.navigation.push('Registry');
     }
   }
@@ -91,32 +91,32 @@ class RegistryView extends React.Component {
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
 
         <Image
-          source={{uri: '../assets/car-306182_960_720.png'}}
-          style={{width: 120, height: 58}}
+          source={{ uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png' }}
+          style={{ width: 120, height: 58 }}
         />
-        
+
         <TextInput
-          placeholder = "Correo UNIMET aquí"
-          placeholderTextColor = 'rgba(20,20,20,0.3)'
+          placeholder="Correo UNIMET aquí"
+          placeholderTextColor='rgba(20,20,20,0.3)'
           style={styles.textInput}
-          editable =  {true}
-          underlineColorAndroid = "transparent"
+          editable={true}
+          underlineColorAndroid="transparent"
           onChangeText={(text) => this.updateValue(text)}
           keyboardType="email-address"
-        /> 
-        
-        <TouchableOpacity 
-          style = {styles.button}
-          onPress = {() => this.submit(2)}
+        />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.submit(2)}
         >
-          <Text style = {{color: "white", fontSize: 20}}>Ingrese como conductor</Text>
+          <Text style={{ color: "white", fontSize: 20 }}>Ingrese como conductor</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style = {styles.button}
-          onPress = {() => this.submit(1)}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.submit(1)}
         >
-          <Text style = {{color: "white", fontSize: 20}}>Ingrese como pasajero</Text>
+          <Text style={{ color: "white", fontSize: 20 }}>Ingrese como pasajero</Text>
         </TouchableOpacity>
       </View>
     );
