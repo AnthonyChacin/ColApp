@@ -10,7 +10,7 @@ import { Container, Header, DeckSwiper, Card, CardItem, View, Text, Left, Body }
 import axios from 'axios';
 
 const { width, height } = Dimensions.get('window')
-const halfHeight = height / 2
+const halfHeight = height / 3
 
 class ListadoColas extends React.Component {
 
@@ -67,7 +67,7 @@ class ListadoColas extends React.Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', width }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -116,11 +116,11 @@ class ListadoColas extends React.Component {
                                 </CardItem>
 
                                 <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20, marginBottom: 20 }}>Vehiculo: </Text>
+                                    <Text note style={{ marginLeft: 20, marginBottom: 20 }}>Vehículo: </Text>
                                     <Text style={{ marginBottom: 20 }}>{item.vehiculo}</Text>
                                 </CardItem>
 
-                                <CardItem>
+                                <CardItem style={{ justifyContent: 'center' }}>
                                     <TouchableOpacity
                                         style={styles.button}
                                         onPress={() => this.darCola(item._id)}
@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        //backgroundColor: '#C4C9BB',
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgb(20,20,20)'
     },
     map: {
         left: 0,
@@ -170,7 +171,8 @@ const styles = StyleSheet.create({
         shadowOffset: {
             width: 3,
             height: 3
-        }
+        },
+        ...StyleSheet.absoluteFillObject,
     },
     cardText: {
         color: 'black',
