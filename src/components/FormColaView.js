@@ -20,7 +20,7 @@ import Geolocation from 'react-native-geolocation-service';
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 2
 const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.0005
+const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
 class FormColaView extends React.Component {
@@ -168,6 +168,7 @@ class FormColaView extends React.Component {
                                 coordinate={this.state.initialMarker}>
                             </MapView.Marker>
                         </MapView>
+                        <Text>Tu ubicación actual</Text>
                     </View>
                     <View style={styles.container}>
                         <TextInput
