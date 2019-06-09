@@ -24,45 +24,8 @@ class ListadoColas extends React.Component {
 
     }
 
-    async darCola(id) {
-        try {
-
-            var url = 'http://192.168.137.35:8080/conductor/darCola'
-
-            let request = await axios.post(url, {
-                idCola: id,
-                idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
-            })
-
-            console.warn(request)
-
-        } catch (error) {
-            console.warn(error)
-        }
-    }
-
     async componentDidMount() {
-
-        try {
-
-            var url = 'http://192.168.137.35:8080/conductor/verColasPedidas';
-
-            let response = await axios.get(url);
-
-            this.setState({
-                loaded: true,
-                colas: response.data.data
-            })
-
-            return response.data.data
-            //console.warn(response.data)
-
-        } catch (error) {
-            console.warn('Hola')
-        }
-
-        //console.warn(this.state.colas)
-
+        await this._getColas();
     }
 
     render() {
@@ -139,6 +102,49 @@ class ListadoColas extends React.Component {
                 )}
             </Container>
         )
+    }
+
+    async _getColas(){
+        try {
+
+            var url = 'http://192.168.137.35:8080/conductor/verColasPedidas';
+
+            let response = await axios.get(url);
+
+            if(response.data.success){
+                this.setState({
+                    loaded: true,
+                    colas: response.data.data
+                })
+            }
+
+            return response.data.success
+
+        } catch (error) {
+            return false
+        }
+    }
+
+    
+    async darCola(id) {
+        try {
+
+            var url = 'http://192.168.137.35:8080/conductor/darCola'
+
+            let request = await axios.post(url, {
+                idCola: id,
+                idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
+            })
+
+            if(request.data.success){
+                this._getColas()
+            }
+
+            return request.data.success
+
+        } catch (error) {
+            return false
+        }
     }
 }
 
