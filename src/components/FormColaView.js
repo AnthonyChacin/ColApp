@@ -154,7 +154,7 @@ class FormColaView extends React.Component {
         const { hora } = this.state
         return (
 
-            <View /* style={styles.container} */>
+            <View>
                 {!this.state.loaded && (
                     <View style={styles.Container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />

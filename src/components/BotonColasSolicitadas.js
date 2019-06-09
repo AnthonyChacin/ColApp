@@ -12,7 +12,7 @@ class BotonColasSolicitadas extends React.Component {
             <Header style={styles.header}>
                 <Left>
                     <Button transparent
-                        onPress = { () => this.props.navigation.navigate("DrawerOpen") }
+                        onPress={() => this.props.navigation.navigate("DrawerOpen")}
                     >
                         <Icon name='menu' />
                     </Button>
@@ -34,13 +34,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#C4C9BB',
+        backgroundColor: '#E6880F',
     },
     header: {
         backgroundColor: '#E6880F'
     },
     title: {
-        fontSize: 18
+        fontSize: 18,
+        backgroundColor: '#E6880F'
     },
     button: {
         alignItems: "center",

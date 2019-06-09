@@ -107,7 +107,7 @@ class ListadoColas extends React.Component {
 
                                 <CardItem cardBody>
                                     <Text note style={{ marginLeft: 20 }}>Tarifa: </Text>
-                                    <Text>{item.tarifa}</Text>
+                                    <Text>{item.tarifa} Bs.</Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
