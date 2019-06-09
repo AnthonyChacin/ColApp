@@ -3,14 +3,20 @@ import {
     StyleSheet,
     TouchableOpacity,
     ActivityIndicator,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
-
+import MapView from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
 import { Container, Header, DeckSwiper, Card, CardItem, Thumbnail, Content, View, Text, Left, Body } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
 import axios from 'axios';
 
+const { width, height } = Dimensions.get('window')
+const SCREEN_HEIGHT = height
+const SCREEN_WIDTH = width
+const ASPECT_RATIO = width / height
+const halfHeight = height / 2
 
 class ListadoColas extends React.Component {
 
@@ -19,7 +25,7 @@ class ListadoColas extends React.Component {
 
         this.state = {
             loaded: false,
-            colas: null
+            colas: null,
         }
 
     }
@@ -79,9 +85,27 @@ class ListadoColas extends React.Component {
                         renderItem={item =>
                             <Card style={{ elevation: 3 }}>
                                 <CardItem>
+                                    <View style={styles.Container}>
+                                        <MapView style={styles.map}
+                                            region={{
+                                                latitude: item.origen.latitude,
+                                                longitude: item.origen.longitude,
+                                                latitudeDelta: item.origen.latitudeDelta,
+                                                longitudeDelta: item.origen.longitudeDelta
+                                            }}>
+                                            <MapView.Marker
+                                                coordinate={{
+                                                    latitude: item.origen.latitude,
+                                                    longitude: item.origen.longitude
+                                                }}>
+                                            </MapView.Marker>
+                                        </MapView>
+                                    </View>
+                                </CardItem>
+                                <CardItem>
                                     <Left>
                                         <Body>
-                                            <Text>{item.origen} - {item.destino}</Text>
+                                            <Text>Destino: {item.destino}</Text>
                                             <Text note>Pasajero: {item.p.email} </Text>
                                         </Body>
                                     </Left>
@@ -122,11 +146,24 @@ class ListadoColas extends React.Component {
 export default ListadoColas;
 
 const styles = StyleSheet.create({
+    Container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width,
+        height: halfHeight
+        /* backgroundColor: '#82826C' */
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         //backgroundColor: '#C4C9BB',
+    },
+    map: {
+        left: 0,
+        right: 0,
+        ...StyleSheet.absoluteFillObject,
     },
     card: {
         backgroundColor: '#82826C',

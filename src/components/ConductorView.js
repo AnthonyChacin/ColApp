@@ -20,7 +20,7 @@ class ConductorView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
+    /* this.state = {
       loaded: false,
       initialPosition: {
         latitude: 0,
@@ -32,10 +32,10 @@ class ConductorView extends React.Component {
         latitude: 0,
         longitude: 0
       }
-    }
+    } */
   }
 
-  async componentDidMount() {
+  /* async componentDidMount() {
     await Geolocation.getCurrentPosition((position) => {
       var lat = parseFloat(position.coords.latitude)
       var long = parseFloat(position.coords.longitude)
@@ -57,7 +57,7 @@ class ConductorView extends React.Component {
     }, (error) => alert(JSON.stringify(error)),
       { enableHighAccuracy: true, timeout: 200000, maximumAge: 0 })
 
-  }
+  } */
 
   static navigationOptions = {
     header: null,
@@ -78,14 +78,14 @@ class ConductorView extends React.Component {
           style={styles.img}
         /> */}
 
-        {this.state.loaded && (<View style={styles.container}>
+        {/*    {this.state.loaded && (<View style={styles.container}>
           <MapView style={styles.map}
             region={this.state.initialPosition}>
             <MapView.Marker
               coordinate={this.state.initialMarker}>
             </MapView.Marker>
           </MapView>
-        </View>)}
+        </View>)} */}
 
         {/* this.state.loaded && (<View><Text style={{color: 'white'}}>{JSON.stringify(this.state.initialPosition)}</Text></View>) */}
         <ListadoColas {...this.props} />
