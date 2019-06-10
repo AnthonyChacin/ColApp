@@ -27,7 +27,7 @@ class ListadoColas extends React.Component {
     async darCola(id) {
         try {
 
-            var url = 'http://192.168.0.100:8080/conductor/darCola'
+            var url = 'http://192.168.137.1:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: id,
@@ -45,7 +45,7 @@ class ListadoColas extends React.Component {
 
         try {
 
-            var url = 'http://192.168.0.100:8080/conductor/verColasPedidas';
+            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
