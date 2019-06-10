@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 
 import axios from 'axios';
@@ -38,14 +39,11 @@ class RegistryView extends React.Component {
               email: this.state.email
             })
 
-            //console.warn(pasajero)
-
             if (pasajero.data.success) {
+              
               this.setState({
                 email: ''
               })
-
-              //console.warn(pasajero.data.pasajero.id)
 
               this.props.navigation.navigate('Pasajero', {
                 PasajeroId: pasajero.data.pasajero.id,
@@ -103,6 +101,7 @@ class RegistryView extends React.Component {
           underlineColorAndroid="transparent"
           onChangeText={(text) => this.updateValue(text)}
           keyboardType="email-address"
+          value={this.state.email}
         />
 
         <TouchableOpacity

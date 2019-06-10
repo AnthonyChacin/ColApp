@@ -1,10 +1,13 @@
-require('dotenv').config({ path: 'variables.env'});
+require('dotenv').config({ path: 'variables.env' });
 const express = require('express');
 
 const bodyParser = require('body-parser');
 const path = require('path');
 
 const Client = require('./config/db');
+
+//real time
+const socketio = require('socket.io');
 
 var DB;
 
@@ -15,7 +18,7 @@ const conductor = require("./routes/conductor");
 
 const app = express();
 
-app.use(bodyParser.json({type: 'application/json'}));
+app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -27,17 +30,17 @@ app.use('/conductor/', conductor);
 
 Client.connect(err => {
 
-	if(err){
+	if (err) {
 		console.log(err);
 	}
 
 	DB = Client.db(`${process.env.DB_NAME}`);
 	const testCollection = DB.collection('testConnection');
-	
+
 	testCollection.find({}).toArray((err, result) => {
-		if(err){
+		if (err) {
 			console.log(err);
-		}else{
+		} else {
 			console.log(result[0].msg + ' to DataBase ' + process.env.DB_NAME);
 		}
 	})
@@ -45,6 +48,25 @@ Client.connect(err => {
 	app.set('port', process.env.PORT || 8080);
 
 	const server = app.listen(app.get('port'), () => {
-	    console.log(`Express running → PORT ${server.address().port} 🔥`);
+		console.log(`ColApp running → PORT ${server.address().port} 🔥`);
+	})
+
+	const io = socketio(server);
+
+	io.on('connection', socket => {
+
+		socket.on('Cola Pedida', (obj) => {
+			if(obj){
+				socket.broadcast.emit('Cola Pedida', true)
+			}
+		})
+
+		/* socket.on('Cola Dada', (obj) => {
+			if(obj){
+				io.emit
+			}
+		}) */
+
 	})
 })
+

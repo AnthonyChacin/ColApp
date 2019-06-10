@@ -8,6 +8,7 @@ import {
 import MapView from 'react-native-maps';
 import { Container, Header, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
+import SockectIOClient from 'socket.io-client';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -19,13 +20,22 @@ class ListadoColas extends React.Component {
 
         this.state = {
             loaded: false,
-            colas: null,
+            colas: null
         }
 
+        this.socket = SockectIOClient('http://192.168.137.35:8080');
     }
 
-    async componentDidMount() {
+    async componentWillMount() {
         await this._getColas();
+    }
+
+    async componentDidMount(){
+        this.socket.on('Cola Pedida', (obj) => {
+            if(obj){
+                this._getColas();
+            }
+        })
     }
 
     render() {

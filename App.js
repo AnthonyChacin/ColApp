@@ -14,10 +14,10 @@ import RegistryView from './src/components/RegistryView';
 import PasajeroView from './src/components/PasajeroView';
 import ConductorView from './src/components/ConductorView';
 
-
 export default class App extends React.Component {
 
   render() {
+    console.disableYellowBox = true;
     return (
       <AppContainer />
     )

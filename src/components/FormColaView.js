@@ -17,6 +17,8 @@ import axios from 'axios';
 import MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 
+import SockectIOClient from 'socket.io-client';
+
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 2
 const ASPECT_RATIO = width / height
@@ -46,6 +48,8 @@ class FormColaView extends React.Component {
             vehiculo: '',
             cantPasajeros: ''
         }
+
+        this.socket = SockectIOClient('http://192.168.137.35:8080');
     }
 
     async componentDidMount() {
@@ -126,9 +130,10 @@ class FormColaView extends React.Component {
                     pasajero: this.props.navigation.getParam('PasajeroId', 'No-Id')
                 })
 
-                console.warn(cola)
-
                 if (cola.data.success) {
+                    
+                    this.socket.emit('Cola Pedida', true);
+
                     this.setState({
                         destino: '',
                         tarifa: '',
@@ -142,7 +147,7 @@ class FormColaView extends React.Component {
             }
 
         } catch (error) {
-            console.warn('Error al pedir la cola')
+            console.log(error)
         }
     }
 

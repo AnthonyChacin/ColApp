@@ -16,7 +16,6 @@ router.get('/verColasPedidas', (req, res) => {
 				data: 'No-Data'
 			})
 		}else{
-			
 			res.json({
 				success: true,
 				data: colas
