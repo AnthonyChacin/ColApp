@@ -23,7 +23,7 @@ class ListadoColas extends React.Component {
             colas: null
         }
 
-        this.socket = SockectIOClient('http://192.168.137.35:8080');
+        this.socket = SockectIOClient('http://10.7.233.66:8080');
     }
 
     async componentWillMount() {
@@ -117,7 +117,7 @@ class ListadoColas extends React.Component {
     async _getColas(){
         try {
 
-            var url = 'http://192.168.137.35:8080/conductor/verColasPedidas';
+            var url = 'http://10.7.233.66:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
@@ -139,7 +139,7 @@ class ListadoColas extends React.Component {
     async darCola(id) {
         try {
 
-            var url = 'http://192.168.137.35:8080/conductor/darCola'
+            var url = 'http://10.7.233.66:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: id,
