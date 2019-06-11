@@ -1,4 +1,7 @@
-require('dotenv').config({ path: 'variables.env' });
+if(process.env.NODE_ENV !== 'production'){
+	require('dotenv').config({ path: 'variables.env' });
+}
+
 const express = require('express');
 
 const bodyParser = require('body-parser');
