@@ -42,7 +42,7 @@ export default class App extends React.Component {
         if (token.os == "android") {
           this.pubnub.push.addChannels(
             {
-              channels: ['ColasPedidas'],
+              channels: ['Notifications'],
               device: token.token,
               pushGateway: 'gcm' // apns, gcm, mpns
             });
@@ -65,12 +65,12 @@ export default class App extends React.Component {
 
   componentWillMount() {
     this.pubnub.publish(
-      {message: {Conductor: `1 ha aceptado tu solicitud`},channel: 'ColasPedidas'}
+      {"pn_gcm":{"data":{"message":"Hello World."}, "channel":"ColasPedidas"}}
     )
   }
 
   render() {
-    //console.disableYellowBox = true;
+    console.disableYellowBox = true;
     return (
       <AppContainer />
     )

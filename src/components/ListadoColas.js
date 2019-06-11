@@ -160,8 +160,8 @@ class ListadoColas extends React.Component {
             if (request.data.success) {
                 this._getColas().then(() => {
                     this.pubnub.publish(
-                        {message: {Conductor: `${this.props.navigation.getParam('ConductorEmail', 'No-Email')} ha aceptado tu solicitud`},channel: 'ColasPedidas'}
-                      )
+                        {"pn_gcm": { "data": {"message": `${this.props.navigation.getParam('ConductorEmail', 'No-Email')} ha aceptado tu solicitud`}, "channel": 'ColasPedidas'}}
+                    )
                 })
             }
 
