@@ -28,45 +28,45 @@ app.use('/pasajero/', pasajero);
 app.use('/conductor/', conductor);
 
 
-Client.connect(err => {
+Client.connect((err) => {
 
 	if (err) {
 		console.log(err);
-	}
+	} else {
+		DB = Client.db(`${process.env.DB_NAME}`);
+		const testCollection = DB.collection('testConnection');
 
-	DB = Client.db(`${process.env.DB_NAME}`);
-	const testCollection = DB.collection('testConnection');
-
-	testCollection.find({}).toArray((err, result) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log(result[0].msg + ' to DataBase ' + process.env.DB_NAME);
-		}
-	})
-
-	app.set('port', process.env.PORT || 8080);
-
-	const server = app.listen(app.get('port'), () => {
-		console.log(`ColApp running → PORT ${server.address().port} 🔥`);
-	})
-
-	const io = socketio(server);
-
-	io.on('connection', socket => {
-
-		socket.on('Cola Pedida', (obj) => {
-			if(obj){
-				socket.broadcast.emit('Cola Pedida', true)
+		testCollection.find({}).toArray((err, result) => {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log(result[0].msg + ' to DataBase ' + process.env.DB_NAME);
 			}
 		})
 
-		/* socket.on('Cola Dada', (obj) => {
-			if(obj){
-				io.emit
-			}
-		}) */
+		app.set('port', process.env.PORT || 8080);
 
-	})
+		const server = app.listen(app.get('port'), () => {
+			console.log(`ColApp running → PORT ${server.address().port} 🔥`);
+		})
+
+		const io = socketio(server);
+
+		io.on('connection', socket => {
+
+			socket.on('Cola Pedida', (obj) => {
+				if (obj) {
+					socket.broadcast.emit('Cola Pedida', true)
+				}
+			})
+
+			/* socket.on('Cola Dada', (obj) => {
+				if(obj){
+					io.emit
+				}
+			}) */
+
+		})
+	}
 })
 

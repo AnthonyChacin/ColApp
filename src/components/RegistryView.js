@@ -13,8 +13,8 @@ import axios from 'axios';
 
 class RegistryView extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: ''
     }
@@ -33,7 +33,7 @@ class RegistryView extends React.Component {
         switch (params) {
           case 1:
 
-            var urlP = `http://192.168.137.1:8080/iniciarPasajero`;
+            var urlP = `http://192.168.137.35:8080/iniciarPasajero`;
 
             let pasajero = await axios.post(urlP, {
               email: this.state.email
@@ -52,13 +52,14 @@ class RegistryView extends React.Component {
             }
             break;
           case 2:
-            var urlC = 'http://192.168.137.1:8080/iniciarConductor';
+            var urlC = 'http://192.168.137.35:8080/iniciarConductor';
 
             let conductor = await axios.post(urlC, {
               email: this.state.email
             })
 
             if (conductor.data.success) {
+
               this.setState({
                 email: ''
               })

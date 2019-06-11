@@ -9,6 +9,7 @@ import MapView from 'react-native-maps';
 import { Container, Header, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
+import PubNubReact from 'pubnub-react';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -18,21 +19,26 @@ class ListadoColas extends React.Component {
     constructor(props) {
         super(props);
 
+        this.pubnub = new PubNubReact({
+            publishKey: 'pub-c-d7d3663d-7ef8-4800-96e5-68eb8f5b4041',
+            subscribeKey: 'sub-c-336faa76-86ed-11e9-9f15-ba4fa582ffed'
+        });
+
         this.state = {
             loaded: false,
             colas: null
         }
 
-        this.socket = SockectIOClient('http://192.168.137.1:8080');
+        this.socket = SockectIOClient('http://192.168.137.35:8080');
     }
 
     async componentWillMount() {
         await this._getColas();
     }
 
-    async componentDidMount(){
+    async componentDidMount() {
         this.socket.on('Cola Pedida', (obj) => {
-            if(obj){
+            if (obj) {
                 this._getColas();
             }
         })
@@ -114,14 +120,14 @@ class ListadoColas extends React.Component {
         )
     }
 
-    async _getColas(){
+    async _getColas() {
         try {
 
-            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
+            var url = 'http://192.168.137.35:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
-            if(response.data.success){
+            if (response.data.success) {
                 this.setState({
                     loaded: true,
                     colas: response.data.data
@@ -135,19 +141,29 @@ class ListadoColas extends React.Component {
         }
     }
 
-    
+
     async darCola(id) {
         try {
 
-            var url = 'http://192.168.137.1:8080/conductor/darCola'
+            var url = 'http://192.168.137.35:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: id,
                 idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
             })
 
-            if(request.data.success){
-                this._getColas()
+            if (request.data.success) {
+                this._getColas().then(() => {
+                    console.warn('noti')
+                    this.pubnub.publish(
+                        {
+                            message: {
+                                Conductor: `${this.props.navigation.getParam('ConductorEmail', 'No-Email')} ha aceptado tu solicitud`
+                            },
+                            channel: 'Notifications'
+                        }
+                    )
+                })
             }
 
             return request.data.success
