@@ -131,7 +131,7 @@ class FormColaView extends React.Component {
                 })
 
                 if (cola.data.success) {
-                    
+
                     this.socket.emit('Cola Pedida', true);
 
                     this.setState({
@@ -155,8 +155,10 @@ class FormColaView extends React.Component {
         header: null
     }
 
+
     render() {
         const { hora } = this.state
+
         return (
 
             <View>
