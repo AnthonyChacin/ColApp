@@ -23,13 +23,18 @@ class ListadoColas extends React.Component {
             publishKey: 'pub-c-d7d3663d-7ef8-4800-96e5-68eb8f5b4041',
             subscribeKey: 'sub-c-336faa76-86ed-11e9-9f15-ba4fa582ffed'
         });
+        
+        this.pubnub.subscribe({
+            channels: ['ColasPedidas'],
+            withPresence: true
+        });
 
         this.state = {
             loaded: false,
             colas: null
         }
 
-        this.socket = SockectIOClient('http://192.168.137.35:8080');
+        this.socket = SockectIOClient('http://192.168.137.1:8080');
     }
 
     async componentWillMount() {
@@ -123,7 +128,7 @@ class ListadoColas extends React.Component {
     async _getColas() {
         try {
 
-            var url = 'http://192.168.137.35:8080/conductor/verColasPedidas';
+            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
@@ -145,7 +150,7 @@ class ListadoColas extends React.Component {
     async darCola(id) {
         try {
 
-            var url = 'http://192.168.137.35:8080/conductor/darCola'
+            var url = 'http://192.168.137.1:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: id,
@@ -154,15 +159,9 @@ class ListadoColas extends React.Component {
 
             if (request.data.success) {
                 this._getColas().then(() => {
-                    console.warn('noti')
                     this.pubnub.publish(
-                        {
-                            message: {
-                                Conductor: `${this.props.navigation.getParam('ConductorEmail', 'No-Email')} ha aceptado tu solicitud`
-                            },
-                            channel: 'Notifications'
-                        }
-                    )
+                        {message: {Conductor: `${this.props.navigation.getParam('ConductorEmail', 'No-Email')} ha aceptado tu solicitud`},channel: 'ColasPedidas'}
+                      )
                 })
             }
 

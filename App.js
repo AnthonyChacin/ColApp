@@ -42,7 +42,7 @@ export default class App extends React.Component {
         if (token.os == "android") {
           this.pubnub.push.addChannels(
             {
-              channels: ['Notifications'],
+              channels: ['ColasPedidas'],
               device: token.token,
               pushGateway: 'gcm' // apns, gcm, mpns
             });
@@ -65,12 +65,7 @@ export default class App extends React.Component {
 
   componentWillMount() {
     this.pubnub.publish(
-      {
-        message: {
-          Conductor: `1 ha aceptado tu solicitud`
-        },
-        channel: 'Notifications'
-      }
+      {message: {Conductor: `1 ha aceptado tu solicitud`},channel: 'ColasPedidas'}
     )
   }
 
