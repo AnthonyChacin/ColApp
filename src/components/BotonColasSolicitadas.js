@@ -11,11 +11,11 @@ class BotonColasSolicitadas extends React.Component {
         return (
             <Header style={styles.header}>
                 <Left>
-                    <Button transparent
+                    {/* <Button transparent
                         onPress={() => this.props.navigation.navigate("DrawerOpen")}
                     >
                         <Icon name='menu' />
-                    </Button>
+                    </Button> */}
                 </Left>
                 <Body>
                     <Title style={styles.title}>

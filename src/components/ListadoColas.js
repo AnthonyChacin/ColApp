@@ -6,8 +6,9 @@ import {
     Dimensions
 } from 'react-native';
 import MapView from 'react-native-maps';
-import { Container, Header, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
+import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
+import SockectIOClient from 'socket.io-client';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -19,55 +20,27 @@ class ListadoColas extends React.Component {
 
         this.state = {
             loaded: false,
-            colas: null,
+            colas: null
         }
 
+        this.socket = SockectIOClient('http://192.168.0.100:8080');
     }
 
-    async darCola(id) {
-        try {
-
-            var url = 'http://192.168.137.1:8080/conductor/darCola'
-
-            let request = await axios.post(url, {
-                idCola: id,
-                idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
-            })
-
-            console.warn(request)
-
-        } catch (error) {
-            console.warn(error)
-        }
+    async componentWillMount() {
+        await this._getColas();
     }
 
     async componentDidMount() {
-
-        try {
-
-            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
-
-            let response = await axios.get(url);
-
-            this.setState({
-                loaded: true,
-                colas: response.data.data
-            })
-
-            return response.data.data
-            //console.warn(response.data)
-
-        } catch (error) {
-            console.warn('Hola')
-        }
-
-        //console.warn(this.state.colas)
-
+        this.socket.on('Cola Pedida', (obj) => {
+            if (obj) {
+                this._getColas();
+            }
+        })
     }
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', width }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -100,9 +73,13 @@ class ListadoColas extends React.Component {
                                     <Left>
                                         <Body>
                                             <Text>Destino: {item.destino}</Text>
-                                            <Text note>Pasajero: {item.p.email} </Text>
                                         </Body>
                                     </Left>
+                                </CardItem>
+
+                                <CardItem cardBody>
+                                    <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
+                                    <Text> {item.p.email} </Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
@@ -140,6 +117,49 @@ class ListadoColas extends React.Component {
             </Container>
         )
     }
+
+    async _getColas() {
+        try {
+
+            var url = 'http://192.168.0.100:8080/conductor/verColasPedidas';
+
+            let response = await axios.get(url);
+
+            if (response.data.success) {
+                this.setState({
+                    loaded: true,
+                    colas: response.data.data
+                })
+            }
+
+            return response.data.success
+
+        } catch (error) {
+            return false
+        }
+    }
+
+
+    async darCola(id) {
+        try {
+
+            var url = 'http://192.168.0.100:8080/conductor/darCola'
+
+            let request = await axios.post(url, {
+                idCola: id,
+                idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
+            })
+
+            if (request.data.success) {
+                this._getColas()
+            }
+
+            return request.data.success
+
+        } catch (error) {
+            return false
+        }
+    }
 }
 
 export default ListadoColas;
@@ -151,25 +171,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width,
         height: halfHeight
-        /* backgroundColor: '#82826C' */
     },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgb(20,20,20)',
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgb(20,20,20)'
     },
     map: {
         left: 0,
         right: 0,
         ...StyleSheet.absoluteFillObject,
+        flex: 1
     },
     card: {
         backgroundColor: '#82826C',
-        marginBottom: 10,
+        marginBottom: '30%',
         marginLeft: '2%',
-        width: '96%',
+        width,
+        height,
         shadowColor: '#E6880F',
         shadowOpacity: 0.2,
         shadowRadius: 1,
@@ -193,7 +214,7 @@ const styles = StyleSheet.create({
         color: "white",
         alignSelf: "center",
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 30,
         borderRadius: 25,
         width: 300
     }
