@@ -25,11 +25,6 @@ class ListadoColas extends React.Component {
             publishKey: 'pub-c-d7d3663d-7ef8-4800-96e5-68eb8f5b4041',
             subscribeKey: 'sub-c-336faa76-86ed-11e9-9f15-ba4fa582ffed'
         });
-        
-        this.pubnub.subscribe({
-            channels: ['ColasPedidas'],
-            withPresence: true
-        });
 
         this.state = {
             loaded: false,
@@ -125,7 +120,7 @@ class ListadoColas extends React.Component {
                                 <CardItem style={{ justifyContent: 'center' }}>
                                     <TouchableOpacity
                                         style={styles.button}
-                                        onPress={() => this.darCola(item._id)}
+                                        onPress={() => this.darCola(item._id, item.p._id)}
                                     >
                                         <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
                                     </TouchableOpacity>
@@ -161,17 +156,22 @@ class ListadoColas extends React.Component {
     }
 
 
-    async darCola(id) {
+    async darCola(idCola, idPasajero) {
         try {
 
             var url = 'http://192.168.137.35:8080/conductor/darCola'
 
             let request = await axios.post(url, {
-                idCola: id,
+                idCola: idCola,
                 idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
             })
 
             if (request.data.success) {
+
+                this.pubnub.publish(
+                    {message:"ha aceptado tu cola", channel:`${idPasajero}`}
+                )
+
                 this._getColas()
                 ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
                 //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);

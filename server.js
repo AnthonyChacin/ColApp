@@ -18,6 +18,7 @@ var DB;
 const index = require("./routes/index");
 const pasajero = require("./routes/pasajero");
 const conductor = require("./routes/conductor");
+const tests = require("./routes/tests");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', index);
 app.use('/pasajero/', pasajero);
 app.use('/conductor/', conductor);
+app.use('/tests/', tests);
 
 app.set('port', process.env.PORT || 8080);
 
