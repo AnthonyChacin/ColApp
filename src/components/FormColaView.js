@@ -145,7 +145,6 @@ class FormColaView extends React.Component {
                     })
 
                     ToastAndroid.show('¡Su cola ha sido pedida con éxito!', ToastAndroid.SHORT);
-                    ToastAndroid.show('Será notificado cuando alguien acepte su solicitud', ToastAndroid.LONG);
 
                 }
             } else {

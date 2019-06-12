@@ -122,7 +122,7 @@ class ListadoColas extends React.Component {
                         }
                     />
                 )}
-                {ToastAndroid.show('No hay ninguna solicitud de cola actualmente', ToastAndroid.SHORT)}
+                {this.state.colas == null && (ToastAndroid.show('No hay ninguna solicitud de cola actualmente', ToastAndroid.SHORT))}
             </Container>
         )
     }
