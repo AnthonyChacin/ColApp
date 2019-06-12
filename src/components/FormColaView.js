@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {
+/*import {
     AppRegistry,
     Platform, Image,
     TextInput,
@@ -10,6 +10,9 @@ import {
     TouchableOpacity,
     Picker
 } from 'react-native';
+*/
+import {View, Picker} from 'react-native';
+import { Text, Input } from 'galio-framework';
 
 import DatePicker from 'react-native-datepicker';
 
@@ -110,7 +113,7 @@ class FormColaView extends React.Component {
 
             <View style={styles.container}>
 
-                <TextInput
+                <Input
                     placeholder="Origen"
                     style={styles.textInput}
                     editable={true}
@@ -119,7 +122,7 @@ class FormColaView extends React.Component {
                     value={this.state.origen}
 
                 />
-                <TextInput
+                <Input
                     placeholder="Destino"
                     style={styles.textInput}
                     editable={true}
@@ -128,7 +131,7 @@ class FormColaView extends React.Component {
                     value={this.state.destino}
 
                 />
-                <TextInput
+                <Input
                     placeholder="Tarifa"
                     style={styles.textInput}
                     editable={true}
@@ -137,7 +140,7 @@ class FormColaView extends React.Component {
                     value={this.state.tarifa}
                     keyboardType="numeric"
                 />
-                <TextInput
+                <Input
                     placeholder="Banco"
                     style={styles.textInput}
                     editable={true}
@@ -166,7 +169,7 @@ class FormColaView extends React.Component {
                     }}
                     onDateChange = {(date) => {this.updateValue(date, 5)}}
                 />
-                <TextInput
+                <Input
                     placeholder="Cantidad de Pasajeros"
                     style={styles.textInput}
                     editable={true}
