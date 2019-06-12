@@ -9,13 +9,13 @@ class HeaderPasajero extends React.Component {
 
     render() {
         return (
-            //<Container style={styles.container}>
-                <TouchableOpacity
-                    style={styles.button}
-                >
-                    <Text style={{ color: "white", fontSize: 20 }}>Solicita tu cola</Text>
-                </TouchableOpacity>
-            //</Container>
+
+            <TouchableOpacity
+                style={styles.button}
+            >
+                <Text style={{ color: "white", fontSize: 20 }}>Solicita tu cola</Text>
+            </TouchableOpacity>
+
         )
     }
 }

@@ -27,10 +27,8 @@ class ConductorView extends React.Component {
 
     return (
       <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
-
         <BotonColasSolicitadas />
         <ListadoColas {...this.props} />
-
       </Container>
     );
   }

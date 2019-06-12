@@ -3,7 +3,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     ActivityIndicator,
-    Dimensions
+    Dimensions,
+    ToastAndroid
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
@@ -40,7 +41,7 @@ class ListadoColas extends React.Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', paddingBottom: '1%', height }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -50,7 +51,8 @@ class ListadoColas extends React.Component {
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
-                            <Card style={{ elevation: 3 }}>
+                            <Card style={{ elevation: 3, flex: 1 }}>
+
                                 <CardItem>
                                     <View style={styles.Container}>
                                         <MapView style={styles.map}
@@ -69,6 +71,7 @@ class ListadoColas extends React.Component {
                                         </MapView>
                                     </View>
                                 </CardItem>
+                                <Text note style={{ marginLeft: 20 }}>Ubicación actual del pasajero</Text>
                                 <CardItem>
                                     <Left>
                                         <Body>
@@ -88,7 +91,7 @@ class ListadoColas extends React.Component {
                                 </CardItem>
 
                                 <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}>Hora: </Text>
+                                    <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
                                     <Text>{item.hora}</Text>
                                 </CardItem>
 
@@ -98,8 +101,13 @@ class ListadoColas extends React.Component {
                                 </CardItem>
 
                                 <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20, marginBottom: 20 }}>Banco: </Text>
-                                    <Text style={{ marginBottom: 20 }}>{item.banco}</Text>
+                                    <Text note style={{ marginLeft: 20 }}>Banco: </Text>
+                                    <Text>{item.banco}</Text>
+                                </CardItem>
+
+                                <CardItem cardBody>
+                                    <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: </Text>
+                                    <Text>{item.cantPasajeros}</Text>
                                 </CardItem>
 
                                 <CardItem style={{ justifyContent: 'center' }}>
@@ -114,6 +122,7 @@ class ListadoColas extends React.Component {
                         }
                     />
                 )}
+                {ToastAndroid.show('No hay ninguna solicitud de cola actualmente', ToastAndroid.SHORT)}
             </Container>
         )
     }
@@ -152,6 +161,8 @@ class ListadoColas extends React.Component {
 
             if (request.data.success) {
                 this._getColas()
+                ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
+                //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);
             }
 
             return request.data.success
@@ -213,8 +224,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         color: "white",
         alignSelf: "center",
-        marginTop: 10,
-        marginBottom: 30,
+        marginTop: 2,
+        marginBottom: 10,
         borderRadius: 25,
         width: 300
     }
