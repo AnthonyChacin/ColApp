@@ -50,7 +50,7 @@ class FormColaView extends React.Component {
             cantPasajeros: ''
         }
 
-        this.socket = SockectIOClient('http://192.168.137.35:8080');
+        this.socket = SockectIOClient('http://192.168.137.1:8080');
     }
 
     async componentDidMount() {
@@ -117,7 +117,7 @@ class FormColaView extends React.Component {
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
                 this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "") {
 
-                var url = 'http://192.168.137.35:8080/pasajero/pedirCola';
+                var url = 'http://192.168.137.1:8080/pasajero/pedirCola';
 
                 let cola = await axios.post(url, {
                     origen: this.state.initialPosition,
@@ -185,7 +185,7 @@ class FormColaView extends React.Component {
                     <View style={styles.container}>
                         <Text style={styles.Label}>Destino</Text>
                         <TextInput
-                            placeholder="e.g. UNIMET"
+                            placeholder="e.g. Santa Fe Sur"
                             placeholderTextColor='rgba(20,20,20,0.3)'
                             style={styles.textInput}
                             editable={true}

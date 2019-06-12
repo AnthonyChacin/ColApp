@@ -31,14 +31,15 @@ class ListadoColas extends React.Component {
             colas: null
         }
 
-        this.socket = SockectIOClient('http://192.168.137.35:8080');
+        this.socket = SockectIOClient('http://192.168.137.1:8080');
     }
 
-    async componentWillMount() {
-        await this._getColas();
-    }
+     async componentWillMount() {
+         await this._getColas();
+     }
 
     async componentDidMount() {
+
         this.socket.on('Cola Pedida', (obj) => {
             if (obj) {
                 this._getColas();
@@ -129,7 +130,7 @@ class ListadoColas extends React.Component {
                         }
                     />
                 )}
-                {this.state.colas == null && (ToastAndroid.show('No hay ninguna solicitud de cola actualmente', ToastAndroid.LONG))}
+                {this.state.colas == null && this.state.loaded && (ToastAndroid.show('No hay ninguna solicitud de cola actualmente', ToastAndroid.LONG))}
             </Container>
         )
     }
@@ -137,7 +138,7 @@ class ListadoColas extends React.Component {
     async _getColas() {
         try {
 
-            var url = 'http://192.168.137.35:8080/conductor/verColasPedidas';
+            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
@@ -159,7 +160,7 @@ class ListadoColas extends React.Component {
     async darCola(idCola, idPasajero) {
         try {
 
-            var url = 'http://192.168.137.35:8080/conductor/darCola'
+            var url = 'http://192.168.137.1:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: idCola,
@@ -169,7 +170,7 @@ class ListadoColas extends React.Component {
             if (request.data.success) {
 
                 this.pubnub.publish(
-                    {message:"ha aceptado tu cola", channel:`${idPasajero}`}
+                    { message: "ha aceptado tu cola", channel: `${idPasajero}` }
                 )
 
                 this._getColas()
