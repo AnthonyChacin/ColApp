@@ -5,6 +5,7 @@ import {
     ActivityIndicator,
     Dimensions
 } from 'react-native';
+import { PixelRatio } from 'react-native'
 import MapView from 'react-native-maps';
 import { Container, Header, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
@@ -34,7 +35,7 @@ class ListadoColas extends React.Component {
             colas: null
         }
 
-        this.socket = SockectIOClient('http://192.168.137.1:8080');
+        this.socket = SockectIOClient('http://192.168.137.35:8080');
     }
 
     async componentWillMount() {
@@ -128,7 +129,7 @@ class ListadoColas extends React.Component {
     async _getColas() {
         try {
 
-            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
+            var url = 'http://192.168.137.35:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
@@ -150,7 +151,7 @@ class ListadoColas extends React.Component {
     async darCola(id) {
         try {
 
-            var url = 'http://192.168.137.1:8080/conductor/darCola'
+            var url = 'http://192.168.137.35:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: id,
