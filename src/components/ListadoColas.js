@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { PixelRatio } from 'react-native'
 import MapView from 'react-native-maps';
-import { Container, Header, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
+import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import PubNubReact from 'pubnub-react';
@@ -52,7 +52,7 @@ class ListadoColas extends React.Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', width }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -85,9 +85,13 @@ class ListadoColas extends React.Component {
                                     <Left>
                                         <Body>
                                             <Text>Destino: {item.destino}</Text>
-                                            <Text note>Pasajero: {item.p.email} </Text>
                                         </Body>
                                     </Left>
+                                </CardItem>
+
+                                <CardItem cardBody>
+                                    <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
+                                    <Text> {item.p.email} </Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
@@ -159,11 +163,7 @@ class ListadoColas extends React.Component {
             })
 
             if (request.data.success) {
-                this._getColas().then(() => {
-                    this.pubnub.publish(
-                        {"pn_gcm": { "data": {"message": `${this.props.navigation.getParam('ConductorEmail', 'No-Email')} ha aceptado tu solicitud`}, "channel": 'ColasPedidas'}}
-                    )
-                })
+                this._getColas()
             }
 
             return request.data.success
@@ -183,25 +183,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width,
         height: halfHeight
-        /* backgroundColor: '#82826C' */
     },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgb(20,20,20)',
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgb(20,20,20)'
     },
     map: {
         left: 0,
         right: 0,
         ...StyleSheet.absoluteFillObject,
+        flex: 1
     },
     card: {
         backgroundColor: '#82826C',
-        marginBottom: 10,
+        marginBottom: '30%',
         marginLeft: '2%',
-        width: '96%',
+        width,
+        height,
         shadowColor: '#E6880F',
         shadowOpacity: 0.2,
         shadowRadius: 1,
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
         color: "white",
         alignSelf: "center",
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 30,
         borderRadius: 25,
         width: 300
     }
