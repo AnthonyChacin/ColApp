@@ -69,7 +69,7 @@ Client.connect((err) => {
 			if (err) {
 				console.log(err);
 			} else {
-				console.log(result[0].msg + ' to DataBase ' + process.env.DB_NAME);
+				console.log(result[0].msg + ' to DataBase! ' + process.env.DB_NAME);
 			}
 		})
 	}
