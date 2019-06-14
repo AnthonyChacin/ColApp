@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "prod": "nodemon ./server.js",
+    "start": "nodemon ./server.js",
     "test": "jest --watchAll --passWithNoTests",
     "server": "nodemon ./server.js"
   },
