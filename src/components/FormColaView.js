@@ -50,7 +50,7 @@ class FormColaView extends React.Component {
             cantPasajeros: ''
         }
 
-        this.socket = SockectIOClient('http://192.168.137.1:8080');
+        this.socket = SockectIOClient('http://10.7.233.66:8080');
     }
 
     async componentDidMount() {
@@ -115,9 +115,9 @@ class FormColaView extends React.Component {
         try {
 
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
-                this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "") {
+                this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
-                var url = 'http://192.168.137.1:8080/pasajero/pedirCola';
+                var url = 'http://10.7.233.66:8080/pasajero/pedirCola';
 
                 let cola = await axios.post(url, {
                     origen: this.state.initialPosition,
@@ -193,9 +193,9 @@ class FormColaView extends React.Component {
                             autoFocus={true}
                             onChangeText={(text) => this.updateValue(text, 2)}
                             value={this.state.destino}
-
+                            enablesReturnKeyAutomatically={true}
                         />
-                        <Text style={styles.Label}>Tarifa</Text>
+                        <Text style={styles.Label}>Tarifa (Bs.)</Text>
                         <TextInput
                             placeholder="e.g. 500"
                             placeholderTextColor='rgba(20,20,20,0.3)'
@@ -205,6 +205,7 @@ class FormColaView extends React.Component {
                             onChangeText={(text) => this.updateValue(text, 3)}
                             value={this.state.tarifa}
                             keyboardType="numeric"
+                            enablesReturnKeyAutomatically={true}
                         />
                         <Text style={styles.Label}>Banco</Text>
                         <View style={styles.Picker}>
@@ -244,8 +245,10 @@ class FormColaView extends React.Component {
                             onChangeText={(text) => this.updateValue(text, 6)}
                             value={this.state.cantPasajeros}
                             keyboardType="numeric"
+                            enablesReturnKeyAutomatically={true}
                         />
                         <Text style={styles.Label}>Vehículo de Preferencia</Text>
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros == 1) && (
                         <View style={styles.Picker}>
                             <Picker
                                 selectedValue={this.state.vehiculo}
@@ -256,7 +259,18 @@ class FormColaView extends React.Component {
                                 <Picker.Item label="Carro" value="Carro" />
                                 <Picker.Item label="Moto" value="Moto" />
                             </Picker>
-                        </View>
+                        </View>)}
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros > 1) && (
+                        <View style={styles.Picker}>
+                            <Picker
+                                selectedValue={this.state.vehiculo}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    this.setState({ vehiculo: itemValue })
+                                }>
+                                <Picker.Item label="Seleccione vehículo..." value="No especificó" />
+                                <Picker.Item label="Carro" value="Carro" />
+                            </Picker>
+                        </View>)}
                         <TouchableOpacity
                             style={styles.buttonSubmit}
                             onPress={() => this.submit(1)}

@@ -31,12 +31,12 @@ class ListadoColas extends React.Component {
             colas: null
         }
 
-        this.socket = SockectIOClient('http://192.168.137.1:8080');
+        this.socket = SockectIOClient('http://10.7.233.66:8080');
     }
 
-     async componentWillMount() {
-         await this._getColas();
-     }
+    async componentWillMount() {
+        await this._getColas();
+    }
 
     async componentDidMount() {
 
@@ -81,16 +81,13 @@ class ListadoColas extends React.Component {
                                 </CardItem>
                                 <Text note style={{ marginLeft: 20 }}>Ubicación actual del pasajero</Text>
                                 <CardItem>
-                                    <Left>
-                                        <Body>
-                                            <Text>Destino: {item.destino}</Text>
-                                        </Body>
-                                    </Left>
+                                    <Text>Destino: </Text>
+                                    <Text style={{ color: '#E6880F' }}>{item.destino}</Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
                                     <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
-                                    <Text> {item.p.email} </Text>
+                                    <Text style={{ fontSize: 14 }}> {item.p.email} </Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
@@ -130,7 +127,6 @@ class ListadoColas extends React.Component {
                         }
                     />
                 )}
-                {this.state.colas == null && this.state.loaded && (ToastAndroid.show('No hay ninguna solicitud de cola actualmente', ToastAndroid.LONG))}
             </Container>
         )
     }
@@ -138,7 +134,7 @@ class ListadoColas extends React.Component {
     async _getColas() {
         try {
 
-            var url = 'http://192.168.137.1:8080/conductor/verColasPedidas';
+            var url = 'http://10.7.233.66:8080/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
@@ -160,7 +156,7 @@ class ListadoColas extends React.Component {
     async darCola(idCola, idPasajero) {
         try {
 
-            var url = 'http://192.168.137.1:8080/conductor/darCola'
+            var url = 'http://10.7.233.66:8080/conductor/darCola'
 
             let request = await axios.post(url, {
                 idCola: idCola,

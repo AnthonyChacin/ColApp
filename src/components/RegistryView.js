@@ -33,7 +33,7 @@ class RegistryView extends React.Component {
         switch (params) {
           case 1:
 
-            var urlP = `http://192.168.137.1:8080/iniciarPasajero`;
+            var urlP = `http://10.7.233.66:8080/iniciarPasajero`;
 
             let pasajero = await axios.post(urlP, {
               email: this.state.email
@@ -52,7 +52,7 @@ class RegistryView extends React.Component {
             }
             break;
           case 2:
-            var urlC = 'http://192.168.137.1:8080/iniciarConductor';
+            var urlC = 'http://10.7.233.66:8080/iniciarConductor';
 
             let conductor = await axios.post(urlC, {
               email: this.state.email
@@ -103,6 +103,7 @@ class RegistryView extends React.Component {
           onChangeText={(text) => this.updateValue(text)}
           keyboardType="email-address"
           value={this.state.email}
+          autoCapitalize="none"
         />
 
         <TouchableOpacity
