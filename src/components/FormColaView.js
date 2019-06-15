@@ -50,7 +50,7 @@ class FormColaView extends React.Component {
             cantPasajeros: ''
         }
 
-        this.socket = SockectIOClient('http://10.7.233.66:8080');
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
     }
 
     async componentDidMount() {
@@ -117,7 +117,7 @@ class FormColaView extends React.Component {
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
                 this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
-                var url = 'http://10.7.233.66:8080/pasajero/pedirCola';
+                var url = 'https://colapp-asa.herokuapp.com/pasajero/pedirCola';
 
                 let cola = await axios.post(url, {
                     origen: this.state.initialPosition,
