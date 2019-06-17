@@ -1,6 +1,9 @@
 {
   "name": "colapp",
   "version": "0.0.1",
+  "engines": {
+    "node": "8.12.0"
+  },
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
