@@ -69,7 +69,7 @@ controller.getColasPedidas = async function (callback) {
 				$match: {estado: "Pedida"}
 			},{
 				$lookup: {
-					from: 'Pasajero',
+					from: 'User',
 					localField: 'pasajero',
 					foreignField: '_id',
 					as: 'p'

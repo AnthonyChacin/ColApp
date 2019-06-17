@@ -12,6 +12,7 @@ import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'n
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import PubNubReact from 'pubnub-react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -19,6 +20,7 @@ const halfHeight = height / 3
 class ListadoColas extends React.Component {
 
     constructor(props) {
+
         super(props);
 
         this.pubnub = new PubNubReact({
@@ -28,14 +30,34 @@ class ListadoColas extends React.Component {
 
         this.state = {
             loaded: false,
-            colas: null
+            colas: null,
+            currentUser: {userId: undefined, userEmail: undefined}
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+        
+            this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+        
+        
+    }
+
+    async getCurrentUser(){
+        try{
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        }catch(error){
+            console.warn(error)
+        }
     }
 
     async componentWillMount() {
         await this._getColas();
+        await this.getCurrentUser();
     }
 
     async componentDidMount() {
@@ -48,6 +70,7 @@ class ListadoColas extends React.Component {
     }
 
     render() {
+        console.warn(this.state.colas)
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)', paddingBottom: '1%', height }}>
                 {!this.state.loaded && (
@@ -117,7 +140,8 @@ class ListadoColas extends React.Component {
 
                                 <CardItem style={{ justifyContent: 'center' }}>
                                     <TouchableOpacity
-                                        style={styles.button}
+                                        disabled={ this.state.currentUser.userEmail == item.p.email ? true : false}
+                                        style={ this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
                                         onPress={() => this.darCola(item._id, item.p._id)}
                                     >
                                         <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
@@ -160,7 +184,7 @@ class ListadoColas extends React.Component {
 
             let request = await axios.post(url, {
                 idCola: idCola,
-                idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
+                idConductor: this.state.currentUser.userId
             })
 
             if (request.data.success) {
@@ -230,6 +254,19 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         backgroundColor: "#E6880F",
+        alignItems: "center",
+        color: "white",
+        alignSelf: "center",
+        marginTop: 2,
+        marginBottom: 10,
+        borderRadius: 25,
+        width: 300
+    },
+    buttonDisabled: {
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: 'rgba(20,20,20,0.3)',
         alignItems: "center",
         color: "white",
         alignSelf: "center",

@@ -19,6 +19,7 @@ import MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 
 import SockectIOClient from 'socket.io-client';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 2
@@ -28,9 +29,11 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
 class FormColaView extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        
         this.state = {
+            currentUser: {userId: undefined, userEmail: undefined},
             loaded: false,
             initialPosition: {
                 latitude: 0,
@@ -50,7 +53,28 @@ class FormColaView extends React.Component {
             cantPasajeros: ''
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+
+            this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+       
+    }
+
+    async getCurrentUser(){
+        try{
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        }catch(error){
+            console.warn(error)
+        }
+    }
+
+    async componentWillMount(){
+        await this.getCurrentUser();
     }
 
     async componentDidMount() {
@@ -113,7 +137,7 @@ class FormColaView extends React.Component {
 
     async submit() {
         try {
-
+            
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
                 this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
@@ -128,8 +152,10 @@ class FormColaView extends React.Component {
                     cantPasajeros: this.state.cantPasajeros,
                     vehiculo: this.state.vehiculo,
                     estado: "Pedida",
-                    pasajero: this.props.navigation.getParam('PasajeroId', 'No-Id')
+                    pasajero: this.state.currentUser.userId
                 })
+
+                console.warn(cola.data)
 
                 if (cola.data.success) {
 
@@ -167,12 +193,12 @@ class FormColaView extends React.Component {
         return (
 
             <View>
-                {!this.state.loaded && (
+                {(!this.state.loaded) && (
                     <View style={styles.Container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
-                {this.state.loaded && (<View>
+                {(this.state.loaded && this.state.currentUser.userId != undefined) && (<View>
                     <View style={styles.Container}>
                         <MapView style={styles.map}
                             region={this.state.initialPosition}>
@@ -273,7 +299,7 @@ class FormColaView extends React.Component {
                         </View>)}
                         <TouchableOpacity
                             style={styles.buttonSubmit}
-                            onPress={() => this.submit(1)}
+                            onPress={() => this.submit()}
                         >
                             <Text style={{ color: "white", fontSize: 20 }}>Solicitar</Text>
                         </TouchableOpacity>

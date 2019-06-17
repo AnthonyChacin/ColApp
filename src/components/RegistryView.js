@@ -6,8 +6,9 @@ import {
   Text,
   View,
   TouchableOpacity,
-  AsyncStorage
 } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import axios from 'axios';
 
@@ -52,29 +53,29 @@ class RegistryView extends React.Component {
             }
             break;
           case 2:
-            var urlC = 'https://colapp-asa.herokuapp.com/iniciarConductor';
+            var urlC = 'https://colapp-asa.herokuapp.com/login';
 
-            let conductor = await axios.post(urlC, {
+            let request = await axios.post(urlC, {
               email: this.state.email
             })
 
-            if (conductor.data.success) {
+            if (request.data.success) {
 
               this.setState({
                 email: ''
               })
 
-              this.props.navigation.navigate('Conductor', {
-                ConductorId: conductor.data.conductor.id,
-                ConductorEmail: conductor.data.conductor.email
-              });
+              await AsyncStorage.setItem('userId', `${request.data.user.id}`);
+              await AsyncStorage.setItem('userEmail', `${request.data.user.email}`);
+
+              this.props.navigation.navigate('Conductor');
             }
             break
         }
       }
 
     } catch (error) {
-      this.props.navigation.push('Registry');
+      this.props.navigation.navigate('Registry');
     }
   }
 
@@ -90,8 +91,8 @@ class RegistryView extends React.Component {
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
 
         <Image
-          source={{ uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png' }}
-          style={{ width: 120, height: 58 }}
+          source={{ uri: 'http://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png' }}
+          style={{ width: 200, height: 100 }}
         />
 
         <TextInput

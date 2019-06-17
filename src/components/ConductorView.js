@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
-import ListadoColas from './ListadoColas';
-import BotonColasSolicitadas from './BotonColasSolicitadas';
+import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import HeaderConductor from './HeaderConductor';
 import { Container, Icon } from 'native-base';
-
-//import MenuConductor from '../components/MenuConductor';
 
 const { width, height } = Dimensions.get('window')
 
@@ -15,20 +12,10 @@ class ConductorView extends React.Component {
     super(props)
   }
 
-  static navigationOptions = {
-    header: null,
-    drawerLabel: 'Conductor',
-    drawerIcon: ({ tintColor }) => (
-      <Icon name="car" />
-    )
-  }
-
   render() {
-
     return (
       <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
-        <BotonColasSolicitadas />
-        <ListadoColas {...this.props} />
+        <HeaderConductor {...this.props}/>
       </Container>
     );
   }

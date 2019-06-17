@@ -3,6 +3,7 @@ const router = express.Router();
 
 const pasajeroController = require('../controllers/pasajeroController');
 const conductorController = require('../controllers/conductorController');
+const userController = require('../controllers/userController');
 
 require('dotenv').config({ path: 'variables.env'});
 
@@ -47,6 +48,26 @@ router.post('/iniciarConductor', (req, res) => {
 				res.json({
 					success: true,
 					conductor: result
+				});
+			}
+		})
+	}else{
+		res.send('notData')
+	}
+})
+
+router.post('/login', (req, res) => {
+	if(!!req.body){
+		userController.insertUser( req.body, (err, result) => {
+			if(err || result == null){
+				res.json({
+					success: false,
+					user: 'error'
+				});
+			}else{
+				res.json({
+					success: true,
+					user: result
 				});
 			}
 		})
