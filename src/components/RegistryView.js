@@ -1,77 +1,81 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-  Image, 
-  TextInput, 
-  StyleSheet, 
-  Text, 
+  Image,
+  TextInput,
+  StyleSheet,
+  Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import axios from 'axios';
 
-
 class RegistryView extends React.Component {
 
-  constructor(){
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: ''
     }
   }
 
-  updateValue(text){
+  updateValue(text) {
     this.setState({
       email: text
     })
   }
 
-  async submit(params){
-    try{
-      switch(params){
-        case 1:
-          var urlP = 'http://10.0.2.2:8080/iniciarPasajero';
+  async submit(params) {
 
-          let pasajero = await axios.post(urlP, {
-            email: this.state.email
-          })
+    try {
+      if (this.state.email != "") {
+        switch (params) {
+          case 1:
 
-          //console.warn(pasajero)
-          
-          if(pasajero.data.success){
-            this.setState({
-              email: ''
+            var urlP = `https://colapp-asa.herokuapp.com/iniciarPasajero`;
+
+            let pasajero = await axios.post(urlP, {
+              email: this.state.email
             })
 
-            //console.warn(pasajero.data.pasajero.id)
-            
-            this.props.navigation.navigate('Pasajero', {
-              PasajeroId: pasajero.data.pasajero.id,
-              PasajeroEmail: pasajero.data.pasajero.email
-            });
-          }
-          break;
-        case 2:
-          var urlC = 'http://10.0.2.2:8080/iniciarConductor';
+            if (pasajero.data.success) {
+              
+              this.setState({
+                email: ''
+              })
 
-          let conductor = await axios.post(urlC, {
-            email: this.state.email
-          })
+              this.props.navigation.navigate('Pasajero', {
+                PasajeroId: pasajero.data.pasajero.id,
+                PasajeroEmail: pasajero.data.pasajero.email
+              });
+            }
+            break;
+          case 2:
+            var urlC = 'https://colapp-asa.herokuapp.com/login';
 
-          if(conductor.data.success){
-            this.setState({
-              email: ''
+            let request = await axios.post(urlC, {
+              email: this.state.email
             })
-            this.props.navigation.navigate('Conductor', {
-              ConductorId: conductor.data.conductor.id,
-              ConductorEmail: conductor.data.conductor.email
-            });
-          }
-          break
+
+            if (request.data.success) {
+
+              this.setState({
+                email: ''
+              })
+
+              await AsyncStorage.setItem('userId', `${request.data.user.id}`);
+              await AsyncStorage.setItem('userEmail', `${request.data.user.email}`);
+
+              this.props.navigation.navigate('Conductor');
+            }
+            break
+        }
       }
-     
-    }catch(error){
-      this.props.navigation.push('Registry');
+
+    } catch (error) {
+      this.props.navigation.navigate('Registry');
     }
   }
 
@@ -87,32 +91,34 @@ class RegistryView extends React.Component {
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
 
         <Image
-          source={{uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png'}}
-          style={{width: 120, height: 58}}
+          source={{ uri: 'http://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png' }}
+          style={{ width: 200, height: 100 }}
         />
-        
+
         <TextInput
-          placeholder = "Correo UNIMET aquí"
+          placeholder="Correo UNIMET aquí"
+          placeholderTextColor='rgba(20,20,20,0.3)'
           style={styles.textInput}
-          editable =  {true}
-          underlineColorAndroid = "transparent"
+          editable={true}
+          underlineColorAndroid="transparent"
           onChangeText={(text) => this.updateValue(text)}
-          //value={this.state.email}
           keyboardType="email-address"
-        /> 
-        
-        <TouchableOpacity 
-          style = {styles.button}
-          onPress = {() => this.submit(2)}
+          value={this.state.email}
+          autoCapitalize="none"
+        />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.submit(2)}
         >
-          <Text style = {{color: "white", fontSize: 20}}>Ingrese como conductor</Text>
+          <Text style={{ color: "white", fontSize: 20 }}>Ingrese como conductor</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style = {styles.button}
-          onPress = {() => this.submit(1)}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.submit(1)}
         >
-          <Text style = {{color: "white", fontSize: 20}}>Ingrese como pasajero</Text>
+          <Text style={{ color: "white", fontSize: 20 }}>Ingrese como pasajero</Text>
         </TouchableOpacity>
       </View>
     );

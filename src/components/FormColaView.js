@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 /*import {
     AppRegistry,
     Platform, Image,
+=======
+import {
+>>>>>>> f6230ea725308f82a6d333051ea776e239583264
     TextInput,
-    Button,
     StyleSheet,
     Text,
     View,
     TouchableOpacity,
-    Picker
+    Picker,
+    Dimensions,
+    ActivityIndicator,
+    ToastAndroid
 } from 'react-native';
 */
 import {View, Picker} from 'react-native';
@@ -18,12 +24,36 @@ import DatePicker from 'react-native-datepicker';
 
 import axios from 'axios';
 
+import MapView from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
+
+import SockectIOClient from 'socket.io-client';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const { width, height } = Dimensions.get('window')
+const halfHeight = height / 2
+const ASPECT_RATIO = width / height
+const LATITUDE_DELTA = 0.01
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
+
 class FormColaView extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        
         this.state = {
-            origen: '',
+            currentUser: {userId: undefined, userEmail: undefined},
+            loaded: false,
+            initialPosition: {
+                latitude: 0,
+                longitude: 0,
+                latitudeDelta: 0,
+                longitudeDelta: 0
+            },
+            initialMarker: {
+                latitude: 0,
+                longitude: 0
+            },
             destino: '',
             tarifa: '',
             banco: '',
@@ -31,15 +61,57 @@ class FormColaView extends React.Component {
             vehiculo: '',
             cantPasajeros: ''
         }
+
+
+            this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+       
+    }
+
+    async getCurrentUser(){
+        try{
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        }catch(error){
+            console.warn(error)
+        }
+    }
+
+    async componentWillMount(){
+        await this.getCurrentUser();
+    }
+
+    async componentDidMount() {
+        await Geolocation.getCurrentPosition((position) => {
+            var lat = parseFloat(position.coords.latitude)
+            var long = parseFloat(position.coords.longitude)
+
+            var initialRegion = {
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            }
+
+            var marker = {
+                latitude: lat,
+                longitude: long
+            }
+
+            this.setState({ loaded: true, initialPosition: initialRegion, initialMarker: marker })
+
+        }, (error) => alert(JSON.stringify(error)),
+            { enableHighAccuracy: true, timeout: 200000, maximumAge: 0 })
+
     }
 
     updateValue(param, i) {
         switch (i) {
-            case 1:
-                this.setState({
-                    origen: param
-                })
-                break;
             case 2:
                 this.setState({
                     destino: param
@@ -66,51 +138,70 @@ class FormColaView extends React.Component {
                 })
                 break;
         }
-     }
- 
+    }
+
+    prueba() {
+        return true
+    }
+
     async submit() {
-         try {
+        try {
+            
+            if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
+                this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
-          var url = 'http://10.0.2.2:8080/pasajero/pedirCola';
- 
-          let cola = await axios.post(url, {
-            origen: this.state.origen,
-            destino: this.state.destino,
-            tarifa: this.state.tarifa,
-            banco: this.state.banco,
-            hora: this.state.hora,
-            cantPasajeros: this.state.cantPasajeros,
-            vehiculo: this.state.vehiculo,
-            estado: "Pedida",
-            pasajero: this.props.navigation.getParam('PasajeroId', 'No-Id')
-          })
+                var url = 'https://colapp-asa.herokuapp.com/pasajero/pedirCola';
 
-          console.warn(cola)
- 
-          if (cola.data.success) {
-            this.setState({
-              origen: '',
-              destino: '',
-              tarifa: '',
-              banco: '',
-              hora: new Date(),
-              cantPasajeros: '',
-              vehiculo: ''
-            })
-          }
- 
-         }catch (error) {
-            console.warn('Error al pedir la cola')
-         }
+                let cola = await axios.post(url, {
+                    origen: this.state.initialPosition,
+                    destino: this.state.destino,
+                    tarifa: this.state.tarifa,
+                    banco: this.state.banco,
+                    hora: this.state.hora,
+                    cantPasajeros: this.state.cantPasajeros,
+                    vehiculo: this.state.vehiculo,
+                    estado: "Pedida",
+                    pasajero: this.state.currentUser.userId
+                })
+
+                console.warn(cola.data)
+
+                if (cola.data.success) {
+
+                    this.socket.emit('Cola Pedida', true);
+
+                    this.setState({
+                        destino: '',
+                        tarifa: '',
+                        banco: '',
+                        hora: new Date(),
+                        cantPasajeros: '',
+                        vehiculo: ''
+                    })
+
+                    ToastAndroid.show('¡Su cola ha sido pedida con éxito!', ToastAndroid.SHORT);
+
+                }
+            } else {
+                ToastAndroid.show('Todos los campos son requeridos', ToastAndroid.SHORT);
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     static navigationOptions = {
         header: null
     }
 
+
     render() {
+        const { hora } = this.state
+
         return (
 
+<<<<<<< HEAD
             <View style={styles.container}>
 
                 <Input
@@ -193,7 +284,123 @@ class FormColaView extends React.Component {
                 >
                     <Text style={{ color: "white", fontSize: 20 }}>Solicitar</Text>
                 </TouchableOpacity>
+=======
+            <View>
+                {(!this.state.loaded) && (
+                    <View style={styles.Container}>
+                        <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
+                    </View>
+                )}
+                {(this.state.loaded && this.state.currentUser.userId != undefined) && (<View>
+                    <View style={styles.Container}>
+                        <MapView style={styles.map}
+                            region={this.state.initialPosition}>
+                            <MapView.Marker
+                                coordinate={this.state.initialMarker}>
+                            </MapView.Marker>
+                        </MapView>
+                        <Text>Tu ubicación actual</Text>
+                    </View>
+                    <View style={styles.container}>
+                        <Text style={styles.Label}>Destino</Text>
+                        <TextInput
+                            placeholder="e.g. Santa Fe Sur"
+                            placeholderTextColor='rgba(20,20,20,0.3)'
+                            style={styles.textInput}
+                            editable={true}
+                            underlineColorAndroid="transparent"
+                            autoFocus={true}
+                            onChangeText={(text) => this.updateValue(text, 2)}
+                            value={this.state.destino}
+                            enablesReturnKeyAutomatically={true}
+                        />
+                        <Text style={styles.Label}>Tarifa (Bs.)</Text>
+                        <TextInput
+                            placeholder="e.g. 500"
+                            placeholderTextColor='rgba(20,20,20,0.3)'
+                            style={styles.textInput}
+                            editable={true}
+                            underlineColorAndroid="transparent"
+                            onChangeText={(text) => this.updateValue(text, 3)}
+                            value={this.state.tarifa}
+                            keyboardType="numeric"
+                            enablesReturnKeyAutomatically={true}
+                        />
+                        <Text style={styles.Label}>Banco</Text>
+                        <View style={styles.Picker}>
+                            <Picker
+                                selectedValue={this.state.banco}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    this.setState({ banco: itemValue })
+                                }>
+                                <Picker.Item label="Seleccione el banco..." value="No especificó" />
+                                <Picker.Item label="Mercantil" value="Mercantil" />
+                                <Picker.Item label="Provincial" value="Provincial" />
+                                <Picker.Item label="Banco del Caribe" value="Banco del Caribe" />
+                                <Picker.Item label="Banesco" value="Banesco" />
+                                <Picker.Item label="Banco Fondo Común" value="Banco Fondo Común" />
+                                <Picker.Item label="Banco Venezolano de Crédito" value="Banco Venezolano de Crédito" />
+                            </Picker>
+                        </View>
+                        <Text style={styles.Label}>Indica la fecha y la hora</Text>
+                        <View style={styles.datePicker}>
+                            <DatePicker
+                                date={this.state.hora}
+                                mode='datetime'
+                                format="DD-MM-YYYY hh:mm"
+                                minDate={this.state.hora}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                onDateChange={(date) => { this.updateValue(date, 5) }}
+                            />
+                        </View>
+                        <Text style={styles.Label}>Cantidad de Pasajeros</Text>
+                        <TextInput
+                            placeholder="e.g. 1,2,3 o 4"
+                            placeholderTextColor='rgba(20,20,20,0.3)'
+                            style={styles.textInput}
+                            editable={true}
+                            underlineColorAndroid="transparent"
+                            onChangeText={(text) => this.updateValue(text, 6)}
+                            value={this.state.cantPasajeros}
+                            keyboardType="numeric"
+                            enablesReturnKeyAutomatically={true}
+                        />
+                        <Text style={styles.Label}>Vehículo de Preferencia</Text>
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros == 1) && (
+                        <View style={styles.Picker}>
+                            <Picker
+                                selectedValue={this.state.vehiculo}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    this.setState({ vehiculo: itemValue })
+                                }>
+                                <Picker.Item label="Seleccione vehículo..." value="No especificó" />
+                                <Picker.Item label="Carro" value="Carro" />
+                                <Picker.Item label="Moto" value="Moto" />
+                            </Picker>
+                        </View>)}
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros > 1) && (
+                        <View style={styles.Picker}>
+                            <Picker
+                                selectedValue={this.state.vehiculo}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    this.setState({ vehiculo: itemValue })
+                                }>
+                                <Picker.Item label="Seleccione vehículo..." value="No especificó" />
+                                <Picker.Item label="Carro" value="Carro" />
+                            </Picker>
+                        </View>)}
+                        <TouchableOpacity
+                            style={styles.buttonSubmit}
+                            onPress={() => this.submit()}
+                        >
+                            <Text style={{ color: "white", fontSize: 20 }}>Solicitar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>)}
+>>>>>>> f6230ea725308f82a6d333051ea776e239583264
             </View>
+
         );
     }
 }
@@ -201,13 +408,26 @@ class FormColaView extends React.Component {
 export default FormColaView;
 
 const styles = StyleSheet.create({
+    Container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width,
+        height: halfHeight
 
+    },
+    map: {
+        left: 0,
+        right: 0,
+        ...StyleSheet.absoluteFillObject,
+        flex: 1,
+
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgb(20,20,20)',
-
     },
     buttonSubmit: {
         paddingHorizontal: 16,
@@ -232,7 +452,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 10,
         marginBottom: 10,
-        // borderRadius: 25,
         width: 300
     },
     textInput: {
@@ -241,7 +460,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
         backgroundColor: "#fff",
-        // borderRadius: 25,
+        borderRadius: 25,
         width: 300
     },
     Picker: {
@@ -252,8 +471,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderWidth: 1,
         overflow: 'hidden',
-        // borderRadius: 10,
-        width: 300
+        width: 300,
+        borderRadius: 25,
     },
     title: {
         fontSize: 20,
@@ -261,5 +480,15 @@ const styles = StyleSheet.create({
         margin: 20,
         color: '#E6880F',
         fontFamily: 'Arial'
+    },
+    Label: {
+        textShadowRadius: 10,
+        color: '#E6880F',
+        marginTop: "2%",
+        marginBottom: "1%"
+    },
+    datePicker: {
+        marginTop: 10,
+        marginBottom: 10
     }
 });

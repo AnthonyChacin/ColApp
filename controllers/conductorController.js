@@ -10,7 +10,7 @@ var Conductor;
 Client.connect(err => {
 
 	if(err){
-		console.log('Error, no se pudo establecer conexión');
+		console.log(err);
 	}
 
 	Conductor = Client.db(`${process.env.DB_NAME}`).collection('Conductor');
