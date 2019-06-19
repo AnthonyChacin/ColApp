@@ -17,6 +17,7 @@ import PasajeroView from './src/components/PasajeroView';
 import ConductorView from './src/components/ConductorView';
 import ColasAceptadasConductor from './src/components/ColasAceptadasConductor';
 import AuthLoadingScreen from './src/components/AuthLoadingScreen';
+//import Logout from './src/components/Logout';
 
 import PubNubReact from 'pubnub-react';
 
@@ -81,7 +82,16 @@ const AppDrawerNavigator = createDrawerNavigator({
     navigationOptions: {
       drawerLabel: () => null
     }
-  }
+  }/* ,
+  Logout: {
+    screen: Logout,
+    navigationOptions: {
+      drawerLabel: 'SignOut',
+      drawerIcon: () => (
+        <Icon name="sign-out-alt" size={20} color="red"/>
+      )
+    }
+  } */
 }, 
 {
   initialRouteName: 'AuthLoadingScreen',
@@ -90,7 +100,7 @@ const AppDrawerNavigator = createDrawerNavigator({
   contentOptions: {
     activeTintColor: '#E6880F',
     inactiveTintColor: '#aaaaaa',
-    activeBackgroundColor: 'rgb(20,20,20)',
+    activeBackgroundColor: 'rgba(20,20,20,0.9)',
     inactiveBackgroundColor: '#ffffff',
   }
 }

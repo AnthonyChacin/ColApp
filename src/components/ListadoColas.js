@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
+const HEIGHT = height;
 
 class ListadoColas extends React.Component {
 
@@ -35,7 +36,7 @@ class ListadoColas extends React.Component {
         }
 
         
-            this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
         
         
     }
@@ -72,7 +73,7 @@ class ListadoColas extends React.Component {
     render() {
         console.warn(this.state.colas)
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', paddingBottom: '1%', height }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT*0.9)}}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -82,7 +83,7 @@ class ListadoColas extends React.Component {
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
-                            <Card style={{ elevation: 3, flex: 1 }}>
+                            <Card style={{ elevation: 3, flex: 1}}>
 
                                 <CardItem>
                                     <View style={styles.Container}>
@@ -188,12 +189,7 @@ class ListadoColas extends React.Component {
             })
 
             if (request.data.success) {
-
-                this.pubnub.publish(
-                    { message: "ha aceptado tu cola", channel: `${idPasajero}` }
-                )
-
-                this._getColas()
+                this.socket.emit('Cola Pedida', true);
                 ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
                 //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);
             }

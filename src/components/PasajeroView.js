@@ -3,12 +3,14 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import HeaderPasajero from './HeaderPasajero';
 import { Container } from 'native-base';
 
+import { BackHandler } from "react-native";
+
 class PasajeroView extends React.Component {
 
   static navigationOptions = {
     header: null
   }
-
+  
   render() {
     return (
       <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>

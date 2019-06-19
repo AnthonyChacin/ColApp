@@ -108,4 +108,56 @@ controller.getColasPedidas = async function (callback) {
 	}
 }
 
+controller.getColasAceptadas = async function (idConductor, callback){
+	try{
+
+		idConductor = new ObjectID(idConductor)
+
+		let colas = await Cola.aggregate([
+			{
+				$match: {
+					conductor: idConductor,
+					estado: "Aceptada"
+				}
+			},{
+				$lookup: {
+					from: 'User',
+					localField: 'pasajero',
+					foreignField: '_id',
+					as: 'p'
+				}
+			},{
+				$unwind: '$p'
+			},{
+				$project: {
+					_id: 1,
+					origen: 1,
+		            destino: 1,
+		            tarifa: 1,
+		            banco: 1,
+		            hora: 1,
+		            cantPasajeros: 1,
+		            vehiculo: 1,
+		            estado: 1,
+		            'p._id': 1,
+		            'p.email': 1
+				}
+			}
+		]).toArray();
+			
+		console.log(colas)
+
+		if(!!colas){
+			console.log(colas)
+		}else{
+			console.log('No tiene colas aceptadas')
+		}
+
+		callback(null, colas)
+
+	}catch(error){
+		callback(error, null)
+	}
+}
+
 module.exports = controller;

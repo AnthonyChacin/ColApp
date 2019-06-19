@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { ppRegistry, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import HeaderConductor from './HeaderConductor';
 import { Container, Icon } from 'native-base';
+
+import { BackHandler } from "react-native";
 
 const { width, height } = Dimensions.get('window')
 

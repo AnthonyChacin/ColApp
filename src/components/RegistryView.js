@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 import axios from 'axios';
@@ -33,42 +35,53 @@ class RegistryView extends React.Component {
       if (this.state.email != "") {
         switch (params) {
           case 1:
+            var urlC = 'https://colapp-asa.herokuapp.com/login';
 
-            var urlP = `https://colapp-asa.herokuapp.com/iniciarPasajero`;
-
-            let pasajero = await axios.post(urlP, {
+            let pasajero = await axios.post(urlC, {
               email: this.state.email
             })
 
             if (pasajero.data.success) {
-              
+
+              await AsyncStorage.setItem('userId', `${pasajero.data.user.id}`);
+              await AsyncStorage.setItem('userEmail', `${pasajero.data.user.email}`);
+              await AsyncStorage.setItem('userType', `Pasajero`);
+
+              this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [
+                  this.props.navigation.navigate('Pasajero')
+                ]
+              }))
+
               this.setState({
                 email: ''
               })
-
-              this.props.navigation.navigate('Pasajero', {
-                PasajeroId: pasajero.data.pasajero.id,
-                PasajeroEmail: pasajero.data.pasajero.email
-              });
             }
             break;
           case 2:
             var urlC = 'https://colapp-asa.herokuapp.com/login';
 
-            let request = await axios.post(urlC, {
+            let conductor = await axios.post(urlC, {
               email: this.state.email
             })
 
-            if (request.data.success) {
+            if (conductor.data.success) {
+
+              await AsyncStorage.setItem('userId', `${conductor.data.user.id}`);
+              await AsyncStorage.setItem('userEmail', `${conductor.data.user.email}`);
+              await AsyncStorage.setItem('userType', `Conductor`);
+
+              this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [
+                  this.props.navigation.navigate('Conductor')
+                ]
+              }))
 
               this.setState({
                 email: ''
               })
-
-              await AsyncStorage.setItem('userId', `${request.data.user.id}`);
-              await AsyncStorage.setItem('userEmail', `${request.data.user.email}`);
-
-              this.props.navigation.navigate('Conductor');
             }
             break
         }

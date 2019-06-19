@@ -3,13 +3,16 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
-    View
+    View, 
+    Dimensions
 } from 'react-native';
 import { Container, Text, Left, Body, Header, Icon, Title, Button, Segment, Right, Tab, Tabs, TabHeading, Content } from 'native-base';
 import MenuButton from './MenuButton';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
 import ListadoColas from './ListadoColas';
 import ColasAceptadasConductor from './ColasAceptadasConductor';
+
+const HEIGHT = Dimensions.get('window').height;
 
 class HeaderConductor extends React.Component {
 
@@ -59,7 +62,8 @@ export default HeaderConductor;
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: '#E6890F'
+        backgroundColor: '#E6890F',
+        height: HEIGHT*0.1
     },
     activeTabStyle: {
         backgroundColor: 'white'
