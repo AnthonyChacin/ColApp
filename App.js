@@ -6,42 +6,105 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {AppRegistry, Platform, StyleSheet, Text, View} from 'react-native';
-import {createStackNavigator, createAppContainer, DrawerNavigator, createDrawerNavigator} from 'react-navigation';
+import React, { Component } from 'react';
+import { AppRegistry, Platform, Dimensions, StyleSheet, Text, View } from 'react-native';
+
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { createStackNavigator, createAppContainer, DrawerNavigator, createDrawerNavigator } from 'react-navigation';
 
 import RegistryView from './src/components/RegistryView';
 import PasajeroView from './src/components/PasajeroView';
 import ConductorView from './src/components/ConductorView';
+import ColasAceptadasConductor from './src/components/ColasAceptadasConductor';
+import AuthLoadingScreen from './src/components/AuthLoadingScreen';
+//import Logout from './src/components/Logout';
+
+import PubNubReact from 'pubnub-react';
+
+const WIDTH = Dimensions.get('window').width;
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.pubnub = new PubNubReact({
+      publishKey: 'pub-c-d7d3663d-7ef8-4800-96e5-68eb8f5b4041',
+      subscribeKey: 'sub-c-336faa76-86ed-11e9-9f15-ba4fa582ffed'
+    });
+    this.pubnub.init(this);
+  }
+
+  componentWillMount() {
+    
+  }
 
   render() {
     console.disableYellowBox = true;
     return (
-      <AppContainer />
+      <AppContainer {...this.props}/>
     )
   }
 }
 
 const AppDrawerNavigator = createDrawerNavigator({
-
-//En la izquierda se muestra el nombre por el que llamaremos al componente cuando queramos ir a esa vista
-//Y en la derecha está el nombre verdadero del componente (Nombre de la clase como tal) 
-
-  Registry: RegistryView,
-  Pasajero: PasajeroView,
-  Conductor: ConductorView
-
-},{
-  
-  //Aquí determinas qué vista será la primera en mostrarse. Por defecto puse el login
-  // Fijense que uso el nombre que le definí arriba, cada vez que uses esos nombres, ponlos en comillas simples
-  initialRouteName: 'Registry',
-  drawerPosition: 'right',
-  drawerWidth: 120
-
-})
+  AuthLoadingScreen: {
+    screen: AuthLoadingScreen,
+    navigationOptions: {
+      drawerLabel: () => null
+    }
+  },
+  Registry: {
+    screen: RegistryView,
+    navigationOptions: {
+      drawerLabel: () => null
+    } 
+  },
+  Pasajero: {
+    screen: PasajeroView,
+    navigationOptions: {
+      drawerLabel: 'Pasajero',
+      drawerIcon: () => (
+        <Icon name="users" size={20} color="#E6880F"/>
+      )
+    } 
+  },
+  Conductor: {
+    screen: ConductorView,
+    navigationOptions: {
+      drawerLabel: 'Conductor',
+      drawerIcon: () => (
+        <Icon name="car" size={20} color="#E6880F"/>
+      )
+    }
+  },
+  ColasAceptadasConductor: {
+    screen: ColasAceptadasConductor,
+    navigationOptions: {
+      drawerLabel: () => null
+    }
+  }/* ,
+  Logout: {
+    screen: Logout,
+    navigationOptions: {
+      drawerLabel: 'SignOut',
+      drawerIcon: () => (
+        <Icon name="sign-out-alt" size={20} color="red"/>
+      )
+    }
+  } */
+}, 
+{
+  initialRouteName: 'AuthLoadingScreen',
+  drawerWidth: (WIDTH*0.83),
+  drawerPosition: 'left',
+  contentOptions: {
+    activeTintColor: '#E6880F',
+    inactiveTintColor: '#aaaaaa',
+    activeBackgroundColor: 'rgba(20,20,20,0.9)',
+    inactiveBackgroundColor: '#ffffff',
+  }
+}
+)
 
 const AppContainer = createAppContainer(AppDrawerNavigator);
 

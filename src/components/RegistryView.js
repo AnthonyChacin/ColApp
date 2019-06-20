@@ -6,15 +6,18 @@ import {
   Text,
   View,
   TouchableOpacity,
-  AsyncStorage
 } from 'react-native';
+
+import { StackActions, NavigationActions } from 'react-navigation';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import axios from 'axios';
 
 class RegistryView extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: ''
     }
@@ -32,48 +35,60 @@ class RegistryView extends React.Component {
       if (this.state.email != "") {
         switch (params) {
           case 1:
+            var urlC = 'https://colapp-asa.herokuapp.com/login';
 
-            var urlP = `http://10.77.7.209:8080/iniciarPasajero`;
-
-            let pasajero = await axios.post(urlP, {
+            let pasajero = await axios.post(urlC, {
               email: this.state.email
             })
 
             if (pasajero.data.success) {
 
+              await AsyncStorage.setItem('userId', `${pasajero.data.user.id}`);
+              await AsyncStorage.setItem('userEmail', `${pasajero.data.user.email}`);
+              await AsyncStorage.setItem('userType', `Pasajero`);
+
+              this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [
+                  this.props.navigation.navigate('Pasajero')
+                ]
+              }))
+
               this.setState({
                 email: ''
               })
-
-              this.props.navigation.navigate('Pasajero', {
-                PasajeroId: pasajero.data.pasajero.id,
-                PasajeroEmail: pasajero.data.pasajero.email
-              });
             }
             break;
           case 2:
-            var urlC = 'http://10.77.7.209:8080/iniciarConductor';
+            var urlC = 'https://colapp-asa.herokuapp.com/login';
 
             let conductor = await axios.post(urlC, {
               email: this.state.email
             })
 
             if (conductor.data.success) {
+
+              await AsyncStorage.setItem('userId', `${conductor.data.user.id}`);
+              await AsyncStorage.setItem('userEmail', `${conductor.data.user.email}`);
+              await AsyncStorage.setItem('userType', `Conductor`);
+
+              this.props.navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [
+                  this.props.navigation.navigate('Conductor')
+                ]
+              }))
+
               this.setState({
                 email: ''
               })
-
-              this.props.navigation.navigate('Conductor', {
-                ConductorId: conductor.data.conductor.id,
-                ConductorEmail: conductor.data.conductor.email
-              });
             }
             break
         }
       }
 
     } catch (error) {
-      this.props.navigation.push('Registry');
+      this.props.navigation.navigate('Registry');
     }
   }
 
@@ -89,8 +104,8 @@ class RegistryView extends React.Component {
         <Text style={styles.welcome}>Bienvenido a ColApp</Text>
 
         <Image
-          source={{ uri: 'https://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png' }}
-          style={{ width: 120, height: 58 }}
+          source={{ uri: 'http://cdn.pixabay.com/photo/2014/04/02/14/06/car-306182_960_720.png' }}
+          style={{ width: 200, height: 100 }}
         />
 
         <TextInput

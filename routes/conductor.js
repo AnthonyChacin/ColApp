@@ -2,20 +2,20 @@ const express = require('express');
 const router = express.Router();
 const colaController = require('../controllers/colaController');
 
-require('dotenv').config({ path: 'variables.env'});
+require('dotenv').config({ path: 'variables.env' });
 
 //rutas establecidas para la ejecución de los métodos POST y GET
 
 router.get('/verColasPedidas', (req, res) => {
-	
+
 	colaController.getColasPedidas((err, colas) => {
-		if(err){
+		if (err) {
 			console.log(err)
 			res.json({
 				success: false,
 				data: 'No-Data'
 			})
-		}else{
+		} else {
 			res.json({
 				success: true,
 				data: colas
@@ -25,16 +25,35 @@ router.get('/verColasPedidas', (req, res) => {
 })
 
 router.post('/darCola', (req, res) => {
-	if(!!req.body){
+	if (!!req.body) {
 		colaController.darCola(req.body, (err) => {
-			if(err){
+			if (err) {
 				console.log(err)
 				res.json({
 					success: false
 				})
-			}else{
+			} else {
 				res.json({
 					success: true
+				});
+			}
+		})
+	}
+})
+
+router.get('/verColasAceptadas/:id', (req, res) => {
+	if (!!req.params.id) {
+		colaController.getColasAceptadas(req.params.id, (err, colas) => {
+			if (err) {
+				console.log(err)
+				res.json({
+					success: false,
+					data: 'No-Data'
+				})
+			} else {
+				res.json({
+					success: true,
+					data: colas
 				});
 			}
 		})

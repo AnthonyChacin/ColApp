@@ -6,32 +6,63 @@ import {
     Dimensions,
     ToastAndroid
 } from 'react-native';
+import { PixelRatio } from 'react-native'
 import MapView from 'react-native-maps';
 import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
+import PubNubReact from 'pubnub-react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
+const HEIGHT = height;
 
 class ListadoColas extends React.Component {
 
     constructor(props) {
+
         super(props);
+
+        this.pubnub = new PubNubReact({
+            publishKey: 'pub-c-d7d3663d-7ef8-4800-96e5-68eb8f5b4041',
+            subscribeKey: 'sub-c-336faa76-86ed-11e9-9f15-ba4fa582ffed'
+        });
 
         this.state = {
             loaded: false,
-            colas: null
+            colas: null,
+            currentUser: {userId: undefined, userEmail: undefined}
         }
 
-        this.socket = SockectIOClient('http://10.77.7.209:8080');
+        
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+        
+        
+    }
+
+    async getCurrentUser(){
+        try{
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        }catch(error){
+            console.warn(error)
+        }
     }
 
     async componentWillMount() {
         await this._getColas();
+        await this.getCurrentUser();
     }
 
     async componentDidMount() {
+
         this.socket.on('Cola Pedida', (obj) => {
             if (obj) {
                 this._getColas();
@@ -40,8 +71,9 @@ class ListadoColas extends React.Component {
     }
 
     render() {
+        console.warn(this.state.colas)
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', paddingBottom: '1%', height }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT*0.9)}}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -51,7 +83,7 @@ class ListadoColas extends React.Component {
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
-                            <Card style={{ elevation: 3, flex: 1 }}>
+                            <Card style={{ elevation: 3, flex: 1}}>
 
                                 <CardItem>
                                     <View style={styles.Container}>
@@ -79,7 +111,7 @@ class ListadoColas extends React.Component {
 
                                 <CardItem cardBody>
                                     <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
-                                    <Text style={{ fontSize: 12 }}> {item.p.email} </Text>
+                                    <Text style={{ fontSize: 14 }}> {item.p.email} </Text>
                                 </CardItem>
 
                                 <CardItem cardBody>
@@ -109,8 +141,9 @@ class ListadoColas extends React.Component {
 
                                 <CardItem style={{ justifyContent: 'center' }}>
                                     <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => this.darCola(item._id)}
+                                        disabled={ this.state.currentUser.userEmail == item.p.email ? true : false}
+                                        style={ this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
+                                        onPress={() => this.darCola(item._id, item.p._id)}
                                     >
                                         <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
                                     </TouchableOpacity>
@@ -126,7 +159,7 @@ class ListadoColas extends React.Component {
     async _getColas() {
         try {
 
-            var url = 'http://10.77.7.209:8080/conductor/verColasPedidas';
+            var url = 'https://colapp-asa.herokuapp.com/conductor/verColasPedidas';
 
             let response = await axios.get(url);
 
@@ -145,18 +178,18 @@ class ListadoColas extends React.Component {
     }
 
 
-    async darCola(id) {
+    async darCola(idCola, idPasajero) {
         try {
 
-            var url = 'http://10.77.7.209:8080/conductor/darCola'
+            var url = 'https://colapp-asa.herokuapp.com/conductor/darCola'
 
             let request = await axios.post(url, {
-                idCola: id,
-                idConductor: this.props.navigation.getParam('ConductorId', 'No-Id')
+                idCola: idCola,
+                idConductor: this.state.currentUser.userId
             })
 
             if (request.data.success) {
-                this._getColas()
+                this.socket.emit('Cola Pedida', true);
                 ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
                 //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);
             }
@@ -217,6 +250,19 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         backgroundColor: "#E6880F",
+        alignItems: "center",
+        color: "white",
+        alignSelf: "center",
+        marginTop: 2,
+        marginBottom: 10,
+        borderRadius: 25,
+        width: 300
+    },
+    buttonDisabled: {
+        paddingHorizontal: 16,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: 'rgba(20,20,20,0.3)',
         alignItems: "center",
         color: "white",
         alignSelf: "center",

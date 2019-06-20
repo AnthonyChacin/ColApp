@@ -1,4 +1,7 @@
-require('dotenv').config({ path: 'variables.env' });
+if(process.env.NODE_ENV !== 'production'){
+	require('dotenv').config({ path: 'variables.env' });
+}
+
 const express = require('express');
 
 const bodyParser = require('body-parser');
@@ -15,6 +18,7 @@ var DB;
 const index = require("./routes/index");
 const pasajero = require("./routes/pasajero");
 const conductor = require("./routes/conductor");
+const tests = require("./routes/tests");
 
 const app = express();
 
@@ -26,47 +30,48 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', index);
 app.use('/pasajero/', pasajero);
 app.use('/conductor/', conductor);
+app.use('/tests/', tests);
 
+app.set('port', process.env.PORT || 8080);
 
-Client.connect(err => {
+const server = app.listen(app.get('port'), () => {
+	console.log(`ColApp running → PORT ${server.address().port} 🔥`);
+})
 
-	if (err) {
-		console.log(err);
-	}
+const io = socketio(server);
 
-	DB = Client.db(`${process.env.DB_NAME}`);
-	const testCollection = DB.collection('testConnection');
+io.on('connection', socket => {
 
-	testCollection.find({}).toArray((err, result) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log(result[0].msg + ' to DataBase ' + process.env.DB_NAME);
+	socket.on('Cola Pedida', (obj) => {
+		if (obj) {
+			socket.broadcast.emit('Cola Pedida', true)
 		}
 	})
 
-	app.set('port', process.env.PORT || 8080);
+	/* socket.on('Cola Dada', (obj) => {
+		if(obj){
+			io.emit
+		}
+	}) */
 
-	const server = app.listen(app.get('port'), () => {
-		console.log(`ColApp running → PORT ${server.address().port} 🔥`);
-	})
+})
 
-	const io = socketio(server);
 
-	io.on('connection', socket => {
+Client.connect((err) => {
 
-		socket.on('Cola Pedida', (obj) => {
-			if(obj){
-				socket.broadcast.emit('Cola Pedida', true)
+	if (err) {
+		console.log(err);
+	} else {
+		DB = Client.db(`${process.env.DB_NAME}`);
+		const testCollection = DB.collection('testConnection');
+
+		testCollection.find({}).toArray((err, result) => {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log(result[0].msg + ' to DataBase! ' + process.env.DB_NAME);
 			}
 		})
-
-		/* socket.on('Cola Dada', (obj) => {
-			if(obj){
-				io.emit
-			}
-		}) */
-
-	})
+	}
 })
 

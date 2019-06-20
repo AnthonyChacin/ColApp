@@ -19,6 +19,7 @@ import MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 
 import SockectIOClient from 'socket.io-client';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 2
@@ -28,9 +29,11 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
 class FormColaView extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        
         this.state = {
+            currentUser: {userId: undefined, userEmail: undefined},
             loaded: false,
             initialPosition: {
                 latitude: 0,
@@ -50,7 +53,28 @@ class FormColaView extends React.Component {
             cantPasajeros: ''
         }
 
-        this.socket = SockectIOClient('http://10.77.7.209:8080');
+
+            this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+       
+    }
+
+    async getCurrentUser(){
+        try{
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        }catch(error){
+            console.warn(error)
+        }
+    }
+
+    async componentWillMount(){
+        await this.getCurrentUser();
     }
 
     async componentDidMount() {
@@ -113,11 +137,11 @@ class FormColaView extends React.Component {
 
     async submit() {
         try {
-
+            
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
                 this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
-                var url = 'http://10.77.7.209:8080/pasajero/pedirCola';
+                var url = 'https://colapp-asa.herokuapp.com/pasajero/pedirCola';
 
                 let cola = await axios.post(url, {
                     origen: this.state.initialPosition,
@@ -128,8 +152,10 @@ class FormColaView extends React.Component {
                     cantPasajeros: this.state.cantPasajeros,
                     vehiculo: this.state.vehiculo,
                     estado: "Pedida",
-                    pasajero: this.props.navigation.getParam('PasajeroId', 'No-Id')
+                    pasajero: this.state.currentUser.userId
                 })
+
+                console.warn(cola.data)
 
                 if (cola.data.success) {
 
@@ -167,12 +193,12 @@ class FormColaView extends React.Component {
         return (
 
             <View>
-                {!this.state.loaded && (
+                {(!this.state.loaded) && (
                     <View style={styles.Container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
-                {this.state.loaded && (<View>
+                {(this.state.loaded && this.state.currentUser.userId != undefined) && (<View>
                     <View style={styles.Container}>
                         <MapView style={styles.map}
                             region={this.state.initialPosition}>
@@ -185,7 +211,7 @@ class FormColaView extends React.Component {
                     <View style={styles.container}>
                         <Text style={styles.Label}>Destino</Text>
                         <TextInput
-                            placeholder="e.g. Santa Fe"
+                            placeholder="e.g. Santa Fe Sur"
                             placeholderTextColor='rgba(20,20,20,0.3)'
                             style={styles.textInput}
                             editable={true}
@@ -193,9 +219,9 @@ class FormColaView extends React.Component {
                             autoFocus={true}
                             onChangeText={(text) => this.updateValue(text, 2)}
                             value={this.state.destino}
-
+                            enablesReturnKeyAutomatically={true}
                         />
-                        <Text style={styles.Label}>Tarifa</Text>
+                        <Text style={styles.Label}>Tarifa (Bs.)</Text>
                         <TextInput
                             placeholder="e.g. 500"
                             placeholderTextColor='rgba(20,20,20,0.3)'
@@ -205,6 +231,7 @@ class FormColaView extends React.Component {
                             onChangeText={(text) => this.updateValue(text, 3)}
                             value={this.state.tarifa}
                             keyboardType="numeric"
+                            enablesReturnKeyAutomatically={true}
                         />
                         <Text style={styles.Label}>Banco</Text>
                         <View style={styles.Picker}>
@@ -244,9 +271,11 @@ class FormColaView extends React.Component {
                             onChangeText={(text) => this.updateValue(text, 6)}
                             value={this.state.cantPasajeros}
                             keyboardType="numeric"
+                            enablesReturnKeyAutomatically={true}
                         />
                         <Text style={styles.Label}>Vehículo de Preferencia</Text>
-                        {(!!this.state.cantPasajeros && this.state.cantPasajeros == 1) && (<View style={styles.Picker}>
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros == 1) && (
+                        <View style={styles.Picker}>
                             <Picker
                                 selectedValue={this.state.vehiculo}
                                 onValueChange={(itemValue, itemIndex) =>
@@ -257,7 +286,8 @@ class FormColaView extends React.Component {
                                 <Picker.Item label="Moto" value="Moto" />
                             </Picker>
                         </View>)}
-                        {(!!this.state.cantPasajeros && this.state.cantPasajeros > 1) && (<View style={styles.Picker}>
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros > 1) && (
+                        <View style={styles.Picker}>
                             <Picker
                                 selectedValue={this.state.vehiculo}
                                 onValueChange={(itemValue, itemIndex) =>
@@ -269,7 +299,7 @@ class FormColaView extends React.Component {
                         </View>)}
                         <TouchableOpacity
                             style={styles.buttonSubmit}
-                            onPress={() => this.submit(1)}
+                            onPress={() => this.submit()}
                         >
                             <Text style={{ color: "white", fontSize: 20 }}>Solicitar</Text>
                         </TouchableOpacity>
