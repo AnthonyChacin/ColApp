@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
-/*import {
-    AppRegistry,
-    Platform, Image,
-=======
 import {
->>>>>>> f6230ea725308f82a6d333051ea776e239583264
     TextInput,
     StyleSheet,
     Text,
@@ -16,9 +10,6 @@ import {
     ActivityIndicator,
     ToastAndroid
 } from 'react-native';
-*/
-import {View, Picker} from 'react-native';
-import { Text, Input } from 'galio-framework';
 
 import DatePicker from 'react-native-datepicker';
 
@@ -201,90 +192,6 @@ class FormColaView extends React.Component {
 
         return (
 
-<<<<<<< HEAD
-            <View style={styles.container}>
-
-                <Input
-                    placeholder="Origen"
-                    style={styles.textInput}
-                    editable={true}
-                    underlineColorAndroid="transparent"
-                    onChangeText={(text) => this.updateValue(text, 1)}
-                    value={this.state.origen}
-
-                />
-                <Input
-                    placeholder="Destino"
-                    style={styles.textInput}
-                    editable={true}
-                    underlineColorAndroid="transparent"
-                    onChangeText={(text) => this.updateValue(text, 2)}
-                    value={this.state.destino}
-
-                />
-                <Input
-                    placeholder="Tarifa"
-                    style={styles.textInput}
-                    editable={true}
-                    underlineColorAndroid="transparent"
-                    onChangeText={(text) => this.updateValue(text, 3)}
-                    value={this.state.tarifa}
-                    keyboardType="numeric"
-                />
-                <Input
-                    placeholder="Banco"
-                    style={styles.textInput}
-                    editable={true}
-                    underlineColorAndroid="transparent"
-                    onChangeText={(text) => this.updateValue(text, 4)}
-                    value={this.state.banco}
-                />
-                <DatePicker
-                    date = {this.state.hora}
-                    mode = 'datetime'
-                    placeholder = 'seleccione fecha y hora'
-                    format = "YYYY-MM-DD hh:mm:ss"
-                    minDate = {new Date()}
-                    confirmBtnText = "Confirm"
-                    cancelBtnText = "Cancel"
-                    customStyles = {{
-                      dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0
-                      },
-                      dateInput: {
-                        marginLeft: 36
-                      }
-                    }}
-                    onDateChange = {(date) => {this.updateValue(date, 5)}}
-                />
-                <Input
-                    placeholder="Cantidad de Pasajeros"
-                    style={styles.textInput}
-                    editable={true}
-                    underlineColorAndroid="transparent"
-                    onChangeText={(text) => this.updateValue(text, 6)}
-                    value={this.state.cantPasajeros}
-                    keyboardType="numeric"
-                />
-                <Picker
-                    selectedValue={this.state.vehiculo}
-                    style={styles.Picker}
-                    onValueChange={(itemValue, itemIndex) =>
-                        this.setState({ vehiculo: itemValue })
-                    }>
-                    <Picker.Item label="Moto" value="moto" />
-                    <Picker.Item label="Carro" value="carro" />
-                </Picker>
-                <TouchableOpacity
-                    style={styles.buttonSubmit}
-                    onPress={() => this.submit(1)}
-                >
-                    <Text style={{ color: "white", fontSize: 20 }}>Solicitar</Text>
-                </TouchableOpacity>
-=======
             <View>
                 {(!this.state.loaded) && (
                     <View style={styles.Container}>
@@ -398,7 +305,6 @@ class FormColaView extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>)}
->>>>>>> f6230ea725308f82a6d333051ea776e239583264
             </View>
 
         );
