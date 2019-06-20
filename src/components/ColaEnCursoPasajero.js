@@ -8,7 +8,7 @@ import {
     ScrollView
 } from 'react-native';
 import MapView from 'react-native-maps';
-import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body, Thumbnail, ListItem, CheckBox } from 'native-base';
+import { Container, View, Text, Body, ListItem, CheckBox } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -23,7 +23,7 @@ class ColaEnCursoPasajero extends React.Component {
         super(props);
 
         this.state = {
-            loaded: false,
+            loaded: true,
             cola: {
                 destino: 'Santa Fe',
                 origen: {
@@ -47,87 +47,64 @@ class ColaEnCursoPasajero extends React.Component {
     render() {
 
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.751) }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.77) }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
                 {this.state.cola != null && (
-
-                    <Card style={{ height: (HEIGHT * 0.75), marginTop: 0 }}>
-                        <CardItem>
-                            <Left>
-                                <Body>
-                                    <Text>Destino</Text>
-                                    <Text note style={{ color: '#E6880F' }}>{this.state.cola.destino}</Text>
-                                </Body>
-                            </Left>
-                        </CardItem>
-                        <CardItem>
-
-                            <View style={styles.Container}>
-                                <MapView style={styles.map}
-                                    region={{
+                    <View style={{ height: (HEIGHT * 0.75), marginTop: 0 }}>
+                        <View style={styles.Container}>
+                            <MapView style={styles.map}
+                                region={{
+                                    latitude: this.state.cola.origen.latitude,
+                                    longitude: this.state.cola.origen.longitude,
+                                    latitudeDelta: this.state.cola.origen.latitudeDelta,
+                                    longitudeDelta: this.state.cola.origen.longitudeDelta
+                                }}>
+                                <MapView.Marker
+                                    coordinate={{
                                         latitude: this.state.cola.origen.latitude,
-                                        longitude: this.state.cola.origen.longitude,
-                                        latitudeDelta: this.state.cola.origen.latitudeDelta,
-                                        longitudeDelta: this.state.cola.origen.longitudeDelta
+                                        longitude: this.state.cola.origen.longitude
                                     }}>
-                                    <MapView.Marker
-                                        coordinate={{
-                                            latitude: this.state.cola.origen.latitude,
-                                            longitude: this.state.cola.origen.longitude
-                                        }}>
-                                    </MapView.Marker>
-                                </MapView>
-                            </View>
+                                </MapView.Marker>
+                            </MapView>
+                        </View>
+                        <Text note style={{ marginLeft: 20, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
+                        <View style={{ height: 20 }}>
+                            <Text note style={{ marginLeft: 20 }}>Tarifa: {this.state.cola.tarifa} Bs.</Text>
+                        </View>
 
-                        </CardItem>
+                        <View style={{ height: 20 }}>
+                            <Text note style={{ marginLeft: 20 }}>Fecha y Hora: {this.state.cola.hora}</Text>
+                        </View>
 
-                        <Container style={{ flex: 1 }}>
-                            <ScrollView>
-                                <Text note style={{ marginLeft: 20, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
-                                <CardItem cardBody style={{ height: 20 }}>
-                                    <Text note style={{ marginLeft: 20 }}>Tarifa: </Text>
-                                    <Text>{this.state.cola.tarifa} Bs.</Text>
-                                </CardItem>
+                        <View style={{ height: 20 }}>
+                            <Text note style={{ marginLeft: 20 }}>Vehículo: {this.state.cola.vehiculo}</Text>
+                        </View>
 
-                                {/*                     <CardItem cardBody style={{ height: 20 }}>
-                                    <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
-                                    <Text>{this.state.cola.hora}</Text>
-                                </CardItem>
+                        <View style={{ height: 20 }}>
+                            <Text note style={{ marginLeft: 20 }}>Banco: {this.state.cola.banco}</Text>
+                            <Text></Text>
+                        </View>
 
-                                <CardItem cardBody style={{ height: 20 }}>
-                                    <Text note style={{ marginLeft: 20 }}>Vehículo: </Text>
-                                    <Text>{this.state.cola.vehiculo}</Text>
-                                </CardItem> */}
-
-                                {/*                                 <CardItem cardBody style={{ height: 20 }}>
-                                    <Text note style={{ marginLeft: 20 }}>Banco: </Text>
-                                    <Text>{this.state.cola.banco}</Text>
-                                </CardItem>
-
-                                <CardItem cardBody style={{ height: 20 }}>
-                                    <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: </Text>
-                                    <Text>{this.state.cola.cantPasajeros}</Text>
-                                </CardItem> */}
-                                <ListItem>
-                                    <CheckBox checked={true} color="#E6880F" />
-                                    <Body>
-                                        <Text>Aceptada</Text>
-                                    </Body>
-                                </ListItem>
-                                <ListItem>
-                                    <CheckBox checked={false} color="#E6880F" />
-                                    <Body>
-                                        <Text>El conductor llegó</Text>
-                                    </Body>
-                                </ListItem>
-
-                            </ScrollView>
-                        </Container>
-                    </Card>
+                        <View style={{ height: 20 }}>
+                            <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.cola.cantPasajeros}</Text>
+                        </View>
+                        <ListItem style={{ marginLeft: 1 }}>
+                            <CheckBox checked={true} color="#E6880F" />
+                            <Body>
+                                <Text style={{ color: 'white' }}>Aceptada</Text>
+                            </Body>
+                        </ListItem>
+                        <ListItem style={{ marginLeft: 1 }}>
+                            <CheckBox checked={false} color="#E6880F" />
+                            <Body>
+                                <Text style={{ color: 'white' }}>El conductor llegó</Text>
+                            </Body>
+                        </ListItem>
+                    </View>
                 )}
             </Container>
         )
@@ -141,7 +118,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width,
-        height: halfHeight
+        height: halfHeight,
+        marginLeft: 0
     },
     container: {
         flex: 1,
