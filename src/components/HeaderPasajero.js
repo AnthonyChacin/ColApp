@@ -7,6 +7,7 @@ import {
 import { Container, Text, Left, Body, Header, Icon, Title, Button, Tab, Tabs, TabHeading } from 'native-base';
 import MenuButton from './MenuButton';
 import FormColaView from './FormColaView';
+import ColaEnCursoPasajero from './ColaEnCursoPasajero';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
 
 class HeaderPasajero extends React.Component {
@@ -31,8 +32,8 @@ class HeaderPasajero extends React.Component {
                     <Tab
                         heading={
                             <TabHeading style={this.state.currentTab == 0 ? styles.activeTabStyle : styles.tabStyle}>
-                                <Icon style={this.state.currentTab == 0 ? {color: '#E6890F'} : {color: 'gray'}} name="compass" />
-                                <Text style={this.state.currentTab == 0 ? {color: '#E6890F'} : {color: 'gray'}}>Solicitud</Text>
+                                <Icon style={this.state.currentTab == 0 ? { color: '#E6890F' } : { color: 'gray' }} name="compass" />
+                                <Text style={this.state.currentTab == 0 ? { color: '#E6890F' } : { color: 'gray' }}>Solicitud</Text>
                             </TabHeading>
                         }
                     >
@@ -40,23 +41,23 @@ class HeaderPasajero extends React.Component {
                             <FormColaView {...this.props} />
                         </ScrollView>
                     </Tab>
-                    <Tab 
+                    <Tab
                         heading={
                             <TabHeading style={this.state.currentTab == 1 ? styles.activeTabStyle : styles.tabStyle}>
-                                <Icon style={this.state.currentTab == 1 ? {color: '#E6890F'} : {color: 'gray'}} name="clock" />
-                                <Text style={this.state.currentTab == 1 ? {color: '#E6890F'} : {color: 'gray'}}>Pedidas</Text>
+                                <Icon style={this.state.currentTab == 1 ? { color: '#E6890F' } : { color: 'gray' }} name="clock" />
+                                <Text style={this.state.currentTab == 1 ? { color: '#E6890F' } : { color: 'gray' }}>En curso</Text>
                             </TabHeading>
                         }
                     >
                         <ScrollView>
-
+                            <ColaEnCursoPasajero {...this.props} />
                         </ScrollView>
                     </Tab>
-                    <Tab 
+                    <Tab
                         heading={
                             <TabHeading style={this.state.currentTab == 2 ? styles.activeTabStyle : styles.tabStyle}>
-                                <Icon style={this.state.currentTab == 2 ? {color: '#E6890F'} : {color: 'gray'}} name="checkmark-circle" />
-                                <Text style={this.state.currentTab == 2 ? {color: '#E6890F'} : {color: 'gray'}}>Aceptadas</Text>
+                                <Icon style={this.state.currentTab == 2 ? { color: '#E6890F' } : { color: 'gray' }} name="checkmark-circle" />
+                                <Text style={this.state.currentTab == 2 ? { color: '#E6890F' } : { color: 'gray' }}>Historial</Text>
                             </TabHeading>
                         }
                     >

@@ -17,6 +17,7 @@ import PasajeroView from './src/components/PasajeroView';
 import ConductorView from './src/components/ConductorView';
 import ColasAceptadasConductor from './src/components/ColasAceptadasConductor';
 import AuthLoadingScreen from './src/components/AuthLoadingScreen';
+import { ThemeProvider } from 'nachos-ui';
 //import Logout from './src/components/Logout';
 
 
@@ -39,8 +40,10 @@ export default class App extends React.Component {
 
   render() {
     console.disableYellowBox = true;
-    return(
-      <AppContainer {...this.props} />
+    return (
+      /* <ThemeProvider> */
+        <AppContainer {...this.props} />
+      /* </ThemeProvider> */
     )
   }
 }

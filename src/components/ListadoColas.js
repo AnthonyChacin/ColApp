@@ -6,7 +6,6 @@ import {
     Dimensions,
     ToastAndroid
 } from 'react-native';
-import { PixelRatio } from 'react-native'
 import MapView from 'react-native-maps';
 import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
 import axios from 'axios';
@@ -32,16 +31,14 @@ class ListadoColas extends React.Component {
         this.state = {
             loaded: false,
             colas: null,
-            currentUser: {userId: undefined, userEmail: undefined}
+            currentUser: { userId: undefined, userEmail: undefined }
         }
-        
+
         this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
-        
-        
     }
 
-    async getCurrentUser(){
-        try{
+    async getCurrentUser() {
+        try {
             const userId = await AsyncStorage.getItem('userId');
             const userEmail = await AsyncStorage.getItem('userEmail');
             this.setState({
@@ -50,7 +47,7 @@ class ListadoColas extends React.Component {
                     userEmail: userEmail
                 }
             })
-        }catch(error){
+        } catch (error) {
             console.warn(error)
         }
     }
@@ -71,7 +68,7 @@ class ListadoColas extends React.Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT*0.9)}}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.9) }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -81,8 +78,7 @@ class ListadoColas extends React.Component {
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
-                            <Card style={{ elevation: 3, flex: 1}}>
-
+                            <Card style={{ height: (HEIGHT * 0.9) }}>
                                 <CardItem>
                                     <View style={styles.Container}>
                                         <MapView style={styles.map}
@@ -101,51 +97,53 @@ class ListadoColas extends React.Component {
                                         </MapView>
                                     </View>
                                 </CardItem>
-                                <Text note style={{ marginLeft: 20 }}>Ubicación actual del pasajero</Text>
-                                <CardItem>
-                                    <Text>Destino: </Text>
-                                    <Text style={{ color: '#E6880F' }}>{item.destino}</Text>
-                                </CardItem>
+                                <Container style={{ flex: 1 }}>
+                                    <Text note style={{ marginLeft: 20, height: 20 }}>Ubicación actual del pasajero</Text>
+                                    <CardItem style={{ height: 30 }}>
+                                        <Text>Destino: </Text>
+                                        <Text style={{ color: '#E6880F' }}>{item.destino}</Text>
+                                    </CardItem>
 
-                                <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
-                                    <Text style={{ fontSize: 14 }}> {item.p.email} </Text>
-                                </CardItem>
+                                    <CardItem cardBody style={{ height: 20 }}>
+                                        <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
+                                        <Text style={{ fontSize: 14 }}> {item.p.email} </Text>
+                                    </CardItem>
 
-                                <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}>Tarifa: </Text>
-                                    <Text>{item.tarifa} Bs.</Text>
-                                </CardItem>
+                                    <CardItem cardBody style={{ height: 20 }}>
+                                        <Text note style={{ marginLeft: 20 }}>Tarifa: </Text>
+                                        <Text>{item.tarifa} Bs.</Text>
+                                    </CardItem>
 
-                                <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
-                                    <Text>{item.hora}</Text>
-                                </CardItem>
+                                    <CardItem cardBody style={{ height: 20 }}>
+                                        <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
+                                        <Text>{item.hora}</Text>
+                                    </CardItem>
 
-                                <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}>Vehículo: </Text>
-                                    <Text>{item.vehiculo}</Text>
-                                </CardItem>
+                                    <CardItem cardBody style={{ height: 20 }}>
+                                        <Text note style={{ marginLeft: 20 }}>Vehículo: </Text>
+                                        <Text>{item.vehiculo}</Text>
+                                    </CardItem>
 
-                                <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}>Banco: </Text>
-                                    <Text>{item.banco}</Text>
-                                </CardItem>
+                                    <CardItem cardBody style={{ height: 20 }}>
+                                        <Text note style={{ marginLeft: 20 }}>Banco: </Text>
+                                        <Text>{item.banco}</Text>
+                                    </CardItem>
 
-                                <CardItem cardBody>
-                                    <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: </Text>
-                                    <Text>{item.cantPasajeros}</Text>
-                                </CardItem>
+                                    <CardItem cardBody style={{ height: 20 }}>
+                                        <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: </Text>
+                                        <Text>{item.cantPasajeros}</Text>
+                                    </CardItem>
 
-                                <CardItem style={{ justifyContent: 'center' }}>
-                                    <TouchableOpacity
-                                        disabled={ this.state.currentUser.userEmail == item.p.email ? true : false}
-                                        style={ this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
-                                        onPress={() => this.darCola(item._id, item.p._id)}
-                                    >
-                                        <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
-                                    </TouchableOpacity>
-                                </CardItem>
+                                    <CardItem style={{ justifyContent: 'center'}}>
+                                        <TouchableOpacity
+                                            disabled={this.state.currentUser.userEmail == item.p.email ? true : false}
+                                            style={this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
+                                            onPress={() => this.darCola(item._id, item.p._id)}
+                                        >
+                                            <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
+                                        </TouchableOpacity>
+                                    </CardItem>
+                                </Container>
                             </Card>
                         }
                     />
@@ -189,7 +187,6 @@ class ListadoColas extends React.Component {
             if (request.data.success) {
                 this.socket.emit('Cola Pedida', true);
                 this.socket.emit('ColaAceptada', this.state.currentUser.userId);
-                this.props.setState({currentPage: 1})
                 this._getColas();
                 ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
                 //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);
