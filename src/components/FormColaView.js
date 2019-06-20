@@ -50,7 +50,7 @@ class FormColaView extends React.Component {
             cantPasajeros: ''
         }
 
-        this.socket = SockectIOClient('http://192.168.0.100:8080');
+        this.socket = SockectIOClient('http://10.77.7.209:8080');
     }
 
     async componentDidMount() {
@@ -115,9 +115,9 @@ class FormColaView extends React.Component {
         try {
 
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
-                this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "") {
+                this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
-                var url = 'http://192.168.0.100:8080/pasajero/pedirCola';
+                var url = 'http://10.77.7.209:8080/pasajero/pedirCola';
 
                 let cola = await axios.post(url, {
                     origen: this.state.initialPosition,
@@ -185,7 +185,7 @@ class FormColaView extends React.Component {
                     <View style={styles.container}>
                         <Text style={styles.Label}>Destino</Text>
                         <TextInput
-                            placeholder="e.g. UNIMET"
+                            placeholder="e.g. Santa Fe"
                             placeholderTextColor='rgba(20,20,20,0.3)'
                             style={styles.textInput}
                             editable={true}
@@ -246,7 +246,7 @@ class FormColaView extends React.Component {
                             keyboardType="numeric"
                         />
                         <Text style={styles.Label}>Vehículo de Preferencia</Text>
-                        <View style={styles.Picker}>
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros == 1) && (<View style={styles.Picker}>
                             <Picker
                                 selectedValue={this.state.vehiculo}
                                 onValueChange={(itemValue, itemIndex) =>
@@ -256,7 +256,17 @@ class FormColaView extends React.Component {
                                 <Picker.Item label="Carro" value="Carro" />
                                 <Picker.Item label="Moto" value="Moto" />
                             </Picker>
-                        </View>
+                        </View>)}
+                        {(!!this.state.cantPasajeros && this.state.cantPasajeros > 1) && (<View style={styles.Picker}>
+                            <Picker
+                                selectedValue={this.state.vehiculo}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    this.setState({ vehiculo: itemValue })
+                                }>
+                                <Picker.Item label="Seleccione vehículo..." value="No especificó" />
+                                <Picker.Item label="Carro" value="Carro" />
+                            </Picker>
+                        </View>)}
                         <TouchableOpacity
                             style={styles.buttonSubmit}
                             onPress={() => this.submit(1)}
