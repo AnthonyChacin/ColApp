@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !== 'production'){
+if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config({ path: 'variables.env' });
 }
 
@@ -48,11 +48,11 @@ io.on('connection', socket => {
 		}
 	})
 
-	/* socket.on('Cola Dada', (obj) => {
-		if(obj){
-			io.emit
+	socket.on('ColaAceptada', (obj) => {
+		if(!!obj){
+			socket.broadcast.emit('ColaAceptada', obj)
 		}
-	}) */
+	})
 
 })
 
