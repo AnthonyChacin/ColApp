@@ -34,7 +34,6 @@ class ListadoColas extends React.Component {
             colas: null,
             currentUser: {userId: undefined, userEmail: undefined}
         }
-
         
         this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
         
@@ -190,6 +189,7 @@ class ListadoColas extends React.Component {
             if (request.data.success) {
                 this.socket.emit('Cola Pedida', true);
                 this.socket.emit('ColaAceptada', this.state.currentUser.userId);
+                this.props.setState({currentPage: 1})
                 this._getColas();
                 ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
                 //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);

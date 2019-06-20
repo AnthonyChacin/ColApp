@@ -38,7 +38,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    //console.disableYellowBox = true;
+    console.disableYellowBox = true;
     return(
       <AppContainer {...this.props} />
     )
