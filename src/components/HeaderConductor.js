@@ -11,6 +11,8 @@ import MenuButton from './MenuButton';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
 import ListadoColas from './ListadoColas';
 import ColasAceptadasConductor from './ColasAceptadasConductor';
+import SockectIOClient from 'socket.io-client';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const HEIGHT = Dimensions.get('window').height;
 
@@ -19,19 +21,43 @@ class HeaderConductor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentPage: 0
+            currentPage: 0,
+            currentUser: {
+                userId: undefined,
+                userEmail: undefined
+            },
+        }
+
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+    }
+
+    async componentWillMount() {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        } catch (error) {
+            console.warn(error)
         }
     }
 
-    _renderComponent() {
-        if(this.state.currentPage == 0){
-            return <ListadoColas {...this.props} />
-        }else{
-            return <ColasAceptadasConductor {...this.props} />
+    async componentDidMount(){
+        if (!!this.state.currentUser.userId) {
+            this.socket.on('ColaAceptada', (obj) => {
+                if (obj == this.state.currentUser.userId) {
+                    this.setState({currentPage: 1})
+                }
+            })
         }
     }
 
     render() {
+        console.warn(this.state.currentUser)
         return (
             <Container>
                 <Header hasSegment style={styles.header}>
@@ -52,7 +78,11 @@ class HeaderConductor extends React.Component {
                         </Segment>
                     </Right>
                 </Header>
-                {this._renderComponent()}
+                {this.state.currentPage == 0 ? 
+                (<ListadoColas {...this.props} />)
+                :
+                (<ColasAceptadasConductor {...this.props} />)
+                }
             </Container>
         )
     }
