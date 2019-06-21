@@ -162,13 +162,14 @@ controller.getColasAceptadas = async function (idConductor, callback){
 
 controller.getColasEnCurso = async function (idPasajero, callback){
 	try{
-
+		console.log(new Date().toTimeString())
 		idPasajero = new ObjectID(idPasajero)
 
 		let colas = await Cola.aggregate([
 			{
 				$match: {
-					conductor: idPasajero
+					pasajero: idPasajero,
+					hora: {$gte: new Date().toTimeString()}
 				}
 			},
 			{
