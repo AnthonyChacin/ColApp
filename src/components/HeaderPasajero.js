@@ -24,7 +24,10 @@ class HeaderPasajero extends React.Component {
             }
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com', {
+            transports: ['websocket'],
+            forceNew: true
+        });
     }
 
     async getCurrentUser() {
@@ -46,12 +49,18 @@ class HeaderPasajero extends React.Component {
         await this.getCurrentUser();
     }
 
-    async componentDidMount() {
+    async _changeTab(i) {
+        this.setState({ currentTab: i })
+    }
 
+    async componentDidMount() {
         this.socket.on('userColaPedida', (obj) => {
+            console.warn(obj)
             if (!!obj) {
-                if(obj == this.state.currentUser.userId){
-                    this.setState({currentTab: 1})
+                
+                if (obj == this.state.currentUser.userId) {
+                    this.setState({ currentTab: 1 })
+                    console.warn(this.state.currentTab)
                 }
             }
         })
@@ -68,7 +77,7 @@ class HeaderPasajero extends React.Component {
                         <Title>Pasajero</Title>
                     </Body>
                 </Header>
-                <Tabs initialPage={this.state.currentTab} onChangeTab={({ i }) => this.setState({ currentTab: i })} tabContainerStyle={{ backgroundColor: 'white' }} tabBarUnderlineStyle={{ borderBottomWidth: 5, borderBottomColor: '#E6890F' }}>
+                <Tabs page={this.state.currentTab} initialPage={this.state.currentTab} onChangeTab={({ i }) => this.setState({ currentTab: i })} tabContainerStyle={{ backgroundColor: 'white' }} tabBarUnderlineStyle={{ borderBottomWidth: 5, borderBottomColor: '#E6890F' }}>
                     <Tab
                         heading={
                             <TabHeading style={this.state.currentTab == 0 ? styles.activeTabStyle : styles.tabStyle}>

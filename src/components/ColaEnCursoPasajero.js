@@ -31,11 +31,14 @@ class ColaEnCursoPasajero extends React.Component {
             cola: null
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com', {
+            transports: ['websocket'],
+            forceNew: true
+        });
 
     }
 
-    async componentWillMount(){ 
+    async componentWillMount() {
         await this.getCurrentUser();
         await this._getColasEnCurso()
     }

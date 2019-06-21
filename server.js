@@ -42,15 +42,12 @@ const io = socketio(server);
 
 io.on('connection', socket => {
 
-	socket.on('Cola Pedida', (obj) => {
-		if (obj) {
-			socket.broadcast.emit('Cola Pedida', true)
-		}
-	})
-
-	socket.on('userColaPedida', (user) => {
-		if (!!user) {
-			socket.broadcast.emit('userColaPedida', user)
+	socket.on('Cola Pedida', (isTrue, obj) => {
+		if (isTrue) {
+			socket.broadcast.emit('Cola Pedida', true);
+			if(!!obj){
+				socket.emit('userColaPedida', obj)
+			}
 		}
 	})
 

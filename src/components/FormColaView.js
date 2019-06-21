@@ -32,9 +32,9 @@ class FormColaView extends React.Component {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
-            currentUser: {userId: undefined, userEmail: undefined},
+            currentUser: { userId: undefined, userEmail: undefined },
             loaded: false,
             initialPosition: {
                 latitude: 0,
@@ -53,14 +53,17 @@ class FormColaView extends React.Component {
             vehiculo: '',
             cantPasajeros: ''
         }
-            console.warn(this.state.hora)
+        console.warn(this.state.hora)
 
-            this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
-       
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+
     }
 
-    async getCurrentUser(){
-        try{
+    async getCurrentUser() {
+        try {
             const userId = await AsyncStorage.getItem('userId');
             const userEmail = await AsyncStorage.getItem('userEmail');
             this.setState({
@@ -69,12 +72,12 @@ class FormColaView extends React.Component {
                     userEmail: userEmail
                 }
             })
-        }catch(error){
+        } catch (error) {
             console.warn(error)
         }
     }
 
-    async componentWillMount(){
+    async componentWillMount() {
         await this.getCurrentUser();
     }
 
@@ -139,7 +142,7 @@ class FormColaView extends React.Component {
     async submit() {
         console.warn(this.state.hora)
         try {
-            
+
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
                 this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
@@ -162,8 +165,7 @@ class FormColaView extends React.Component {
 
                 if (cola.data.success) {
 
-                    this.socket.emit('Cola Pedida', true);
-                    this.socket.emit('userColaPedida', this.state.currentUser.userId)
+                    this.socket.emit('Cola Pedida', (true, this.state.currentUser.userId));
 
                     this.setState({
                         destino: '',
@@ -279,28 +281,28 @@ class FormColaView extends React.Component {
                         />
                         <Text style={styles.Label}>Vehículo de Preferencia</Text>
                         {(!!this.state.cantPasajeros && this.state.cantPasajeros == 1) && (
-                        <View style={styles.Picker}>
-                            <Picker
-                                selectedValue={this.state.vehiculo}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    this.setState({ vehiculo: itemValue })
-                                }>
-                                <Picker.Item label="Seleccione vehículo..." value="No especificó" />
-                                <Picker.Item label="Carro" value="Carro" />
-                                <Picker.Item label="Moto" value="Moto" />
-                            </Picker>
-                        </View>)}
+                            <View style={styles.Picker}>
+                                <Picker
+                                    selectedValue={this.state.vehiculo}
+                                    onValueChange={(itemValue, itemIndex) =>
+                                        this.setState({ vehiculo: itemValue })
+                                    }>
+                                    <Picker.Item label="Seleccione vehículo..." value="No especificó" />
+                                    <Picker.Item label="Carro" value="Carro" />
+                                    <Picker.Item label="Moto" value="Moto" />
+                                </Picker>
+                            </View>)}
                         {(!!this.state.cantPasajeros && this.state.cantPasajeros > 1) && (
-                        <View style={styles.Picker}>
-                            <Picker
-                                selectedValue={this.state.vehiculo}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    this.setState({ vehiculo: itemValue })
-                                }>
-                                <Picker.Item label="Seleccione vehículo..." value="No especificó" />
-                                <Picker.Item label="Carro" value="Carro" />
-                            </Picker>
-                        </View>)}
+                            <View style={styles.Picker}>
+                                <Picker
+                                    selectedValue={this.state.vehiculo}
+                                    onValueChange={(itemValue, itemIndex) =>
+                                        this.setState({ vehiculo: itemValue })
+                                    }>
+                                    <Picker.Item label="Seleccione vehículo..." value="No especificó" />
+                                    <Picker.Item label="Carro" value="Carro" />
+                                </Picker>
+                            </View>)}
                         <TouchableOpacity
                             style={styles.buttonSubmit}
                             onPress={() => this.submit()}

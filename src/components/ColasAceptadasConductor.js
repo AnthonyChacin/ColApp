@@ -23,7 +23,10 @@ class ColasAceptadasConductor extends React.Component {
             colasAceptadas: undefined
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com', {
+            transports: ['websocket'],
+            forceNew: true
+        });
     }
 
     async componentDidMount() {
@@ -56,17 +59,17 @@ class ColasAceptadasConductor extends React.Component {
         try {
 
             var url = `https://colapp-asa.herokuapp.com/conductor/verColasAceptadas/${this.state.currentUser.userId}`;
-            
+
             let response = await axios.get(url);
             console.warn(response.data.data)
             if (response.data.success) {
-                
+
                 this.setState({
                     loaded: true,
                     colasAceptadas: response.data.data.length
                 })
             }
-            
+
             return response.data.success
 
         } catch (error) {
