@@ -74,7 +74,7 @@ class ColaEnCursoPasajero extends React.Component {
             if (response.data.success) {
                 this.setState({
                     loaded: true,
-                    colas: response.data.data
+                    cola: response.data.data
                 })
             }
 
@@ -86,7 +86,7 @@ class ColaEnCursoPasajero extends React.Component {
     }
 
     render() {
-
+        console.warn(this.state.cola)
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.8) }}>
                 {!this.state.loaded && (
@@ -94,7 +94,7 @@ class ColaEnCursoPasajero extends React.Component {
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
-                {this.state.cola != null && (
+                {!!this.state.cola && (
                     <View style={{ height: (HEIGHT * 0.9), marginTop: 0 }}>
                         <View style={styles.Container}>
                             <MapView style={styles.map}
@@ -118,7 +118,7 @@ class ColaEnCursoPasajero extends React.Component {
                         </View>
 
                         <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Fecha y Hora: {this.state.cola.hora}</Text>
+                            <Text note style={{ marginLeft: 20 }}>Fecha y Hora: {moment(`${this.state.cola.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
                         </View>
 
                         <View style={{ height: 20 }}>
@@ -134,7 +134,13 @@ class ColaEnCursoPasajero extends React.Component {
                             <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.cola.cantPasajeros}</Text>
                         </View>
                         <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={true} color="#E6880F" />
+                            <CheckBox checked={(this.state.cola.estado == 'Pedida' || this.state.cola.estado == 'Aceptada') ? true : false} color="#E6880F" />
+                            <Body>
+                                <Text style={{ color: 'white' }}>Pedida</Text>
+                            </Body>
+                        </ListItem>
+                        <ListItem style={{ marginLeft: 1 }}>
+                            <CheckBox checked={(this.state.cola.estado == 'Aceptada') ? true : false} color="#E6880F" />
                             <Body>
                                 <Text style={{ color: 'white' }}>Aceptada</Text>
                             </Body>

@@ -12,6 +12,7 @@ import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import PubNubReact from 'pubnub-react';
 import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -74,7 +75,7 @@ class ListadoColas extends React.Component {
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
-                {this.state.colas != null && (
+                {(this.state.colas != null && !!this.state.currentUser.userEmail) && (
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
@@ -116,7 +117,7 @@ class ListadoColas extends React.Component {
 
                                     <CardItem cardBody style={{ height: 20 }}>
                                         <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
-                                        <Text>{item.hora}</Text>
+                                        <Text>{moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
                                     </CardItem>
 
                                     <CardItem cardBody style={{ height: 20 }}>
