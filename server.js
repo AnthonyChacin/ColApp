@@ -44,10 +44,7 @@ io.on('connection', socket => {
 
 	socket.on('Cola Pedida', (isTrue, obj) => {
 		if (isTrue) {
-			socket.broadcast.emit('Cola Pedida', true);
-			if(!!obj){
-				socket.emit('userColaPedida', obj)
-			}
+			socket.broadcast.emit('Cola Pedida', (true, obj));
 		}
 	})
 
