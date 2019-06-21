@@ -32,7 +32,8 @@ controller.pedirCola = async function (data, callback) {
 			cantPasajeros: data.cantPasajeros,
 			vehiculo: data.vehiculo,
 			estado: data.estado,
-			pasajero: data.pasajero
+			pasajero: data.pasajero,
+			creacionCola: data.creacionCola
 		}
 		console.log(query)
 		let request = await Cola.insertOne(query);
@@ -186,7 +187,7 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 			},
 			{
 				$sort: {
-					hora: -1
+					creacionCola: -1
 				}
 			},
 			{

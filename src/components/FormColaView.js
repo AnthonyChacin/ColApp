@@ -20,6 +20,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 2
@@ -153,7 +154,8 @@ class FormColaView extends React.Component {
                     cantPasajeros: this.state.cantPasajeros,
                     vehiculo: this.state.vehiculo,
                     estado: "Pedida",
-                    pasajero: this.state.currentUser.userId
+                    pasajero: this.state.currentUser.userId,
+                    creacionCola: moment().format()
                 })
 
                 console.warn(cola.data)
