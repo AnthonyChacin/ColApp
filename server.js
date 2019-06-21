@@ -40,20 +40,20 @@ const server = app.listen(app.get('port'), () => {
 
 const io = socketio(server);
 
-io.on('connection', socket => {
+io.of('/colapedida').on('connection', socket => {
 
 	socket.on('Cola Pedida', (obj) => {
 		if (obj.success && !!obj.data) {
 			socket.broadcast.emit('Cola Pedida', {success: true, data: obj.data})
 		}
 	})
+})
 
-	socket.on('ColaAceptada', (obj) => {
-		if(!!obj){
-			socket.broadcast.emit('ColaAceptada', obj)
-		}
+io.of('/colaaceptada').on('connection', socket => {
+
+	socket.on('Cola Aceptada', (obj) => {
+		
 	})
-
 })
 
 

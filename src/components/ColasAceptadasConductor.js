@@ -23,7 +23,7 @@ class ColasAceptadasConductor extends React.Component {
             colasAceptadas: undefined
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com', {
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com/colaaceptada', {
             transports: ['websocket'],
             forceNew: true
         });

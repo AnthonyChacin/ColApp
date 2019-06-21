@@ -24,7 +24,7 @@ class HeaderPasajero extends React.Component {
             }
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com', {
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
             transports: ['websocket'],
             forceNew: true
         });
