@@ -54,11 +54,11 @@ class HeaderPasajero extends React.Component {
     }
 
     async componentDidMount() {
-        this.socket.on('Cola Pedida', (isTrue, obj) => {
+        this.socket.on('Cola Pedida', (obj) => {
             console.warn(obj)
-            if (isTrue && !!obj) {
+            if (obj.success && !!obj.data) {
                 
-                if (obj == this.state.currentUser.userId) {
+                if (obj.data == this.state.currentUser.userId) {
                     this.setState({ currentTab: 1 })
                     console.warn(this.state.currentTab)
                 }
