@@ -203,17 +203,15 @@ controller.getColasEnCurso = async function (idPasajero, callback){
 		            'p.email': 1
 				}
 			}
-		]);
-			
-		console.log(colas)
+		]).toArray();
 
-		if(!!colas){
-			console.log(colas)
+		if(!!colas[0]){
+			console.log(colas[0])
 		}else{
 			console.log('No tiene colas pedidas')
 		}
 
-		callback(null, colas)
+		callback(null, colas[0])
 
 	}catch(error){
 		callback(error, null)

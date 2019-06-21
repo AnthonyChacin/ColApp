@@ -41,12 +41,11 @@ class ColaEnCursoPasajero extends React.Component {
     }
 
     async componentDidMount() {
-
-        /* this.socket.on('Cola Pedida', (obj) => {
+        this.socket.on('Cola Pedida', (obj) => {
             if (obj) {
-                this._getColas();
+                this._getColasEnCurso();
             }
-        }) */
+        })
     }
 
     async getCurrentUser() {
@@ -70,7 +69,7 @@ class ColaEnCursoPasajero extends React.Component {
             var url = `https://colapp-asa.herokuapp.com/pasajero/verColasEnCurso/${this.state.currentUser.userId}`;
 
             let response = await axios.get(url);
-
+            console.warn(response)
             if (response.data.success) {
                 this.setState({
                     loaded: true,
