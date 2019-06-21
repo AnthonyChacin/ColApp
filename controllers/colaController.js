@@ -168,7 +168,7 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 			{
 				$match: {
 					pasajero: idPasajero,
-					hora: {$gte: horaLocal}
+					hora: {$gte: ISODate(`${horaLocal}`)}
 				}
 			},
 			{

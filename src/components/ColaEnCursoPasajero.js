@@ -65,7 +65,7 @@ class ColaEnCursoPasajero extends React.Component {
 
     async _getColasEnCurso() {
         try {
-            const horaLocal = new Date()
+            const horaLocal = new Date().toISOString()
             console.warn(horaLocal)
             var url = `https://colapp-asa.herokuapp.com/pasajero/verColasEnCurso/${this.state.currentUser.userId}-${horaLocal}`;
             console.warn(url)
