@@ -22,8 +22,20 @@ Client.connect(err => {
 controller.pedirCola = async function (data, callback) {
 	try{
 		data.pasajero = new ObjectID(data.pasajero)
-		data.hora = data.hora.toISOString();
-		let request = await Cola.insertOne(data);
+
+		let query = {
+			origen: data.origen,
+			destino: data.destino,
+			tarifa: data.tarifa,
+			banco: data.banco,
+			hora: ISODate(`${data.hora.toISOString()}`),
+			cantPasajeros: data.cantPasajeros,
+			vehiculo: data.vehiculo,
+			estado: data.estado,
+			pasajero: data.pasajero
+		}
+
+		let request = await Cola.insertOne(query);
 		if(request.insertedCount == 1 && !!request.insertedId){
 			console.log(request)
 			callback(null)
