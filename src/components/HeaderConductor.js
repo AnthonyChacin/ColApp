@@ -51,8 +51,11 @@ class HeaderConductor extends React.Component {
 
     async componentDidMount(){
         this.socketColaAceptada.on('Cola Aceptada', (obj) => {
+            console.warn(obj)
             if (obj.success && !!obj.pasajero && !!obj.conductor) {
+                console.warn(obj)
                 if (obj.conductor == this.state.currentUser.userId) {
+                    console.warn(obj)
                     this.setState({ currentPage: 1 })
                 }
             }

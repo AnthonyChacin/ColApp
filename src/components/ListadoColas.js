@@ -41,7 +41,7 @@ class ListadoColas extends React.Component {
             forceNew: true
         });
 
-        this.socketColaAceptada = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
+        this.socketColaAceptada = SockectIOClient('https://colapp-asa.herokuapp.com/colaaceptada', {
             jsonp: false,
             transports: ['websocket'],
             forceNew: true
