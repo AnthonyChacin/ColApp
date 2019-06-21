@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginBottom: 10,
         borderRadius: 25,
-        width: 300
+        width: (width*0.8)
     },
     buttonDisabled: {
         paddingHorizontal: 16,
@@ -267,6 +267,6 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginBottom: 10,
         borderRadius: 25,
-        width: 300
+        width: (width*0.8)
     }
 })

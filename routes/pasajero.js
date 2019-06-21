@@ -27,4 +27,23 @@ router.post('/pedirCola', (req, res) => {
 	}
 })
 
+router.get('/verColasEnCurso/:id', (req, res) => {
+	if (!!req.params.id) {
+		colaController.getColasEnCurso(req.params.id, (err, colas) => {
+			if (err) {
+				console.log(err)
+				res.json({
+					success: false,
+					data: 'No-Data'
+				})
+			} else {
+				res.json({
+					success: true,
+					data: colas
+				});
+			}
+		})
+	}
+})
+
 module.exports = router;

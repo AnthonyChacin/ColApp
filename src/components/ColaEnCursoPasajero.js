@@ -23,38 +23,79 @@ class ColaEnCursoPasajero extends React.Component {
         super(props);
 
         this.state = {
-            loaded: true,
-            cola: {
-                destino: 'Santa Fe',
-                origen: {
-                    latitude: 10.4993502,
-                    longitude: -66.7843985,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.005625
-                },
-                tarifa: 3450,
-                hora: '28-06-2019 08:00',
-                vehiculo: 'Carro',
-                banco: 'Provincial',
-                cantPasajeros: 1
+            loaded: false,
+            currentUser: {
+                userId: undefined,
+                userEmail: undefined
             },
+            cola: null
         }
 
         this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
 
     }
 
+    async componentWillMount(){ 
+        await this.getCurrentUser();
+        await this._getColasEnCurso()
+    }
+
+    async componentDidMount() {
+
+        /* this.socket.on('Cola Pedida', (obj) => {
+            if (obj) {
+                this._getColas();
+            }
+        }) */
+    }
+
+    async getCurrentUser() {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+
+    async _getColasEnCurso() {
+        try {
+
+            var url = `https://colapp-asa.herokuapp.com/pasajero/verColasEnCurso/${this.state.currentUser.userId}`;
+
+            let response = await axios.get(url);
+
+            if (response.data.success) {
+                this.setState({
+                    loaded: true,
+                    colas: response.data.data
+                })
+            }
+
+            return response.data.success
+
+        } catch (error) {
+            return false
+        }
+    }
+
     render() {
 
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.77) }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.8) }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
                 {this.state.cola != null && (
-                    <View style={{ height: (HEIGHT * 0.75), marginTop: 0 }}>
+                    <View style={{ height: (HEIGHT * 0.9), marginTop: 0 }}>
                         <View style={styles.Container}>
                             <MapView style={styles.map}
                                 region={{
