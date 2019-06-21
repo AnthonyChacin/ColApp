@@ -69,7 +69,7 @@ class ListadoColas extends React.Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.9) }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)'}}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -79,7 +79,7 @@ class ListadoColas extends React.Component {
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
-                            <Card style={{ height: (HEIGHT * 0.9) }}>
+                            <Card>
                                 <CardItem>
                                     <View style={styles.Container}>
                                         <MapView style={styles.map}

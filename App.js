@@ -103,7 +103,7 @@ const AppDrawerNavigator = createDrawerNavigator({
       activeTintColor: '#E6880F',
       inactiveTintColor: '#aaaaaa',
       activeBackgroundColor: 'rgba(20,20,20,0.9)',
-      inactiveBackgroundColor: '#ffffff',
+      inactiveBackgroundColor: '#ffffff'
     }
   }
 )

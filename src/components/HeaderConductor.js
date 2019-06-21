@@ -3,7 +3,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
-    View, 
+    View,
     Dimensions
 } from 'react-native';
 import { Container, Text, Left, Body, Header, Icon, Title, Button, Segment, Right, Tab, Tabs, TabHeading, Content } from 'native-base';
@@ -65,11 +65,13 @@ class HeaderConductor extends React.Component {
                         </Segment>
                     </Right>
                 </Header>
-                {this.state.currentPage == 0 ? 
-                (<ListadoColas {...this.props} />)
-                :
-                (<ColasAceptadasConductor {...this.props} />)
-                }
+                <View style={{ height: (HEIGHT * 0.9) }}>
+                    {this.state.currentPage == 0 ?
+                        (<ListadoColas {...this.props} />)
+                        :
+                        (<ColasAceptadasConductor {...this.props} />)
+                    }
+                </View>
             </Container>
         )
     }
@@ -80,7 +82,7 @@ export default HeaderConductor;
 const styles = StyleSheet.create({
     header: {
         backgroundColor: '#E6890F',
-        height: HEIGHT*0.1
+        height: HEIGHT * 0.1
     },
     activeTabStyle: {
         backgroundColor: 'white'
