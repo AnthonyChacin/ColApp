@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    TouchableOpacity,
     ActivityIndicator,
-    Dimensions,
-    ToastAndroid,
-    ScrollView
+    Dimensions
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Container, View, Text, Body, ListItem, CheckBox } from 'native-base';
@@ -13,6 +10,7 @@ import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment, { isMoment } from 'moment';
+
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
 const HEIGHT = height;
@@ -115,7 +113,7 @@ class ColaEnCursoPasajero extends React.Component {
                                 </MapView.Marker>
                             </MapView>
                         </View>
-                        <Text note style={{ marginLeft: 20, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
+                        <Text note style={{ marginLeft: 10, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
                         <View style={{ height: 20 }}>
                             <Text note style={{ marginLeft: 20 }}>Tarifa: {this.state.cola.tarifa} Bs.</Text>
                         </View>

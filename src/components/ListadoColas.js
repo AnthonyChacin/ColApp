@@ -118,7 +118,7 @@ class ListadoColas extends React.Component {
 
                                     <CardItem cardBody style={{ height: 20 }}>
                                         <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
-                                        <Text style={{ fontSize: 14 }}> {item.p.email} </Text>
+                                        <Text style={{ fontSize: 12 }}> {item.p.email} </Text>
                                     </CardItem>
 
                                     <CardItem cardBody style={{ height: 20 }}>

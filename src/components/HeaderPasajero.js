@@ -8,6 +8,7 @@ import { Container, Text, Left, Body, Header, Icon, Title, Button, Tab, Tabs, Ta
 import MenuButton from './MenuButton';
 import FormColaView from './FormColaView';
 import ColaEnCursoPasajero from './ColaEnCursoPasajero';
+import HistorialPasajero from './historialPasajero';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -111,7 +112,7 @@ class HeaderPasajero extends React.Component {
                         }
                     >
                         <ScrollView>
-
+                            <HistorialPasajero {...this.props} />
                         </ScrollView>
                     </Tab>
                 </Tabs>
