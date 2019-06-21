@@ -71,7 +71,7 @@ class ColaEnCursoPasajero extends React.Component {
                                 </MapView.Marker>
                             </MapView>
                         </View>
-                        <Text note style={{ marginLeft: 20, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
+                        <Text note style={{ marginLeft: 10, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
                         <View style={{ height: 20 }}>
                             <Text note style={{ marginLeft: 20 }}>Tarifa: {this.state.cola.tarifa} Bs.</Text>
                         </View>
