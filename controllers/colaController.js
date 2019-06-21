@@ -22,6 +22,7 @@ Client.connect(err => {
 controller.pedirCola = async function (data, callback) {
 	try{
 		data.pasajero = new ObjectID(data.pasajero)
+		data.hora = data.hora.toISOString();
 		let request = await Cola.insertOne(data);
 		if(request.insertedCount == 1 && !!request.insertedId){
 			console.log(request)
