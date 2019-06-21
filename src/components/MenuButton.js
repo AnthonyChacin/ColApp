@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
+    Dimensions
 } from 'react-native';
 import { Text, Left, Body, Header, Icon, Title, Button } from 'native-base';
+const { width, height } = Dimensions.get('window')
 
 class MenuButton extends React.Component {
 
@@ -12,7 +14,7 @@ class MenuButton extends React.Component {
             <Button transparent
                 onPress={() => { this.props.navigation.openDrawer() }}
             >
-                <Icon name='menu' />
+                <Icon name='menu' style={{fontSize: 40}}/>
             </Button>
         )
     }
@@ -20,19 +22,4 @@ class MenuButton extends React.Component {
 
 export default MenuButton;
 
-const styles = StyleSheet.create({
-    header: {
-        backgroundColor: '#E6890F'
-    },
-    button: {
-        alignItems: "center",
-        color: "white",
-        alignSelf: "center",
-        margin: 0,
-        borderRadius: 0,
-        width: 300,
-        backgroundColor: 'rgb(20,20,20)',
-        left: 0
-    }
-})
 

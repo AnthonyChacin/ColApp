@@ -20,6 +20,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 2
@@ -52,7 +53,7 @@ class FormColaView extends React.Component {
             vehiculo: '',
             cantPasajeros: ''
         }
-
+            console.warn(this.state.hora)
 
             this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
        
@@ -136,6 +137,7 @@ class FormColaView extends React.Component {
     }
 
     async submit() {
+        console.warn(this.state.hora)
         try {
             
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
@@ -152,7 +154,8 @@ class FormColaView extends React.Component {
                     cantPasajeros: this.state.cantPasajeros,
                     vehiculo: this.state.vehiculo,
                     estado: "Pedida",
-                    pasajero: this.state.currentUser.userId
+                    pasajero: this.state.currentUser.userId,
+                    creacionCola: moment().format()
                 })
 
                 console.warn(cola.data)
@@ -254,7 +257,7 @@ class FormColaView extends React.Component {
                             <DatePicker
                                 date={this.state.hora}
                                 mode='datetime'
-                                format="DD-MM-YYYY hh:mm"
+                                format=''
                                 minDate={this.state.hora}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"

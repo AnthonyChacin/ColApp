@@ -22,7 +22,21 @@ Client.connect(err => {
 controller.pedirCola = async function (data, callback) {
 	try{
 		data.pasajero = new ObjectID(data.pasajero)
-		let request = await Cola.insertOne(data);
+
+		let query = {
+			origen: data.origen,
+			destino: data.destino,
+			tarifa: data.tarifa,
+			banco: data.banco,
+			hora: data.hora,
+			cantPasajeros: data.cantPasajeros,
+			vehiculo: data.vehiculo,
+			estado: data.estado,
+			pasajero: data.pasajero,
+			creacionCola: data.creacionCola
+		}
+		console.log(query)
+		let request = await Cola.insertOne(query);
 		if(request.insertedCount == 1 && !!request.insertedId){
 			console.log(request)
 			callback(null)
@@ -154,6 +168,64 @@ controller.getColasAceptadas = async function (idConductor, callback){
 		}
 
 		callback(null, colas)
+
+	}catch(error){
+		callback(error, null)
+	}
+}
+
+controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
+	try{
+		idPasajero = new ObjectID(idPasajero)
+		console.log(horaLocal)
+		let colas = await Cola.aggregate([
+			{
+				$match: {
+					pasajero: idPasajero,
+					hora: {$gte: `${horaLocal}`}
+				}
+			},
+			{
+				$sort: {
+					creacionCola: -1
+				}
+			},
+			{
+				$limit: 1
+			},
+			{
+				$lookup: {
+					from: 'User',
+					localField: 'pasajero',
+					foreignField: '_id',
+					as: 'p'
+				}
+			},{
+				$unwind: '$p'
+			},{
+				$project: {
+					_id: 1,
+					origen: 1,
+		            destino: 1,
+		            tarifa: 1,
+		            banco: 1,
+		            hora: 1,
+		            cantPasajeros: 1,
+		            vehiculo: 1,
+		            estado: 1,
+		            'p._id': 1,
+		            'p.email': 1
+				}
+			}
+		]).toArray();
+
+		if(!!colas[0]){
+			console.log(colas[0])
+		}else{
+			console.log('No tiene colas pedidas')
+		}
+
+		callback(null, colas[0])
 
 	}catch(error){
 		callback(error, null)

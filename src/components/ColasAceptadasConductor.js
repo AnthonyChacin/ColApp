@@ -4,6 +4,7 @@ import { Container, Icon, Text } from 'native-base';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import SockectIOClient from 'socket.io-client';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window')
 
@@ -45,6 +46,7 @@ class ColasAceptadasConductor extends React.Component {
                     userEmail: userEmail
                 }
             })
+            this._getColasAceptadas()
         } catch (error) {
             console.warn(error)
         }
@@ -53,17 +55,18 @@ class ColasAceptadasConductor extends React.Component {
     async _getColasAceptadas() {
         try {
 
-            var url = 'https://colapp-asa.herokuapp.com/conductor/verColasAceptadas';
-
+            var url = `https://colapp-asa.herokuapp.com/conductor/verColasAceptadas/${this.state.currentUser.userId}`;
+            
             let response = await axios.get(url);
-
+            console.warn(response.data.data)
             if (response.data.success) {
+                
                 this.setState({
                     loaded: true,
                     colasAceptadas: response.data.data.length
                 })
             }
-
+            
             return response.data.success
 
         } catch (error) {

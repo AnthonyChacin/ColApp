@@ -3,7 +3,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
-    View, 
+    View,
     Dimensions
 } from 'react-native';
 import { Container, Text, Left, Body, Header, Icon, Title, Button, Segment, Right, Tab, Tabs, TabHeading, Content } from 'native-base';
@@ -11,6 +11,7 @@ import MenuButton from './MenuButton';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
 import ListadoColas from './ListadoColas';
 import ColasAceptadasConductor from './ColasAceptadasConductor';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const HEIGHT = Dimensions.get('window').height;
 
@@ -19,19 +20,31 @@ class HeaderConductor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentPage: 0
+            currentPage: 0,
+            currentUser: {
+                userId: undefined,
+                userEmail: undefined
+            },
         }
     }
 
-    _renderComponent() {
-        if(this.state.currentPage == 0){
-            return <ListadoColas {...this.props} />
-        }else{
-            return <ColasAceptadasConductor {...this.props} />
+    async componentWillMount() {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        } catch (error) {
+            console.warn(error)
         }
     }
 
     render() {
+        console.warn(this.state.currentUser)
         return (
             <Container>
                 <Header hasSegment style={styles.header}>
@@ -52,7 +65,13 @@ class HeaderConductor extends React.Component {
                         </Segment>
                     </Right>
                 </Header>
-                {this._renderComponent()}
+                <View style={{ height: (HEIGHT * 0.9) }}>
+                    {this.state.currentPage == 0 ?
+                        (<ListadoColas {...this.props} />)
+                        :
+                        (<ColasAceptadasConductor {...this.props} />)
+                    }
+                </View>
             </Container>
         )
     }
@@ -63,7 +82,7 @@ export default HeaderConductor;
 const styles = StyleSheet.create({
     header: {
         backgroundColor: '#E6890F',
-        height: HEIGHT*0.1
+        height: HEIGHT * 0.1
     },
     activeTabStyle: {
         backgroundColor: 'white'

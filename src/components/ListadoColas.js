@@ -12,6 +12,7 @@ import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import PubNubReact from 'pubnub-react';
 import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -34,10 +35,7 @@ class ListadoColas extends React.Component {
             currentUser: { userId: undefined, userEmail: undefined }
         }
 
-
         this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
-
-
     }
 
     async getCurrentUser() {
@@ -71,17 +69,17 @@ class ListadoColas extends React.Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.9) }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)'}}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
-                {this.state.colas != null && (
+                {(this.state.colas != null && !!this.state.currentUser.userEmail) && (
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
-                            <Card style={{ height: (HEIGHT * 0.9) }}>
+                            <Card>
                                 <CardItem>
                                     <View style={styles.Container}>
                                         <MapView style={styles.map}
@@ -119,7 +117,7 @@ class ListadoColas extends React.Component {
 
                                     <CardItem cardBody style={{ height: 20 }}>
                                         <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
-                                        <Text>{item.hora}</Text>
+                                        <Text>{moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
                                     </CardItem>
 
                                     <CardItem cardBody style={{ height: 20 }}>
@@ -137,7 +135,7 @@ class ListadoColas extends React.Component {
                                         <Text>{item.cantPasajeros}</Text>
                                     </CardItem>
 
-                                    <CardItem style={{ justifyContent: 'center', height: 80 }}>
+                                    <CardItem style={{ justifyContent: 'center'}}>
                                         <TouchableOpacity
                                             disabled={this.state.currentUser.userEmail == item.p.email ? true : false}
                                             style={this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
@@ -257,8 +255,7 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginBottom: 10,
         borderRadius: 25,
-        width: 300,
-        height: 20
+        width: (width*0.8)
     },
     buttonDisabled: {
         paddingHorizontal: 16,
@@ -271,6 +268,6 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginBottom: 10,
         borderRadius: 25,
-        width: 300
+        width: (width*0.8)
     }
 })

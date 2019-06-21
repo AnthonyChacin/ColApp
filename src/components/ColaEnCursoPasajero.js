@@ -12,7 +12,7 @@ import { Container, View, Text, Body, ListItem, CheckBox } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import moment, { isMoment } from 'moment';
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
 const HEIGHT = height;
@@ -23,38 +23,79 @@ class ColaEnCursoPasajero extends React.Component {
         super(props);
 
         this.state = {
-            loaded: true,
-            cola: {
-                destino: 'Santa Fe',
-                origen: {
-                    latitude: 10.4993502,
-                    longitude: -66.7843985,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.005625
-                },
-                tarifa: 3450,
-                hora: '28-06-2019 08:00',
-                vehiculo: 'Carro',
-                banco: 'Provincial',
-                cantPasajeros: 1
+            loaded: false,
+            currentUser: {
+                userId: undefined,
+                userEmail: undefined
             },
+            cola: null
         }
 
         this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
 
     }
 
-    render() {
+    async componentWillMount(){ 
+        await this.getCurrentUser();
+        await this._getColasEnCurso()
+    }
 
+    async componentDidMount() {
+        this.socket.on('Cola Pedida', (obj) => {
+            if (obj) {
+                this._getColasEnCurso();
+            }
+        })
+    }
+
+    async getCurrentUser() {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+
+    async _getColasEnCurso() {
+        try {
+            const horaLocal = moment().format();
+            console.warn(horaLocal)
+            var url = `https://colapp-asa.herokuapp.com/pasajero/verColasEnCurso/${this.state.currentUser.userId}-${horaLocal}`;
+            console.warn(url)
+            let response = await axios.get(url);
+            console.warn(response)
+            if (response.data.success) {
+                this.setState({
+                    loaded: true,
+                    cola: response.data.data
+                })
+            }
+
+            return response.data.success
+
+        } catch (error) {
+            return false
+        }
+    }
+
+    render() {
+        console.warn(this.state.cola)
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.77) }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.8) }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
-                {this.state.cola != null && (
-                    <View style={{ height: (HEIGHT * 0.75), marginTop: 0 }}>
+                {!!this.state.cola && (
+                    <View style={{ height: (HEIGHT * 0.9), marginTop: 0 }}>
                         <View style={styles.Container}>
                             <MapView style={styles.map}
                                 region={{
@@ -77,7 +118,7 @@ class ColaEnCursoPasajero extends React.Component {
                         </View>
 
                         <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Fecha y Hora: {this.state.cola.hora}</Text>
+                            <Text note style={{ marginLeft: 20 }}>Fecha y Hora: {moment(`${this.state.cola.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
                         </View>
 
                         <View style={{ height: 20 }}>
@@ -93,7 +134,13 @@ class ColaEnCursoPasajero extends React.Component {
                             <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.cola.cantPasajeros}</Text>
                         </View>
                         <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={true} color="#E6880F" />
+                            <CheckBox checked={(this.state.cola.estado == 'Pedida' || this.state.cola.estado == 'Aceptada') ? true : false} color="#E6880F" />
+                            <Body>
+                                <Text style={{ color: 'white' }}>Pedida</Text>
+                            </Body>
+                        </ListItem>
+                        <ListItem style={{ marginLeft: 1 }}>
+                            <CheckBox checked={(this.state.cola.estado == 'Aceptada') ? true : false} color="#E6880F" />
                             <Body>
                                 <Text style={{ color: 'white' }}>Aceptada</Text>
                             </Body>
