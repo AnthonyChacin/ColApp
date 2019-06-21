@@ -27,9 +27,9 @@ router.post('/pedirCola', (req, res) => {
 	}
 })
 
-router.get('/verColasEnCurso/:id', (req, res) => {
+router.get('/verColasEnCurso/:id1-:id2', (req, res) => {
 	if (!!req.params.id) {
-		colaController.getColasEnCurso(req.params.id, (err, colas) => {
+		colaController.getColasEnCurso(req.params.id1, req.params.id2, (err, colas) => {
 			if (err) {
 				console.log(err)
 				res.json({

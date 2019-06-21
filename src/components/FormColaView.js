@@ -254,7 +254,6 @@ class FormColaView extends React.Component {
                             <DatePicker
                                 date={this.state.hora}
                                 mode='datetime'
-                                format="DD-MM-YYYY hh:mm"
                                 minDate={this.state.hora}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"

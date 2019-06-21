@@ -65,8 +65,9 @@ class ColaEnCursoPasajero extends React.Component {
 
     async _getColasEnCurso() {
         try {
-
-            var url = `https://colapp-asa.herokuapp.com/pasajero/verColasEnCurso/${this.state.currentUser.userId}`;
+            const horaLocal = new Date()
+            console.warn(newDate)
+            var url = `https://colapp-asa.herokuapp.com/pasajero/verColasEnCurso/${this.state.currentUser.userId}-${horaLocal}`;
 
             let response = await axios.get(url);
             console.warn(response)
