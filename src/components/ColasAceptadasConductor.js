@@ -5,6 +5,7 @@ import { Container, Icon, Text } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import SockectIOClient from 'socket.io-client';
 import axios from 'axios';
+import { Broadcast } from 'pubnub-react/lib/broadcast';
 
 const { width, height } = Dimensions.get('window')
 

@@ -52,7 +52,9 @@ io.of('/colapedida').on('connection', socket => {
 io.of('/colaaceptada').on('connection', socket => {
 
 	socket.on('Cola Aceptada', (obj) => {
-		
+		if (obj.success && !!obj.pasajero && !!obj.conductor) {
+			socket.broadcast.emit('Cola Aceptada', {success: true, pasajero: obj.pasajero, conductor: obj.conductor})
+		}
 	})
 })
 

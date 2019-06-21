@@ -12,6 +12,7 @@ import IconVector from 'react-native-vector-icons/FontAwesome5';
 import ListadoColas from './ListadoColas';
 import ColasAceptadasConductor from './ColasAceptadasConductor';
 import AsyncStorage from '@react-native-community/async-storage';
+import SockectIOClient from 'socket.io-client';
 
 const HEIGHT = Dimensions.get('window').height;
 
@@ -26,6 +27,11 @@ class HeaderConductor extends React.Component {
                 userEmail: undefined
             },
         }
+
+        this.socketColaAceptada = SockectIOClient('https://colapp-asa.herokuapp.com/colaaceptada', {
+            transports: ['websocket'],
+            forceNew: true
+        });
     }
 
     async componentWillMount() {
@@ -41,6 +47,16 @@ class HeaderConductor extends React.Component {
         } catch (error) {
             console.warn(error)
         }
+    }
+
+    async componentDidMount(){
+        this.socketColaAceptada.on('Cola Aceptada', (obj) => {
+            if (obj.success && !!obj.pasajero && !!obj.conductor) {
+                if (obj.conductor == this.state.currentUser.userId) {
+                    this.setState({ currentPage: 1 })
+                }
+            }
+        })
     }
 
     render() {

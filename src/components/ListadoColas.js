@@ -35,7 +35,13 @@ class ListadoColas extends React.Component {
             currentUser: { userId: undefined, userEmail: undefined }
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
+        this.socketColaPedida = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
+            jsonp: false,
+            transports: ['websocket'],
+            forceNew: true
+        });
+
+        this.socketColaAceptada = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
             jsonp: false,
             transports: ['websocket'],
             forceNew: true
@@ -64,7 +70,7 @@ class ListadoColas extends React.Component {
 
     async componentDidMount() {
 
-        this.socket.on('Cola Pedida', (obj) => {
+        this.socketColaPedida.on('Cola Pedida', (obj) => {
             if (obj) {
                 this._getColas();
             }
@@ -72,6 +78,7 @@ class ListadoColas extends React.Component {
     }
 
     render() {
+        console.warn(this.state.colas)
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {!this.state.loaded && (
@@ -190,7 +197,8 @@ class ListadoColas extends React.Component {
             })
 
             if (request.data.success) {
-                this.socket.emit('Cola Pedida', true);
+                this.socketColaPedida.emit('Cola Pedida', true);
+                this.socketColaAceptada.emit('Cola Aceptada', {success: true, pasajero: idPasajero, conductor: this.state.currentUser.userId})
                 this._getColas();
                 ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
                 //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);
