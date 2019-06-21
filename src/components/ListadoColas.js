@@ -69,7 +69,7 @@ class ListadoColas extends React.Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)'}}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -107,7 +107,7 @@ class ListadoColas extends React.Component {
 
                                     <CardItem cardBody style={{ height: 20 }}>
                                         <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
-                                        <Text style={{ fontSize: 14 }}> {item.p.email} </Text>
+                                        <Text style={{ fontSize: 12 }}> {item.p.email} </Text>
                                     </CardItem>
 
                                     <CardItem cardBody style={{ height: 20 }}>
@@ -135,7 +135,7 @@ class ListadoColas extends React.Component {
                                         <Text>{item.cantPasajeros}</Text>
                                     </CardItem>
 
-                                    <CardItem style={{ justifyContent: 'center'}}>
+                                    <CardItem style={{ justifyContent: 'center' }}>
                                         <TouchableOpacity
                                             disabled={this.state.currentUser.userEmail == item.p.email ? true : false}
                                             style={this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginBottom: 10,
         borderRadius: 25,
-        width: (width*0.8)
+        width: (width * 0.8)
     },
     buttonDisabled: {
         paddingHorizontal: 16,
@@ -268,6 +268,6 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginBottom: 10,
         borderRadius: 25,
-        width: (width*0.8)
+        width: (width * 0.8)
     }
 })
