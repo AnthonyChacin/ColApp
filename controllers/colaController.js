@@ -28,7 +28,7 @@ controller.pedirCola = async function (data, callback) {
 			destino: data.destino,
 			tarifa: data.tarifa,
 			banco: data.banco,
-			hora: ISODate(`${data.hora}`),
+			hora: data.hora,
 			cantPasajeros: data.cantPasajeros,
 			vehiculo: data.vehiculo,
 			estado: data.estado,
