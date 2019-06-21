@@ -42,9 +42,10 @@ const io = socketio(server);
 
 io.on('connection', socket => {
 
-	socket.on('Cola Pedida', (isTrue, obj) => {
-		if (isTrue) {
-			socket.broadcast.emit('Cola Pedida', (true, obj));
+	socket.on('Cola Pedida', (data) => {
+		console.log(data)
+		if (data.success) {
+			console.log(data)
 		}
 	})
 
