@@ -163,6 +163,7 @@ class FormColaView extends React.Component {
                 if (cola.data.success) {
 
                     this.socket.emit('Cola Pedida', true);
+                    this.socket.emit('userColaPedida', this.state.currentUser.userId)
 
                     this.setState({
                         destino: '',

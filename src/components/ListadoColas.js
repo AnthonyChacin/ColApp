@@ -54,8 +54,8 @@ class ListadoColas extends React.Component {
     }
 
     async componentWillMount() {
-        await this._getColas();
         await this.getCurrentUser();
+        await this._getColas();
     }
 
     async componentDidMount() {

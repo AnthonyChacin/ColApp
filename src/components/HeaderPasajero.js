@@ -9,12 +9,52 @@ import MenuButton from './MenuButton';
 import FormColaView from './FormColaView';
 import ColaEnCursoPasajero from './ColaEnCursoPasajero';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
+import SockectIOClient from 'socket.io-client';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class HeaderPasajero extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { currentTab: 0 }
+        this.state = {
+            currentTab: 0,
+            currentUser: {
+                userId: undefined,
+                userEmail: undefined
+            }
+        }
+
+        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com');
+    }
+
+    async getCurrentUser() {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+
+    async componentWillMount() {
+        await this.getCurrentUser();
+    }
+
+    async componentDidMount() {
+
+        this.socket.on('userColaPedida', (obj) => {
+            if (!!obj) {
+                if(obj == this.state.currentUser.userId){
+                    this.setState({currentTab: 1})
+                }
+            }
+        })
     }
 
     render() {

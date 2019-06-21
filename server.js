@@ -48,6 +48,12 @@ io.on('connection', socket => {
 		}
 	})
 
+	socket.on('userColaPedida', (user) => {
+		if (!!user) {
+			socket.broadcast.emit('userColaPedida', user)
+		}
+	})
+
 	socket.on('ColaAceptada', (obj) => {
 		if(!!obj){
 			socket.broadcast.emit('ColaAceptada', obj)
