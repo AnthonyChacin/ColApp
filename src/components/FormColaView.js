@@ -136,14 +136,13 @@ class FormColaView extends React.Component {
     }
 
     async submit() {
-        this.setState({hora: this.state.hora.toISOString()})
+        console.warn(this.state.hora)
         try {
             
             if (this.state.loaded && this.state.destino != "" && this.state.tarifa != "" &&
                 this.state.banco != "" && this.state.hora != "" && this.state.cantPasajeros != "" && this.state.vehiculo != "") {
 
                 var url = 'https://colapp-asa.herokuapp.com/pasajero/pedirCola';
-                console.warn(this.state.hora.toISOString())
 
                 let cola = await axios.post(url, {
                     origen: this.state.initialPosition,
@@ -256,6 +255,7 @@ class FormColaView extends React.Component {
                             <DatePicker
                                 date={this.state.hora}
                                 mode='datetime'
+                                format=''
                                 minDate={this.state.hora}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"

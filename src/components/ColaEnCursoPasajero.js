@@ -12,7 +12,7 @@ import { Container, View, Text, Body, ListItem, CheckBox } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import moment, { isMoment } from 'moment';
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
 const HEIGHT = height;
@@ -65,7 +65,7 @@ class ColaEnCursoPasajero extends React.Component {
 
     async _getColasEnCurso() {
         try {
-            const horaLocal = new Date().toISOString()
+            const horaLocal = moment().format();
             console.warn(horaLocal)
             var url = `https://colapp-asa.herokuapp.com/pasajero/verColasEnCurso/${this.state.currentUser.userId}-${horaLocal}`;
             console.warn(url)
