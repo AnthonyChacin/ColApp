@@ -3,10 +3,10 @@ import {
     StyleSheet,
     ActivityIndicator,
     Dimensions,
-    FlatList
+    FlatList,
+    View
 } from 'react-native';
-import { Container, View } from 'native-base';
-import { List, ListItem } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -39,32 +39,26 @@ class HistorialPasajero extends React.Component {
     }
 
     render() {
+        if (!this.state.loading) {
+            return (
+                <View style={styles.container}>
+                    <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
+                </View>
+            )
+        } else {
+            return (
+                <FlatList
+                    data={this.state.historial}
+                    renderItem={({ item }) => (
 
-        return (
-            <Container>
-                {!this.state.loading && (
-                    <View style={styles.container}>
-                        <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
-                    </View>
-                )}
-                {!!this.state.historial && (
-                    <View>
-                        <List>
-                            <FlatList
-                                data={this.state.historial}
-                                renderItem={({ item }) => (
-
-                                    <ListItem
-                                        title={item.destino}
-                                        subtitle={item.hora}
-                                    />
-                                )}
-                            />
-                        </List>
-                    </View>
-                )}
-            </Container>
-        )
+                        <ListItem
+                            title={item.destino}
+                            subtitle={item.hora}
+                        />
+                    )}
+                />
+            )
+        }
     }
 }
 

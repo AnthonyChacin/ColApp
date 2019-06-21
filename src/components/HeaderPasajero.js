@@ -81,7 +81,7 @@ class HeaderPasajero extends React.Component {
                 <Tabs page={this.state.currentTab} initialPage={this.state.currentTab} onChangeTab={({ i }) => this.setState({ currentTab: i })} tabContainerStyle={{ backgroundColor: 'white' }} tabBarUnderlineStyle={{ borderBottomWidth: 5, borderBottomColor: '#E6890F' }}>
                     <Tab
                         heading={
-                            <TabHeading style={this.state.currentTab == 0 ? styles.activeTabStyle : styles.tabStyle}>
+                            <TabHeading style={{backgroundColor: 'white'}}>
                                 <Icon style={this.state.currentTab == 0 ? { color: '#E6890F' } : { color: 'gray' }} name="compass" />
                                 <Text style={this.state.currentTab == 0 ? { color: '#E6890F' } : { color: 'gray' }}>Solicitud</Text>
                             </TabHeading>
@@ -93,7 +93,7 @@ class HeaderPasajero extends React.Component {
                     </Tab>
                     <Tab
                         heading={
-                            <TabHeading style={this.state.currentTab == 1 ? styles.activeTabStyle : styles.tabStyle}>
+                            <TabHeading style={{backgroundColor: 'white'}}>
                                 <Icon style={this.state.currentTab == 1 ? { color: '#E6890F' } : { color: 'gray' }} name="clock" />
                                 <Text style={this.state.currentTab == 1 ? { color: '#E6890F' } : { color: 'gray' }}>En curso</Text>
                             </TabHeading>
@@ -105,7 +105,7 @@ class HeaderPasajero extends React.Component {
                     </Tab>
                     <Tab
                         heading={
-                            <TabHeading style={this.state.currentTab == 2 ? styles.activeTabStyle : styles.tabStyle}>
+                            <TabHeading style={{backgroundColor: 'white'}}>
                                 <Icon style={this.state.currentTab == 2 ? { color: '#E6890F' } : { color: 'gray' }} name="checkmark-circle" />
                                 <Text style={this.state.currentTab == 2 ? { color: '#E6890F' } : { color: 'gray' }}>Historial</Text>
                             </TabHeading>

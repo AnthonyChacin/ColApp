@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     ActivityIndicator,
-    Dimensions
+    Dimensions,
+    ProgressBarAndroid
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Container, View, Text, Body, ListItem, CheckBox } from 'native-base';
@@ -29,7 +30,12 @@ class ColaEnCursoPasajero extends React.Component {
             cola: null
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
+        this.socketColaPedida = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+
+        this.socketColaAceptada = SockectIOClient('https://colapp-asa.herokuapp.com/colaaceptada', {
             transports: ['websocket'],
             forceNew: true
         });
@@ -42,9 +48,17 @@ class ColaEnCursoPasajero extends React.Component {
     }
 
     async componentDidMount() {
-        this.socket.on('Cola Pedida', (obj) => {
+        this.socketColaPedida.on('Cola Pedida', (obj) => {
             if (obj) {
                 this._getColasEnCurso();
+            }
+        })
+
+        this.socketColaAceptada.on('Cola Aceptada', (obj) => {
+            if(!!obj.conductor && !!obj.pasajero){
+                if(obj.pasajero == this.state.currentUser.userId){
+                    this.setState({cola: {estado: 'Aceptada'}})
+                }
             }
         })
     }
@@ -152,6 +166,7 @@ class ColaEnCursoPasajero extends React.Component {
                                 <Text style={{ color: 'white' }}>El conductor llegó</Text>
                             </Body>
                         </ListItem>
+                        <ProgressBarAndroid animating={true} styleAttr='Horizontal' indeterminate={false} progress={0.66} color='#E6880F' />
                     </View>
                 )}
             </Container>
