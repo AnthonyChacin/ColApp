@@ -28,7 +28,7 @@ router.post('/pedirCola', (req, res) => {
 })
 
 router.get('/verColasEnCurso/:id1-:id2', (req, res) => {
-	if (!!req.params.id) {
+	if (!!req.params.id1 && !!req.params.id2) {
 		colaController.getColasEnCurso(req.params.id1, req.params.id2, (err, colas) => {
 			if (err) {
 				console.log(err)
