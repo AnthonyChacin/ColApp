@@ -163,7 +163,7 @@ controller.getColasAceptadas = async function (idConductor, callback){
 controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 	try{
 		idPasajero = new ObjectID(idPasajero)
-
+		console.log(horaLocal)
 		let colas = await Cola.aggregate([
 			{
 				$match: {
