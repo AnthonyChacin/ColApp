@@ -148,7 +148,7 @@ class FormColaView extends React.Component {
                     destino: this.state.destino,
                     tarifa: this.state.tarifa,
                     banco: this.state.banco,
-                    hora: this.state.hora,
+                    hora: this.state.hora.toISOString(),
                     cantPasajeros: this.state.cantPasajeros,
                     vehiculo: this.state.vehiculo,
                     estado: "Pedida",

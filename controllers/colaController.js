@@ -28,13 +28,13 @@ controller.pedirCola = async function (data, callback) {
 			destino: data.destino,
 			tarifa: data.tarifa,
 			banco: data.banco,
-			hora: ISODate(`${data.hora.toISOString()}`),
+			hora: ISODate(`${data.hora}`),
 			cantPasajeros: data.cantPasajeros,
 			vehiculo: data.vehiculo,
 			estado: data.estado,
 			pasajero: data.pasajero
 		}
-
+		console.log(query)
 		let request = await Cola.insertOne(query);
 		if(request.insertedCount == 1 && !!request.insertedId){
 			console.log(request)
