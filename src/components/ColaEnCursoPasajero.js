@@ -3,10 +3,11 @@ import {
     StyleSheet,
     ActivityIndicator,
     Dimensions,
+    TouchableOpacity,
     ProgressBarAndroid
 } from 'react-native';
 import MapView from 'react-native-maps';
-import { Container, View, Text, Body, ListItem, CheckBox } from 'native-base';
+import { Container, View, Text, Body, ListItem, CheckBox, Icon } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -103,14 +104,14 @@ class ColaEnCursoPasajero extends React.Component {
     render() {
         console.warn(this.state.cola)
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)', flex: 1 }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
                 {!!this.state.cola && (
-                    <View style={{ marginTop: 0 }}>
+                    <View style={{ marginTop: 0, marginBottom: 20, flex: 1 }}>
                         <View style={styles.Container}>
                             <MapView style={styles.map}
                                 region={{
@@ -169,8 +170,26 @@ class ColaEnCursoPasajero extends React.Component {
                                 <Text style={{ color: 'white' }}>El conductor llegó</Text>
                             </Body>
                         </ListItem>
-                        <View style={{ height: 10 }}>
+                        <View style={{ height: 4 }}>
                             <ProgressBarAndroid animating={true} styleAttr='Horizontal' indeterminate={false} progress={0.66} color='#E6880F' />
+                        </View>
+                        <View style={{ height: 40, alignItems: 'center', marginBottom: 10 }}>
+                            <TouchableOpacity
+                                style={{
+                                    borderWidth: 1,
+                                    borderColor: 'rgba(0,0,0,0.2)',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 100,
+                                    height: 50,
+                                    backgroundColor: '#E6880F',
+                                    borderRadius: 50,
+                                    marginBottom: 10,
+                                    marginTop: 10
+                                }}
+                            >
+                                <Icon name={"checkmark-circle"} size={30} color="#01a699" />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 )}
