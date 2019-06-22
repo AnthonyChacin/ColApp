@@ -88,7 +88,6 @@ class HistorialPasajero extends React.Component {
 
                     <View style={{ height: 20 }}>
                         <Text note style={{ marginLeft: 20 }}>Banco: {this.state.selected.banco}</Text>
-                        <Text></Text>
                     </View>
 
                     <View style={{ height: 20 }}>
