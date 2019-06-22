@@ -50,10 +50,6 @@ class HeaderPasajero extends React.Component {
         await this.getCurrentUser();
     }
 
-    async _changeTab(i) {
-        this.setState({ currentTab: i })
-    }
-
     async componentDidMount() {
         this.socket.on('Cola Pedida', (obj) => {
             console.warn(obj)
