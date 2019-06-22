@@ -55,9 +55,9 @@ class ColaEnCursoPasajero extends React.Component {
         })
 
         this.socketColaAceptada.on('Cola Aceptada', (obj) => {
-            if(!!obj.conductor && !!obj.pasajero){
-                if(obj.pasajero == this.state.currentUser.userId){
-                    this.setState({cola: {estado: 'Aceptada'}})
+            if (!!obj.conductor && !!obj.pasajero) {
+                if (obj.pasajero == this.state.currentUser.userId) {
+                    this.setState({ cola: { estado: 'Aceptada' } })
                 }
             }
         })
@@ -103,14 +103,14 @@ class ColaEnCursoPasajero extends React.Component {
     render() {
         console.warn(this.state.cola)
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', height: (HEIGHT * 0.8) }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
                 {!!this.state.cola && (
-                    <View style={{ height: (HEIGHT * 0.9), marginTop: 0 }}>
+                    <View style={{ marginTop: 0 }}>
                         <View style={styles.Container}>
                             <MapView style={styles.map}
                                 region={{
@@ -128,6 +128,9 @@ class ColaEnCursoPasajero extends React.Component {
                             </MapView>
                         </View>
                         <Text note style={{ marginLeft: 10, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
+                        <View style={{ height: 20 }}>
+                            <Text note style={{ marginLeft: 20 }}>Destino: {this.state.cola.destino}</Text>
+                        </View>
                         <View style={{ height: 20 }}>
                             <Text note style={{ marginLeft: 20 }}>Tarifa: {this.state.cola.tarifa} Bs.</Text>
                         </View>
@@ -166,7 +169,9 @@ class ColaEnCursoPasajero extends React.Component {
                                 <Text style={{ color: 'white' }}>El conductor llegó</Text>
                             </Body>
                         </ListItem>
-                        <ProgressBarAndroid animating={true} styleAttr='Horizontal' indeterminate={false} progress={0.66} color='#E6880F' />
+                        <View style={{ height: 10 }}>
+                            <ProgressBarAndroid animating={true} styleAttr='Horizontal' indeterminate={false} progress={0.66} color='#E6880F' />
+                        </View>
                     </View>
                 )}
             </Container>

@@ -9,7 +9,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Icon } from 'native-base';
-import { ListItem} from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import MapView from 'react-native-maps';
 import moment, { isMoment } from 'moment';
 
@@ -72,6 +72,9 @@ class HistorialPasajero extends React.Component {
                     </View>
                     <Text note style={{ marginLeft: 10, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
                     <View style={{ height: 20 }}>
+                        <Text note style={{ marginLeft: 20 }}>Destino: {this.state.selected.destino}</Text>
+                    </View>
+                    <View style={{ height: 20 }}>
                         <Text note style={{ marginLeft: 20 }}>Tarifa: {this.state.selected.tarifa} Bs.</Text>
                     </View>
 
@@ -91,8 +94,8 @@ class HistorialPasajero extends React.Component {
                     <View style={{ height: 20 }}>
                         <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.selected.cantPasajeros}</Text>
                     </View>
-                    <View style={{marginTop: 50, alignItems: 'center'}}>
-                        <TouchableOpacity onPress={() => this._itemSelected(null)}><Icon name="arrow-round-back" style={{color: '#E6890F', fontSize: 100}} /></TouchableOpacity>
+                    <View style={{ marginTop: 20, alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => this._itemSelected(null)}><Icon name="arrow-round-back" style={{ color: '#E6890F', fontSize: 100 }} /></TouchableOpacity>
                     </View>
                 </View>
             )
@@ -103,7 +106,7 @@ class HistorialPasajero extends React.Component {
                     renderItem={({ item }) =>
                         <ListItem
                             title={item.destino}
-                            subtitle={item.hora}
+                            subtitle={moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}
                             onPress={() => this._itemSelected(item)}
                         />
                     }
