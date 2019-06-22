@@ -7,6 +7,7 @@ import EstoyAquiButton  from './EstoyAquiButton';
 import MapView from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window')
+const halfHeight = height / 3
 
 
 class ColasAceptadasConductor extends React.Component {
