@@ -3,21 +3,20 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import { Text, Left, Body, Header, Icon, Title, Button } from 'native-base';
+import { Text, Left, Body, Header, Icon, Title, Button,View } from 'native-base';
+import { ALPN_ENABLED } from 'constants';
 
 class EstoyAquiButton extends React.Component {
     constructor(props) {
         super(props);
         this.pressed = false;
+        //this.disabled = false;
         this.state = {
-        // disabled = false
+       // disabled = false
       }
+      
+    
   };
-   /* _handleNav = () => {
-        if (!this.pressed){
-           this.pressed = true;
-           this.setState({ this.props.navigation.openDrawer()});
-       }*/
     
 
     render() {
@@ -30,14 +29,14 @@ class EstoyAquiButton extends React.Component {
             
              if (!this.pressed)
              return(
-                 <TouchableOpacity style={styles.button}/*onPress={ this.props.navigation.openDrawer()} */>
-                     <Text style={styles.buttonDisabled}> Estoy Aquí </Text>
+                 <TouchableOpacity style={styles.button} /*disabled={ this.disabled = false}*/>
+                     <Text > Estoy Aquí </Text>
                  </TouchableOpacity>
              )
          else
              return(
                  <View>
-                     <Text>Estoy Aquí  </Text>
+                     <Text style={styles.buttonDisabled}>Estoy Aquí  </Text>
                  </View>
              )
         

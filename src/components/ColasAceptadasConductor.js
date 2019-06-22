@@ -73,10 +73,10 @@ class ColasAceptadasConductor extends React.Component {
                     <ScrollView>
                         <Card style={{ elevation: 3, flex: 1 }}>
                             <CardItem>
-                             <Text style={{ color: 'white' }}>{this.state.currentUser.userId}</Text>
+                             <Text style={{ color: 'black' }}>{this.state.currentUser.userId}</Text>
                              </CardItem>
                          <CardItem>
-                            <Text style={{ color: 'white' }}>{this.state.currentUser.userEmail}</Text>
+                            <Text style={{ color: 'black' }}>{this.state.currentUser.userEmail}</Text>
                         </CardItem>
                         <CardItem>
                             <View><EstoyAquiButton {...this.props} /></View>
