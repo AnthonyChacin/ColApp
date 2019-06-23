@@ -36,9 +36,11 @@ class ColasAceptadasConductor extends React.Component {
 
     async componentDidMount() {
         if (!!this.state.currentUser.userId) {
-            this.socket.on('ColaAceptada', (obj) => {
-                if (obj == this.state.currentUser.userId) {
-                    this._getColasAceptadas();
+            this.socketColaAceptada.on('Cola Aceptada', (obj) => {
+                if (!!obj.conductor && !!obj.pasajero) {
+                    if (obj.conductor == this.state.currentUser.userId) {
+                        this._getColasAceptadas()
+                    }
                 }
             })
         }
