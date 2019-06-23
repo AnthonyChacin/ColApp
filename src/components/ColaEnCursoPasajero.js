@@ -58,7 +58,7 @@ class ColaEnCursoPasajero extends React.Component {
         this.socketColaAceptada.on('Cola Aceptada', (obj) => {
             if (!!obj.conductor && !!obj.pasajero) {
                 if (obj.pasajero == this.state.currentUser.userId) {
-                    this.setState({ cola: { estado: 'Aceptada' } })
+                    this._getColasEnCurso();
                 }
             }
         })
