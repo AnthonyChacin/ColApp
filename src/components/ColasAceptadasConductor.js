@@ -111,7 +111,7 @@ class ColasAceptadasConductor extends React.Component {
     }
 
     async _lleguePuntoEncuentro(idCola, idPasajero, selected) {
-        try{
+        try {
             var url = `https://colapp-asa.herokuapp.com/conductor/llegadaPuntoEncuentro/`
 
             let request = await axios.post(url, {
@@ -120,10 +120,10 @@ class ColasAceptadasConductor extends React.Component {
 
             if (request.data.success) {
 
-                this.socketLlegadaConductor.emit('Llego Conductor', {success: true, pasajero: idPasajero, conductor: this.state.currentUser.userId})
+                this.socketLlegadaConductor.emit('Llego Conductor', { success: true, pasajero: idPasajero, conductor: this.state.currentUser.userId })
                 this._getColasAceptadas()
                 ToastAndroid.show('Se le hará saber al pasajero que ya estás en el punto de encuentro.', ToastAndroid.SHORT);
-                
+
                 this.setState({
                     selected: {
                         _id: selected._id,
@@ -143,7 +143,7 @@ class ColasAceptadasConductor extends React.Component {
                 })
             }
 
-        }catch(error) {
+        } catch (error) {
 
         }
     }
@@ -203,57 +203,70 @@ class ColasAceptadasConductor extends React.Component {
                     <View style={{ height: 20 }}>
                         {!!this.state.selected.p.email && (<Text note style={{ marginLeft: 20 }}>Pasajero: {this.state.selected.p.email}</Text>)}
                     </View>
-                    
+
                     <Container>
-                        <Content style={{margin: width*0.05, height: height*0.3}}>
-                            <Button 
-                                disabled={this.state.selected.estado == "LlegoConductor" ? true : false}
+                        <Content style={{ margin: width * 0.05, height: height * 0.3 }}>
+                            <Button
+                                disabled={(this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") ? true : false}
                                 style={{
-                                    height: height*0.1,
-                                    marginBottom: height*0.02,
+                                    height: height * 0.1,
+                                    marginBottom: height * 0.02,
                                     borderRadius: 5,
                                     backgroundColor: this.state.selected.estado == "Aceptada" ? 'rgb(230,136,15)' : 'rgba(20,20,20,0.2)'
-                                }} 
+                                }}
                                 full light onPress={() => this._lleguePuntoEncuentro(this.state.selected._id, this.state.selected.p._id, this.state.selected)}
                             >
-                                <Icon name="map-marked-alt" style={{ fontSize: width*0.1, marginRight: 10 }} color={this.state.selected.estado == "LlegoConductor" && 'rgba(20,20,20,0.2)'} />
-                                <Text style={{fontSize: height*0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Llegué al punto de encuentro</Text>
+                                <Icon name={this.state.selected.estado == "Terminada" ? "check-circle" : "map-marked-alt"} style={{ fontSize: width * 0.1, marginRight: 10 }} color={(this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)'} />
+                                {this.state.selected.estado == "LlegoConductor" &&
+                                    (<Text style={{ fontSize: height * 0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Llegué al punto de encuentro</Text>)
+                                }
+                                {this.state.selected.estado == "Terminada" &&
+                                    (<Text style={{ fontSize: height * 0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Cola terminada</Text>)
+                                }
                             </Button>
-                            <Button style={styles.buttonBack} full light onPress={() => this._itemSelected(null)}><Icon name="angle-left" style={{ color:'white', fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03, color:'white'}}>Atrás</Text></Button>
+                            <Button style={styles.buttonBack} full light onPress={() => this._itemSelected(null)}><Icon name="angle-left" style={{ color: 'white', fontSize: width * 0.1, marginRight: 10 }} /><Text style={{ fontSize: height * 0.03, color: 'white' }}>Atrás</Text></Button>
                         </Content>
                     </Container>
                 </View>
             )
         } else {
             return (
-                <FlatList
-                    data={this.state.colasAceptadas}
-                    renderItem={({ item }) =>
-                        <ListItem
-                            leftIcon={
-                                (
-                                (item.estado == 'Aceptada' && <Icon name='hourglass-start' size={width*0.1} />) ||
-                                (item.estado == 'LlegoConductor' && <Icon name='hourglass-half' size={width*0.1} /> ) ||
-                                (item.estado == 'Terminada' && <Icon name='hourglass-end' size={width*0.1} /> )
-                                )
+                <Container>
+                    <ListItem
+                        leftIcon={<Button transparent><Icon name="tint" size={width * 0.1} color='rgba(230,136,15,0.5)' /><Text>   En curso</Text></Button>}
+                        rightIcon={<Button transparent><Text>Terminada   </Text><Icon name="tint" size={width * 0.1} color='gray' /></Button>}
+                    />
+                    <ScrollView>
+                        <FlatList
+                            data={this.state.colasAceptadas}
+                            renderItem={({ item }) =>
+                                <ListItem
+                                    leftIcon={
+                                        (
+                                            (item.estado == 'Aceptada' && <Icon name='hourglass-start' size={width * 0.1} />) ||
+                                            (item.estado == 'LlegoConductor' && <Icon name='hourglass-half' size={width * 0.1} />) ||
+                                            (item.estado == 'Terminada' && <Icon name='hourglass-end' size={width * 0.1} /* color="white" */ />)
+                                        )
+                                    }
+                                    rightIcon={
+                                        (item.estado == 'LlegoConductor' && <Icon name='car-side' size={width * 0.1} />) ||
+                                        (item.estado == 'Terminada' && <Icon name='check-circle' size={width * 0.1} /* color="white" *//>)
+                                    }
+                                    containerStyle={{
+                                        backgroundColor: (item.estado == 'Aceptada' || item.estado == 'LlegoConductor') ? 'rgba(230,136,15,0.5)' : 'gray',
+                                        borderBottomWidth: 2,
+                                        marginTop: 2
+                                    }}
+                                    title={item.destino}
+                                    /* titleStyle={{color: (item.estado == "Terminada" && ('white'))}}
+                                    subtitleStyle={{color: (item.estado == "Terminada" && ('white'))}} */
+                                    subtitle={moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}
+                                    onPress={() => this._itemSelected(item)}
+                                />
                             }
-                            rightIcon={
-                                (item.estado == 'LlegoConductor' && <Icon name='car-side' size={width*0.1} />) ||
-                                (item.estado == 'Terminada' && <Icon name='check-circle' size={width*0.1} />)
-                            }
-                            containerStyle={{
-                                backgroundColor: (item.estado == 'Aceptada' || item.estado == 'LlegoConductor') ? 'rgba(230,136,15,0.5)' : 'gray',
-                                borderBottomWidth: 2,
-                                marginTop: 2
-                            }}
-                            title={item.destino}
-                            subtitle={moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}
-                            onPress={() => this._itemSelected(item)}
-                        >
-                            <Icon name='clock' />
-                        </ListItem>
-                    }
-                />
+                        />
+                    </ScrollView>
+                </Container>
             )
         }
     }
@@ -284,8 +297,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
     buttonBack: {
-        height: height*0.1,
-        marginBottom: height*0.02,
+        height: height * 0.1,
+        marginBottom: height * 0.02,
         borderRadius: 5,
         backgroundColor: 'gray'
     }

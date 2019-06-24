@@ -67,4 +67,23 @@ router.get('/verColasEnCurso/:id1-:id2', (req, res) => {
 	}
 })
 
+router.get('/verHistorial/:id', (req, res) => {
+	if (!!req.params.id) {
+		colaController.getColasTerminadas(req.params.id, (err, historial) => {
+			if (err) {
+				console.log(err)
+				res.json({
+					success: false,
+					data: 'No-Data'
+				})
+			} else {
+				res.json({
+					success: true,
+					data: historial
+				});
+			}
+		})
+	}
+})
+
 module.exports = router;

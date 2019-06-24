@@ -24,13 +24,57 @@ class HistorialPasajero extends React.Component {
 
         this.state = {
             loading: true,
-            historial: [
-
-                { "_id": "5d0cdcd9d8211a0017f0e14e", "origen": { "latitude": 10.460896, "longitude": -66.866109, "latitudeDelta": 0.01, "longitudeDelta": 0.005620608899297424 }, "destino": "Unimet", "tarifa": "6000", "banco": "Provincial", "hora": "2019-06-27T07:00:00-04:30", "cantPasajeros": "1", "vehiculo": "Carro", "estado": "Pedida", "pasajero": "5d091bee68ab9f0017cb51f9", "creacionCola": "2019-06-21T09:35:55-04:30" },
-                { "_id": "5d0d1b4373a65300170aa001", "origen": { "latitude": 10.3998821, "longitude": -66.8865553, "latitudeDelta": 0.01, "longitudeDelta": 0.005625 }, "destino": "Unimet", "tarifa": "2450", "banco": "Mercantil", "hora": "2019-06-21T16:00:00-04:00", "cantPasajeros": "1", "vehiculo": "Moto", "estado": "Pedida", "pasajero": "5d010180e280a601a8314e76", "creacionCola": "2019-06-21T14:00:34-04:00" },
-                { "_id": "5d0cd85bd8211a0017f0e14d", "origen": { "latitude": 10.460896, "longitude": -66.866109, "latitudeDelta": 0.01, "longitudeDelta": 0.005620608899297424 }, "destino": "Unimet", "tarifa": "1000", "banco": "Provincial", "hora": "2019-06-27T07:00:00-04:30", "cantPasajeros": "1", "vehiculo": "Carro", "estado": "Pedida", "pasajero": "5d091bee68ab9f0017cb51f9", "creacionCola": "2019-06-21T09:16:44-04:30" }
-            ],
+            currentUser: {
+                userId: undefined,
+                userEmail: undefined
+            },
+            historial: null,
             selected: null
+        }
+
+        this.socketTerminarCola = SockectIOClient('https://colapp-asa.herokuapp.com/terminarcola', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+    }
+
+    async componentWillMount(){
+        await this.getCurrentUser();
+        await this._getColasTerminadas();
+    }
+
+    async getCurrentUser() {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+
+    async _getColasTerminadas() {
+        try {
+            var url = `https://colapp-asa.herokuapp.com/pasajero/verHistorial/${this.state.currentUser.userId}`;
+            
+            let response = await axios.get(url);
+
+            if (response.data.success) {
+                this.setState({
+                    loaded: true,
+                    historial: response.data.data
+                })
+            }
+
+            return response.data.success
+
+        } catch (error) {
+            return false
         }
     }
 
@@ -93,6 +137,11 @@ class HistorialPasajero extends React.Component {
                     <View style={{ height: 20 }}>
                         <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.selected.cantPasajeros}</Text>
                     </View>
+
+                    <View style={{ height: 20 }}>
+                        <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.selected.c.email}</Text>
+                    </View>
+
                     <View style={{ marginTop: 20, alignItems: 'center' }}>
                         <TouchableOpacity onPress={() => this._itemSelected(null)}><Icon name="arrow-round-back" style={{ color: '#E6890F', fontSize: 100 }} /></TouchableOpacity>
                     </View>
