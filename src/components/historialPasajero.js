@@ -12,6 +12,9 @@ import { Icon } from 'native-base';
 import { ListItem } from 'react-native-elements'
 import MapView from 'react-native-maps';
 import moment, { isMoment } from 'moment';
+import SockectIOClient from 'socket.io-client';
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
