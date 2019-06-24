@@ -73,7 +73,7 @@ controller.darCola = async function (data, callback) {
 	}
 }
 
-controller.darCola = async function (data, callback) {
+controller.terminarCola = async function (data, callback) {
 	try{
 
 		data.idCola = new ObjectID(data.idCola)
