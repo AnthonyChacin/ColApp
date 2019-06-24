@@ -193,7 +193,7 @@ class ColaEnCursoPasajero extends React.Component {
                             }
                         </View>
                         <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={(this.state.cola.estado == 'Pedida' || this.state.cola.estado == 'Aceptada') ? true : false} color="#E6880F" />
+                            <CheckBox checked={(this.state.cola.estado == 'Pedida' || this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor') ? true : false} color="#E6880F" />
                             <Body>
                                 <Text style={{ color: 'white' }}>Pedida</Text>
                             </Body>
