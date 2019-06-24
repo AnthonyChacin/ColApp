@@ -187,7 +187,7 @@ class ColasAceptadasConductor extends React.Component {
                     </View>
 
                     <View style={{ height: 20 }}>
-                        <Text note style={{ marginLeft: 20 }}>Pasajero: {this.state.selected.p.email}</Text>
+                        {!!this.state.selected.p.email && (<Text note style={{ marginLeft: 20 }}>Pasajero: {this.state.selected.p.email}</Text>)}
                     </View>
                     
                     <Container>
