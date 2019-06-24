@@ -8,7 +8,8 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import { Icon } from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Container, Content, Button } from 'native-base'
 import { ListItem } from 'react-native-elements'
 import MapView from 'react-native-maps';
 import moment, { isMoment } from 'moment';
@@ -41,7 +42,7 @@ class HistorialPasajero extends React.Component {
         });
     }
 
-    async componentWillMount(){
+    async componentWillMount() {
         await this.getCurrentUser();
         await this._getColasTerminadas();
     }
@@ -64,7 +65,7 @@ class HistorialPasajero extends React.Component {
     async _getColasTerminadas() {
         try {
             var url = `https://colapp-asa.herokuapp.com/pasajero/verHistorial/${this.state.currentUser.userId}`;
-            
+
             let response = await axios.get(url);
 
             if (response.data.success) {
@@ -82,7 +83,15 @@ class HistorialPasajero extends React.Component {
     }
 
     componentDidMount() {
-
+        if (!!this.state.currentUser.userId) {
+            this.socketTerminarCola.on('Terminar Cola', (obj) => {
+                if (!!obj.conductor && !!obj.pasajero) {
+                    if (obj.pasajero == this.state.currentUser.userId) {
+                        this._getColasTerminadas()
+                    }
+                }
+            })
+        }
     }
 
     _itemSelected(selection) {
@@ -145,9 +154,11 @@ class HistorialPasajero extends React.Component {
                         <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.selected.c.email}</Text>
                     </View>
 
-                    <View style={{ marginTop: 20, alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => this._itemSelected(null)}><Icon name="arrow-round-back" style={{ color: '#E6890F', fontSize: 100 }} /></TouchableOpacity>
-                    </View>
+                    <Container>
+                        <Content style={{ margin: width * 0.05, height: height * 0.3 }}>
+                            <Button style={styles.buttonBack} full light onPress={() => this._itemSelected(null)}><Icon name="angle-left" style={{ color: 'white', fontSize: width * 0.1, marginRight: 10 }} /><Text style={{ fontSize: height * 0.03, color: 'white' }}>Atrás</Text></Button>
+                        </Content>
+                    </Container>
                 </View>
             )
         } else {
@@ -156,6 +167,13 @@ class HistorialPasajero extends React.Component {
                     data={this.state.historial}
                     renderItem={({ item }) =>
                         <ListItem
+                            leftIcon={<Icon name='hourglass-end' size={width * 0.1} />}
+                            rightIcon={<Icon name='check-circle' size={width * 0.1} />}
+                            containerStyle={{
+                                backgroundColor: 'gray',
+                                borderBottomWidth: 2,
+                                marginTop: 2
+                            }}
                             title={item.destino}
                             subtitle={moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}
                             onPress={() => this._itemSelected(item)}
@@ -189,5 +207,11 @@ const styles = StyleSheet.create({
         right: 0,
         ...StyleSheet.absoluteFillObject,
         flex: 1
+    },
+    buttonBack: {
+        height: height * 0.1,
+        marginBottom: height * 0.02,
+        borderRadius: 5,
+        backgroundColor: 'gray'
     }
 })
