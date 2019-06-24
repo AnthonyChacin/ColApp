@@ -181,6 +181,9 @@ controller.getColasAceptadas = async function (idConductor, callback){
 						},
 						{
 							estado: "LlegoConductor"
+						},
+						{
+							estado: "Terminada"
 						}
 					]
 				}

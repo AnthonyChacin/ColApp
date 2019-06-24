@@ -39,11 +39,24 @@ class ColasAceptadasConductor extends React.Component {
             transports: ['websocket'],
             forceNew: true
         });
+
+        this.socketTerminarCola = SockectIOClient('https://colapp-asa.herokuapp.com/terminarcola', {
+            transports: ['websocket'],
+            forceNew: true
+        });
     }
 
     async componentDidMount() {
         if (!!this.state.currentUser.userId) {
             this.socketColaAceptada.on('Cola Aceptada', (obj) => {
+                if (!!obj.conductor && !!obj.pasajero) {
+                    if (obj.conductor == this.state.currentUser.userId) {
+                        this._getColasAceptadas()
+                    }
+                }
+            })
+
+            this.socketTerminarCola.on('Terminar Cola', (obj) => {
                 if (!!obj.conductor && !!obj.pasajero) {
                     if (obj.conductor == this.state.currentUser.userId) {
                         this._getColasAceptadas()
@@ -220,11 +233,13 @@ class ColasAceptadasConductor extends React.Component {
                             leftIcon={
                                 (
                                 (item.estado == 'Aceptada' && <Icon name='hourglass-start' size={width*0.1} />) ||
-                                (item.estado == 'LlegoConductor' && <Icon name='hourglass-half' size={width*0.1} /> )
+                                (item.estado == 'LlegoConductor' && <Icon name='hourglass-half' size={width*0.1} /> ) ||
+                                (item.estado == 'Terminada' && <Icon name='hourglass-end' size={width*0.1} /> )
                                 )
                             }
                             rightIcon={
-                                (item.estado == 'LlegoConductor' && <Icon name='car-side' size={width*0.1} />)
+                                (item.estado == 'LlegoConductor' && <Icon name='car-side' size={width*0.1} />) ||
+                                (item.estado == 'Terminada' && <Icon name='check-circle' size={width*0.1} />)
                             }
                             containerStyle={{
                                 backgroundColor: (item.estado == 'Aceptada' || item.estado == 'LlegoConductor') ? 'rgba(230,136,15,0.5)' : 'gray',
