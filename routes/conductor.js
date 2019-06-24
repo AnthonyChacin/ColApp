@@ -60,4 +60,23 @@ router.get('/verColasAceptadas/:id', (req, res) => {
 	}
 })
 
+router.post('/llegadaPuntoEncuentro/', (req, res) => {
+	if (!!req.body) {
+		colaController.llegarPuntoEncuentro(req.body, (err) => {
+			if (err) {
+				console.log(err)
+				res.json({
+					success: false,
+					data: 'fallo al actualizar estado de la BD'
+				})
+			} else {
+				res.json({
+					success: true,
+					data: 'ok'
+				});
+			}
+		})
+	}
+})
+
 module.exports = router;

@@ -58,6 +58,14 @@ io.of('/colaaceptada').on('connection', socket => {
 	})
 })
 
+io.of('/llegadaconductor').on('connection', socket => {
+
+	socket.on('Llego Conductor', (obj) => {
+		if (obj.success && !!obj.pasajero && !!obj.conductor) {
+			socket.broadcast.emit('Llego Conductor', {success: true, pasajero: obj.pasajero, conductor: obj.conductor})
+		}
+	})
+})
 
 Client.connect((err) => {
 

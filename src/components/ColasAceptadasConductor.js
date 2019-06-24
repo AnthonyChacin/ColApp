@@ -29,7 +29,12 @@ class ColasAceptadasConductor extends React.Component {
             selected: null
         }
 
-        this.socket = SockectIOClient('https://colapp-asa.herokuapp.com/colaaceptada', {
+        this.socketColaAceptada = SockectIOClient('https://colapp-asa.herokuapp.com/colaaceptada', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+
+        this.socketLlegadaConductor = SockectIOClient('https://colapp-asa.herokuapp.com/llegadaconductor', {
             transports: ['websocket'],
             forceNew: true
         });
@@ -91,6 +96,25 @@ class ColasAceptadasConductor extends React.Component {
         })
     }
 
+    async _lleguePuntoEncuentro(idCola, idPasajero) {
+        try{
+            var url = `https://colapp-asa.herokuapp.com/conductor/llegadaPuntoEncuentro/`
+
+            let request = await axios.post(url, {
+                idCola
+            })
+
+            if (request.data.success) {
+                this.socketLlegadaConductor.emit('Llego Conductor', {success: true, pasajero: idPasajero, conductor: this.state.currentUser.userId})
+                this._getColasAceptadas()
+                ToastAndroid.show('Se le hará saber al pasajero que ya estás en el punto de encuentro.', ToastAndroid.SHORT);
+            }
+
+        }catch(error) {
+
+        }
+    }
+
     render() {
 
         if (!this.state.loaded) {
@@ -141,9 +165,14 @@ class ColasAceptadasConductor extends React.Component {
                     <View style={{ height: 20 }}>
                         <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.selected.cantPasajeros}</Text>
                     </View>
+
+                    <View style={{ height: 20 }}>
+                        <Text note style={{ marginLeft: 20 }}>Pasajero: {this.state.selected.p.email}</Text>
+                    </View>
+                    
                     <Container>
                         <Content style={{margin: width*0.05, height: height*0.3}}>
-                            <Button style={styles.buttonMark} full light onPress={() => this._itemSelected(null)}><Icon name="map-marked-alt" style={{ fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03}}>Llegué al punto de encuentro</Text></Button>
+                            <Button style={styles.buttonMark} full light onPress={() => this._lleguePuntoEncuentro(this.state.selected._id, this.state.selected.p._id)}><Icon name="map-marked-alt" style={{ fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03}}>Llegué al punto de encuentro</Text></Button>
                             <Button style={styles.buttonBack} full light onPress={() => this._itemSelected(null)}><Icon name="angle-left" style={{ color:'white', fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03, color:'white'}}>Atrás</Text></Button>
                         </Content>
                     </Container>

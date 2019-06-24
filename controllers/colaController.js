@@ -73,6 +73,24 @@ controller.darCola = async function (data, callback) {
 	}
 }
 
+controller.llegadaPuntoEncuentro = async function (data, callback) {
+	try{
+		data.idCola = new ObjectID(data.idCola)
+
+		let request = await Cola.updateOne({_id: data.idCola}, {$set: {estado: "LlegoConductor"}});
+
+		if(request.modifiedCount == 1){
+			callback(null)
+		}else{
+			var error = 'error'
+			callback(error)
+		}
+
+	}catch(error){
+		callback(error)
+	}
+}
+
 
 //Obtener colas pedidas
 controller.getColasPedidas = async function (callback) {

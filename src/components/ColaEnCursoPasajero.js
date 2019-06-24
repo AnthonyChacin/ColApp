@@ -41,6 +41,11 @@ class ColaEnCursoPasajero extends React.Component {
             forceNew: true
         });
 
+        this.socketLlegadaConductor = SockectIOClient('https://colapp-asa.herokuapp.com/llegadaconductor', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+
     }
 
     async componentWillMount() {
@@ -62,6 +67,15 @@ class ColaEnCursoPasajero extends React.Component {
                 }
             }
         })
+
+        this.socketLlegadaConductor.on('Llego Conductor', (obj) => {
+            if (!!obj.conductor && !!obj.pasajero) {
+                if (obj.pasajero == this.state.currentUser.userId) {
+                    this._getColasEnCurso();
+                }
+            }
+        })
+
     }
 
     async getCurrentUser() {
