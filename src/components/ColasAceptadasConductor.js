@@ -97,7 +97,7 @@ class ColasAceptadasConductor extends React.Component {
         })
     }
 
-    async _lleguePuntoEncuentro(idCola, idPasajero) {
+    async _lleguePuntoEncuentro(idCola, idPasajero, selected) {
         try{
             var url = `https://colapp-asa.herokuapp.com/conductor/llegadaPuntoEncuentro/`
 
@@ -106,9 +106,28 @@ class ColasAceptadasConductor extends React.Component {
             })
 
             if (request.data.success) {
+
                 this.socketLlegadaConductor.emit('Llego Conductor', {success: true, pasajero: idPasajero, conductor: this.state.currentUser.userId})
                 this._getColasAceptadas()
                 ToastAndroid.show('Se le hará saber al pasajero que ya estás en el punto de encuentro.', ToastAndroid.SHORT);
+                
+                this.setState({
+                    selected: {
+                        _id: selected._id,
+                        origen: selected.origen,
+                        destino: selected.destino,
+                        tarifa: selected.tarifa,
+                        banco: selected.banco,
+                        hora: selected.hora,
+                        cantPasajeros: selected.cantPasajeros,
+                        vehiculo: selected.vehiculo,
+                        estado: "LlegoConductor",
+                        p: {
+                            _id: selected.p._id,
+                            email: selected.p.email
+                        }
+                    }
+                })
             }
 
         }catch(error) {
@@ -181,7 +200,7 @@ class ColasAceptadasConductor extends React.Component {
                                     borderRadius: 5,
                                     backgroundColor: this.state.selected.estado == "Aceptada" ? 'rgb(230,136,15)' : 'rgba(20,20,20,0.2)'
                                 }} 
-                                full light onPress={() => this._lleguePuntoEncuentro(this.state.selected._id, this.state.selected.p._id)}
+                                full light onPress={() => this._lleguePuntoEncuentro(this.state.selected._id, this.state.selected.p._id, this.state.selected)}
                             >
                                 <Icon name="map-marked-alt" style={{ fontSize: width*0.1, marginRight: 10 }} color={this.state.selected.estado == "LlegoConductor" && 'rgba(20,20,20,0.2)'} />
                                 <Text style={{fontSize: height*0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Llegué al punto de encuentro</Text>
