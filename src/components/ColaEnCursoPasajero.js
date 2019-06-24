@@ -152,6 +152,14 @@ class ColaEnCursoPasajero extends React.Component {
                         <View style={{ height: 20 }}>
                             <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.cola.cantPasajeros}</Text>
                         </View>
+                        <View style={{ height: 20 }}>
+                            {(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor')
+                            ?
+                            <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.cola.c.email}</Text>
+                            :
+                            <Text note style={{ marginLeft: 20 }}>Conductor: esperando por alguno ...</Text>
+                            }
+                        </View>
                         <ListItem style={{ marginLeft: 1 }}>
                             <CheckBox checked={(this.state.cola.estado == 'Pedida' || this.state.cola.estado == 'Aceptada') ? true : false} color="#E6880F" />
                             <Body>
@@ -159,20 +167,17 @@ class ColaEnCursoPasajero extends React.Component {
                             </Body>
                         </ListItem>
                         <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={(this.state.cola.estado == 'Aceptada') ? true : false} color="#E6880F" />
+                            <CheckBox checked={(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor') ? true : false} color="#E6880F" />
                             <Body>
                                 <Text style={{ color: 'white' }}>Aceptada</Text>
                             </Body>
                         </ListItem>
                         <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={false} color="#E6880F" />
+                            <CheckBox checked={this.state.cola.estado == 'LlegoConductor' ? true : false} color="#E6880F" />
                             <Body>
                                 <Text style={{ color: 'white' }}>El conductor llegó</Text>
                             </Body>
                         </ListItem>
-                        <View style={{ height: 4 }}>
-                            <ProgressBarAndroid animating={true} styleAttr='Horizontal' indeterminate={false} progress={0.66} color='#E6880F' />
-                        </View>
                         <View style={{ height: 40, alignItems: 'center', marginBottom: 10 }}>
                             <TouchableOpacity
                                 style={{

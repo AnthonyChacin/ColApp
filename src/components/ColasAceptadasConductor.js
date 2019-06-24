@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, ScrollView, View, ActivityIndicator, Text, FlatList, TouchableOpacity } from 'react-native';
-import { Container, Icon } from 'native-base';
+import { Container, Button, Content } from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { ListItem } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import SockectIOClient from 'socket.io-client';
@@ -140,9 +141,12 @@ class ColasAceptadasConductor extends React.Component {
                     <View style={{ height: 20 }}>
                         <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.selected.cantPasajeros}</Text>
                     </View>
-                    <View style={{ marginTop: 20, alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => this._itemSelected(null)}><Icon name="arrow-round-back" style={{ color: '#E6890F', fontSize: 100 }} /></TouchableOpacity>
-                    </View>
+                    <Container>
+                        <Content style={{margin: width*0.05, height: height*0.3}}>
+                            <Button style={styles.buttonMark} full light onPress={() => this._itemSelected(null)}><Icon name="map-marked-alt" style={{ fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03}}>Llegué al punto de encuentro</Text></Button>
+                            <Button style={styles.buttonBack} full light onPress={() => this._itemSelected(null)}><Icon name="angle-left" style={{ color:'white', fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03, color:'white'}}>Atrás</Text></Button>
+                        </Content>
+                    </Container>
                 </View>
             )
         } else {
@@ -151,10 +155,18 @@ class ColasAceptadasConductor extends React.Component {
                     data={this.state.colasAceptadas}
                     renderItem={({ item }) =>
                         <ListItem
+                            leftIcon={<Icon name='hourglass-half' size={width*0.1} />}
+                            containerStyle={{
+                                backgroundColor: item.estado == 'Aceptada' ? 'rgba(230,136,15,0.5)' : 'gray',
+                                borderBottomWidth: 2,
+                                marginTop: 2
+                            }}
                             title={item.destino}
                             subtitle={moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}
                             onPress={() => this._itemSelected(item)}
-                        />
+                        >
+                            <Icon name='clock' />
+                        </ListItem>
                     }
                 />
             )
@@ -185,5 +197,17 @@ const styles = StyleSheet.create({
         right: 0,
         ...StyleSheet.absoluteFillObject,
         flex: 1
+    },
+    buttonMark: {
+        height: height*0.1,
+        marginBottom: height*0.02,
+        borderRadius: 5,
+        backgroundColor: 'rgb(230,136,15)'
+    },
+    buttonBack: {
+        height: height*0.1,
+        marginBottom: height*0.02,
+        borderRadius: 5,
+        backgroundColor: 'gray'
     }
 })

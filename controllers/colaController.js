@@ -176,6 +176,8 @@ controller.getColasAceptadas = async function (idConductor, callback){
 
 controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 	try{
+		let result = {}
+		let conductor;
 		idPasajero = new ObjectID(idPasajero)
 		console.log(horaLocal)
 		let colas = await Cola.aggregate([
@@ -220,12 +222,63 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 		]).toArray();
 
 		if(!!colas[0]){
-			console.log(colas[0])
+			if(colas[0].estado == 'Aceptada' || colas[0].estado == 'LlegoConductor'){
+				conductor = await Cola.aggregate([
+					{
+						$match: {
+							_id: colas[0]._id
+						}
+					},
+					{
+						$limit: 1
+					},
+					{
+						$lookup: {
+							from: 'User',
+							localField: 'conductor',
+							foreignField: '_id',
+							as: 'c'
+						}
+					},{
+						$unwind: '$c'
+					},{
+						$project: {
+							_id: 1,
+							'c._id': 1,
+							'c.email': 1
+						}
+					}
+				]).toArray();
+
+				if(!!conductor[0]){
+					result = {
+						_id: colas[0]._id,
+						origen: colas[0].origen,
+						destino: colas[0].destino,
+						tarifa: colas[0].tarifa,
+						banco: colas[0].banco,
+						hora: colas[0].hora,
+						cantPasajeros: colas[0].cantPasajeros,
+						vehiculo: colas[0].vehiculo,
+						estado: colas[0].estado,
+						p: {
+							_id: colas[0].p._id,
+							email: colas[0].p.email
+						},
+						c: {
+							_id: conductor[0].c._id,
+							email: conductor[0].c.email
+						}
+					}
+				}else{
+					result = colas[0]
+				}
+			}
 		}else{
 			console.log('No tiene colas pedidas')
 		}
 
-		callback(null, colas[0])
+		callback(null, result)
 
 	}catch(error){
 		callback(error, null)
