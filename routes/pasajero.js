@@ -27,6 +27,27 @@ router.post('/pedirCola', (req, res) => {
 	}
 })
 
+router.post('/terminarCola', (req, res) => {
+	if(!!req.body){
+		
+		console.log(req.body)
+
+		colaController.terminarCola(req.body, (err) => {
+			if(err){
+				res.json({
+					success: false,
+					cola: 'error'
+				});
+			}else{
+				res.json({
+					success: true,
+					cola: "ok" 
+				});
+			}
+		})
+	}
+})
+
 router.get('/verColasEnCurso/:id1-:id2', (req, res) => {
 	if (!!req.params.id1 && !!req.params.id2) {
 		colaController.getColasEnCurso(req.params.id1, req.params.id2, (err, colas) => {

@@ -73,6 +73,29 @@ controller.darCola = async function (data, callback) {
 	}
 }
 
+controller.darCola = async function (data, callback) {
+	try{
+
+		data.idCola = new ObjectID(data.idCola)
+
+		let request = await Cola.updateOne({_id: data.idCola}, {$set: {estado: "Terminada"}});
+		console.log(request)
+
+		if(request.modifiedCount == 1){
+			console.log(request)
+			callback(null)
+		}else{
+			console.log('error')
+			var error = 'error'
+			callback(error)
+		}
+
+	}catch(error){
+		callback(error)
+	}
+}
+
+
 controller.llegadaPuntoEncuentro = async function (data, callback) {
 	try{
 		data.idCola = new ObjectID(data.idCola)

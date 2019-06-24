@@ -67,6 +67,15 @@ io.of('/llegadaconductor').on('connection', socket => {
 	})
 })
 
+io.of('/terminarcola').on('connection', socket => {
+
+	socket.on('Terminar Cola', (obj) => {
+		if (obj.success && !!obj.pasajero && !!obj.conductor) {
+			socket.broadcast.emit('Terminar Cola', {success: true, pasajero: obj.pasajero, conductor: obj.conductor})
+		}
+	})
+})
+
 Client.connect((err) => {
 
 	if (err) {
