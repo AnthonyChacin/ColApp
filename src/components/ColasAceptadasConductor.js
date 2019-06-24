@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Broadcast } from 'pubnub-react/lib/broadcast';
 import MapView from 'react-native-maps';
 import moment, { isMoment } from 'moment';
+import { thisExpression } from '@babel/types';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -172,7 +173,19 @@ class ColasAceptadasConductor extends React.Component {
                     
                     <Container>
                         <Content style={{margin: width*0.05, height: height*0.3}}>
-                            <Button style={styles.buttonMark} full light onPress={() => this._lleguePuntoEncuentro(this.state.selected._id, this.state.selected.p._id)}><Icon name="map-marked-alt" style={{ fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03}}>Llegué al punto de encuentro</Text></Button>
+                            <Button 
+                                disabled={this.state.selected.estado == "LlegoConductor" ? true : false}
+                                style={{
+                                    height: height*0.1,
+                                    marginBottom: height*0.02,
+                                    borderRadius: 5,
+                                    backgroundColor: this.state.selected.estado == "Aceptada" ? 'rgb(230,136,15)' : 'rgba(20,20,20,0.2)'
+                                }} 
+                                full light onPress={() => this._lleguePuntoEncuentro(this.state.selected._id, this.state.selected.p._id)}
+                            >
+                                <Icon name="map-marked-alt" style={{ fontSize: width*0.1, marginRight: 10 }} color={this.state.selected.estado == "LlegoConductor" && 'rgba(20,20,20,0.2)'} />
+                                <Text style={{fontSize: height*0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Llegué al punto de encuentro</Text>
+                            </Button>
                             <Button style={styles.buttonBack} full light onPress={() => this._itemSelected(null)}><Icon name="angle-left" style={{ color:'white', fontSize: width*0.1, marginRight: 10 }} /><Text style={{fontSize: height*0.03, color:'white'}}>Atrás</Text></Button>
                         </Content>
                     </Container>
@@ -184,9 +197,17 @@ class ColasAceptadasConductor extends React.Component {
                     data={this.state.colasAceptadas}
                     renderItem={({ item }) =>
                         <ListItem
-                            leftIcon={<Icon name='hourglass-half' size={width*0.1} />}
+                            leftIcon={
+                                (
+                                (item.estado == 'Aceptada' && <Icon name='hourglass-start' size={width*0.1} />) ||
+                                (item.estado == 'LlegoConductor' && <Icon name='hourglass-half' size={width*0.1} /> )
+                                )
+                            }
+                            rightIcon={
+                                (item.estado == 'LlegoConductor' && <Icon name='car-side' size={width*0.1} />)
+                            }
                             containerStyle={{
-                                backgroundColor: item.estado == 'Aceptada' ? 'rgba(230,136,15,0.5)' : 'gray',
+                                backgroundColor: (item.estado == 'Aceptada' || item.estado == 'LlegoConductor') ? 'rgba(230,136,15,0.5)' : 'gray',
                                 borderBottomWidth: 2,
                                 marginTop: 2
                             }}
@@ -226,12 +247,6 @@ const styles = StyleSheet.create({
         right: 0,
         ...StyleSheet.absoluteFillObject,
         flex: 1
-    },
-    buttonMark: {
-        height: height*0.1,
-        marginBottom: height*0.02,
-        borderRadius: 5,
-        backgroundColor: 'rgb(230,136,15)'
     },
     buttonBack: {
         height: height*0.1,

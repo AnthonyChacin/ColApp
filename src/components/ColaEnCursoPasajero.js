@@ -211,22 +211,24 @@ class ColaEnCursoPasajero extends React.Component {
                             </Body>
                         </ListItem>
                         <View style={{ height: 40, alignItems: 'center', marginBottom: 10 }}>
-                            <TouchableOpacity
-                                style={{
-                                    borderWidth: 1,
-                                    borderColor: 'rgba(0,0,0,0.2)',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: 100,
-                                    height: 50,
-                                    backgroundColor: '#E6880F',
-                                    borderRadius: 50,
-                                    marginBottom: 10,
-                                    marginTop: 10
-                                }}
-                            >
-                                <Icon name={"checkmark-circle"} size={30} color="#01a699" />
-                            </TouchableOpacity>
+                            {this.state.cola.estado == "LlegoConductor" && (
+                                <TouchableOpacity
+                                    style={{
+                                        borderWidth: 1,
+                                        borderColor: 'rgba(0,0,0,0.2)',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: 100,
+                                        height: 50,
+                                        backgroundColor: '#E6880F',
+                                        borderRadius: 50,
+                                        marginBottom: 10,
+                                        marginTop: 10
+                                    }}
+                                >
+                                    <Icon name={"checkmark-circle"} size={30} color="#01a699" />
+                                </TouchableOpacity>
+                            )}
                         </View>
                     </View>
                 )}
