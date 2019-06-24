@@ -166,8 +166,8 @@ class ListadoColas extends React.Component {
 
     async _getColas() {
         try {
-
-            var url = 'https://colapp-asa.herokuapp.com/conductor/verColasPedidas';
+            const horaLocal = moment().format();
+            var url = `https://colapp-asa.herokuapp.com/conductor/verColasPedidas/${horaLocal}`;
 
             let response = await axios.get(url);
 

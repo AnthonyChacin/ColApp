@@ -76,6 +76,12 @@ class ColaEnCursoPasajero extends React.Component {
             }
         })
 
+        if(!!this.state.cola){
+            let horaActual = moment().format();
+            if(horaActual > moment(`${this.state.cola.hora}`).format()){
+                this._getColasEnCurso();
+            }
+        }
     }
 
     async getCurrentUser() {

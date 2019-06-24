@@ -6,22 +6,23 @@ require('dotenv').config({ path: 'variables.env' });
 
 //rutas establecidas para la ejecución de los métodos POST y GET
 
-router.get('/verColasPedidas', (req, res) => {
-
-	colaController.getColasPedidas((err, colas) => {
-		if (err) {
-			console.log(err)
-			res.json({
-				success: false,
-				data: 'No-Data'
-			})
-		} else {
-			res.json({
-				success: true,
-				data: colas
-			});
-		}
-	})
+router.get('/verColasPedidas/:id', (req, res) => {
+	if(!!req.params.id){
+		colaController.getColasPedidas(req.params.id, (err, colas) => {
+			if (err) {
+				console.log(err)
+				res.json({
+					success: false,
+					data: 'No-Data'
+				})
+			} else {
+				res.json({
+					success: true,
+					data: colas
+				});
+			}
+		})
+	}
 })
 
 router.post('/darCola', (req, res) => {

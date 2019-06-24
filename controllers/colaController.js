@@ -93,12 +93,15 @@ controller.llegadaPuntoEncuentro = async function (data, callback) {
 
 
 //Obtener colas pedidas
-controller.getColasPedidas = async function (callback) {
+controller.getColasPedidas = async function (horaLocal, callback) {
 	try{
 
 		let colas = await Cola.aggregate([
 			{
-				$match: {estado: "Pedida"}
+				$match: {
+					estado: "Pedida",
+					hora: {$gte: `${horaLocal}`}
+				}
 			},{
 				$lookup: {
 					from: 'User',
