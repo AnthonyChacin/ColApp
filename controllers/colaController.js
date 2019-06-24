@@ -152,7 +152,14 @@ controller.getColasAceptadas = async function (idConductor, callback){
 			{
 				$match: {
 					conductor: idConductor,
-					estado: "Aceptada"
+					$or: [
+						{
+							estado: "Aceptada"
+						},
+						{
+							estado: "LlegoConductor"
+						}
+					]
 				}
 			},{
 				$lookup: {
