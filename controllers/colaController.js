@@ -194,7 +194,7 @@ controller.getColasAceptadas = async function (idConductor, callback){
 
 controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 	try{
-		let result = {}
+		let result = undefined
 		let conductor;
 		idPasajero = new ObjectID(idPasajero)
 		console.log(horaLocal)
@@ -240,11 +240,12 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 		]).toArray();
 
 		if(!!colas[0]){
+			idCola = new ObjectID(colas[0]._id)
 			if(colas[0].estado == 'Aceptada' || colas[0].estado == 'LlegoConductor'){
 				conductor = await Cola.aggregate([
 					{
 						$match: {
-							_id: colas[0]._id
+							_id: idCola
 						}
 					},
 					{
@@ -291,6 +292,8 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 				}else{
 					result = colas[0]
 				}
+			}else{
+				result = colas[0]
 			}
 		}else{
 			console.log('No tiene colas pedidas')
