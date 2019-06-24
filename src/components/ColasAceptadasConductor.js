@@ -144,6 +144,7 @@ class ColasAceptadasConductor extends React.Component {
                 </View>
             )
         } else if (this.state.selected !== null) {
+            console.warn(this.state.selected.p.email)
             return (
                 <View style={{ height: (HEIGHT * 0.9), marginTop: 0 }}>
                     <View style={styles.Container}>
