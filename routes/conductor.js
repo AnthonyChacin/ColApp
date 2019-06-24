@@ -63,7 +63,7 @@ router.get('/verColasAceptadas/:id', (req, res) => {
 
 router.post('/llegadaPuntoEncuentro/', (req, res) => {
 	if (!!req.body) {
-		colaController.llegarPuntoEncuentro(req.body, (err) => {
+		colaController.llegadaPuntoEncuentro(req.body, (err) => {
 			if (err) {
 				console.log(err)
 				res.json({
