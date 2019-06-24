@@ -125,14 +125,16 @@ class ColaEnCursoPasajero extends React.Component {
     }
 
     render() {
+
         if (!this.state.isChangeCurrentTime) {
             let currentTime = moment().format()
             if (!!this.state.cola) {
-                if (currentTime > moment(`${this.state.cola.hora}`).format()) {
+                if (currentTime > moment(`${this.state.cola.hora}`).format() && this.state.cola.estado == "Pedida") {
                     this._getColasEnCurso()
                 }
             }
         }
+
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)', flex: 1 }}>
                 {!this.state.loaded && (
