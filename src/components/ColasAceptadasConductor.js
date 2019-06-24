@@ -186,7 +186,7 @@ class ColasAceptadasConductor extends React.Component {
                         <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.selected.cantPasajeros}</Text>
                     </View>
 
-                    <View style={{ height: 20 }}>
+                    <View style={{ height: 20, fontSize: 9 }}>
                         <Text note style={{ marginLeft: 20 }}>Pasajero: {this.state.selected.p.email}</Text>
                     </View>
                     
