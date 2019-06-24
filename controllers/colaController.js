@@ -202,7 +202,20 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 			{
 				$match: {
 					pasajero: idPasajero,
-					hora: {$gte: `${horaLocal}`}
+					$or: [
+						{
+							$and: [
+								{hora: {$gte: `${horaLocal}`}},
+								{estado: "Pedida"}
+							]
+						},
+						{
+							estado: "Aceptada"
+						},
+						{
+							estado: "LlegoConductor"
+						}
+					]
 				}
 			},
 			{
