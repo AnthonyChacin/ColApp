@@ -28,7 +28,8 @@ class ColaEnCursoPasajero extends React.Component {
                 userId: undefined,
                 userEmail: undefined
             },
-            cola: null
+            cola: null,
+            isChangeCurrentTime: true
         }
 
         this.socketColaPedida = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
@@ -75,6 +76,15 @@ class ColaEnCursoPasajero extends React.Component {
                 }
             }
         })
+
+        setInterval(() => (
+            this.setState(previousState => (
+                {
+                    isChangeCurrentTime: !previousState.isChangeCurrentTime
+                }
+            ))
+        ), 1000);
+
     }
 
     async getCurrentUser() {
@@ -115,15 +125,14 @@ class ColaEnCursoPasajero extends React.Component {
     }
 
     render() {
-
-        if(!!this.state.cola){
-            let horaActual = moment().format();
-            if(horaActual > moment(`${this.state.cola.hora}`).format()){
-                this._getColasEnCurso();
+        if (!this.state.isChangeCurrentTime) {
+            let currentTime = moment().format()
+            if (!!this.state.cola) {
+                if (currentTime > moment(`${this.state.cola.hora}`).format()) {
+                    this._getColasEnCurso()
+                }
             }
         }
-
-        console.warn(this.state.cola)
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)', flex: 1 }}>
                 {!this.state.loaded && (
@@ -175,10 +184,10 @@ class ColaEnCursoPasajero extends React.Component {
                         </View>
                         <View style={{ height: 20 }}>
                             {(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor')
-                            ?
-                            <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.cola.c.email}</Text>
-                            :
-                            <Text note style={{ marginLeft: 20 }}>Conductor: esperando por alguno ...</Text>
+                                ?
+                                <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.cola.c.email}</Text>
+                                :
+                                <Text note style={{ marginLeft: 20 }}>Conductor: esperando por alguno ...</Text>
                             }
                         </View>
                         <ListItem style={{ marginLeft: 1 }}>
