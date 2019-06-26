@@ -59,27 +59,26 @@ class HeaderPasajero extends React.Component {
     }
 
     async componentDidMount() {
-        if (!!this.state.currentUser.userId) {
 
-            this.socket.on('Cola Pedida', (obj) => {
-                console.warn(obj)
-                if (obj.success && !!obj.data) {
+        this.socket.on('Cola Pedida', (obj) => {
+            console.warn(obj)
+            if (obj.success && !!obj.data) {
 
-                    if (obj.data == this.state.currentUser.userId) {
-                        this.setState({ currentTab: 1 })
-                        console.warn(this.state.currentTab)
-                    }
+                if (obj.data == this.state.currentUser.userId) {
+                    this.setState({ currentTab: 1 })
+                    console.warn(this.state.currentTab)
                 }
-            })
+            }
+        })
 
-            this.socketTerminarCola.on('Terminar Cola', (obj) => {
-                if (!!obj.conductor && !!obj.pasajero) {
-                    if (obj.pasajero == this.state.currentUser.userId) {
-                        this.setState({ currentTab: 2 })
-                    }
+        this.socketTerminarCola.on('Terminar Cola', (obj) => {
+            console.warn(obj)
+            if (!!obj.conductor && !!obj.pasajero) {
+                if (obj.pasajero == this.state.currentUser.userId) {
+                    this.setState({ currentTab: 2 })
                 }
-            })
-        }
+            }
+        })
     }
 
     render() {

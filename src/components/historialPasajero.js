@@ -83,15 +83,13 @@ class HistorialPasajero extends React.Component {
     }
 
     componentDidMount() {
-        if (!!this.state.currentUser.userId) {
-            this.socketTerminarCola.on('Terminar Cola', (obj) => {
-                if (!!obj.conductor && !!obj.pasajero) {
-                    if (obj.pasajero == this.state.currentUser.userId) {
-                        this._getColasTerminadas()
-                    }
+        this.socketTerminarCola.on('Terminar Cola', (obj) => {
+            if (!!obj.conductor && !!obj.pasajero) {
+                if (obj.pasajero == this.state.currentUser.userId) {
+                    this._getColasTerminadas()
                 }
-            })
-        }
+            }
+        })
     }
 
     _itemSelected(selection) {

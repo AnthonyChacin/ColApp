@@ -111,7 +111,7 @@ class ColaEnCursoPasajero extends React.Component {
 
     async _terminarCola(idCola, idConductor){
         try {
-
+            console.warn(idConductor)
             var url = `https://colapp-asa.herokuapp.com/pasajero/terminarCola/`
 
             let request = await axios.post(url, {
