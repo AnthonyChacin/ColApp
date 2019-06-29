@@ -171,14 +171,14 @@ class ColaEnCursoPasajero extends React.Component {
         }
 
         return (
-            <Container style={{ backgroundColor: 'rgb(20,20,20)', flex: 1 }}>
+            <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
                 {!!this.state.cola && (
-                    <View style={{ marginTop: 0, marginBottom: 20, flex: 1 }}>
+                    <View style={{ marginTop: 0, marginBottom: 20 }}>
                         <View style={styles.Container}>
                             <MapView style={styles.map}
                                 region={{
@@ -222,7 +222,7 @@ class ColaEnCursoPasajero extends React.Component {
                         <View style={{ height: 20 }}>
                             {(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor')
                                 ?
-                                <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.cola.c.email}</Text>
+                                <Text note style={{ marginLeft: 20, fontSize: 12 }}>Conductor: {this.state.cola.c.email}</Text>
                                 :
                                 <Text note style={{ marginLeft: 20 }}>Conductor: esperando por alguno ...</Text>
                             }
@@ -245,20 +245,20 @@ class ColaEnCursoPasajero extends React.Component {
                                 <Text style={{ color: 'white' }}>El conductor llegó</Text>
                             </Body>
                         </ListItem>
-                        <View style={{ height: 40, alignItems: 'center', marginBottom: 10 }}>
+                        <View style={{ height: 30, alignItems: 'center', marginBottom: 30 }}>
                             {this.state.cola.estado == "LlegoConductor" && (
                                 <TouchableOpacity
                                     onPress={() => this._terminarCola(this.state.cola._id, this.state.cola.c._id)}
                                     style={{
-                                        borderWidth: 1,
+
                                         borderColor: 'rgba(0,0,0,0.2)',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         width: 100,
-                                        height: 50,
+                                        height: 30,
                                         backgroundColor: '#E6880F',
                                         borderRadius: 50,
-                                        marginBottom: 10,
+                                        marginBottom: 20,
                                         marginTop: 10
                                     }}
                                 >

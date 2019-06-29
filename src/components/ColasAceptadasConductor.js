@@ -200,15 +200,15 @@ class ColasAceptadasConductor extends React.Component {
                     </View>
 
                     <View style={{ height: 20 }}>
-                        {!!this.state.selected.p.email && (<Text note style={{ marginLeft: 20 }}>Pasajero: {this.state.selected.p.email}</Text>)}
+                        {!!this.state.selected.p.email && (<Text note style={{ marginLeft: 20, fontSize: 13 }}>Pasajero: {this.state.selected.p.email}</Text>)}
                     </View>
 
                     <Container>
-                        <Content style={{ margin: width * 0.05, height: height * 0.3 }}>
+                        <Content style={{ margin: width * 0.05, height: height * 0.5 }}>
                             <Button
                                 disabled={(this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") ? true : false}
                                 style={{
-                                    height: height * 0.1,
+                                    height: height * 0.07,
                                     marginBottom: height * 0.02,
                                     borderRadius: 5,
                                     backgroundColor: this.state.selected.estado == "Aceptada" ? 'rgb(230,136,15)' : 'rgba(20,20,20,0.2)'
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     buttonBack: {
-        height: height * 0.1,
+        height: height * 0.07,
         marginBottom: height * 0.02,
         borderRadius: 5,
         backgroundColor: 'gray'

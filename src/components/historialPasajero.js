@@ -149,7 +149,7 @@ class HistorialPasajero extends React.Component {
                     </View>
 
                     <View style={{ height: 20 }}>
-                        <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.selected.c.email}</Text>
+                        <Text note style={{ marginLeft: 20, fontSize: 12 }}>Conductor: {this.state.selected.c.email}</Text>
                     </View>
 
                     <Container>
