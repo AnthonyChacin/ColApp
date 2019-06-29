@@ -77,10 +77,10 @@ class HeaderConductor extends React.Component {
                         <Segment style={{ backgroundColor: '#E6890F' }}>
                             <Button first active={this.state.currentPage == 0 ? true : false} style={styles.button} onPress={() => {
                                 this.setState({ currentPage: 0 })
-                            }}><IconVector style={{ margin: 10 }} color={this.state.currentPage == 0 ? 'white' : 'gray'} size={40} name="clock" /></Button>
+                            }}><IconVector style={{ margin: 10 }} color={this.state.currentPage == 0 ? 'white' : 'gray'} size={30} name="clock" /></Button>
                             <Button last active={this.state.currentPage == 1 ? true : false} style={styles.button} onPress={() => {
                                 this.setState({ currentPage: 1 })
-                            }}><IconVector style={{ margin: 10 }} color={this.state.currentPage == 1 ? 'white' : 'gray'} size={40} name="check-circle" /></Button>
+                            }}><IconVector style={{ margin: 10 }} color={this.state.currentPage == 1 ? 'white' : 'gray'} size={30} name="check-circle" /></Button>
                         </Segment>
                     </Right>
                 </Header>
