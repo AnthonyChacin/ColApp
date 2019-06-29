@@ -228,8 +228,8 @@ class ColasAceptadasConductor extends React.Component {
                                 full light onPress={() => this._lleguePuntoEncuentro(this.state.selected._id, this.state.selected.p._id, this.state.selected)}
                             >
                                 <Icon name={this.state.selected.estado == "Terminada" ? "check-circle" : "map-marked-alt"} style={{ fontSize: width * 0.1, marginRight: 10 }} color={(this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)'} />
-                                {this.state.selected.estado == "LlegoConductor" &&
-                                    (<Text style={{ fontSize: height * 0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Llegué</Text>)
+                                {(this.state.selected.estado == "LlegoConductor"  || this.state.selected.estado == "Aceptada") &&
+                                    (<Text style={{ fontSize: height * 0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Llegué al punto de encuentro</Text>)
                                 }
                                 {this.state.selected.estado == "Terminada" &&
                                     (<Text style={{ fontSize: height * 0.03, color: (this.state.selected.estado == "LlegoConductor" || this.state.selected.estado == "Terminada") && 'rgba(20,20,20,0.2)' }}>Cola terminada</Text>)

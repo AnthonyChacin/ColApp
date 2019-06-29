@@ -116,7 +116,8 @@ class ColaEnCursoPasajero extends React.Component {
             var url = `https://colapp-asa.herokuapp.com/pasajero/terminarCola/`
 
             let request = await axios.post(url, {
-                idCola
+                idCola,
+                horaLocal: moment().format()
             })
 
             if (request.data.success) {
