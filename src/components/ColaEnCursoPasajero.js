@@ -109,7 +109,7 @@ class ColaEnCursoPasajero extends React.Component {
         }
     }
 
-    async _terminarCola(idCola, idConductor){
+    async _terminarCola(idCola, idConductor) {
         try {
             console.warn(idConductor)
             var url = `https://colapp-asa.herokuapp.com/pasajero/terminarCola/`
@@ -119,10 +119,10 @@ class ColaEnCursoPasajero extends React.Component {
             })
 
             if (request.data.success) {
-                this.socketTerminarCola.emit('Terminar Cola', {success: true, pasajero: this.state.currentUser.userId, conductor: idConductor})
+                this.socketTerminarCola.emit('Terminar Cola', { success: true, pasajero: this.state.currentUser.userId, conductor: idConductor })
                 ToastAndroid.show('Cola terminada con éxito, será enviada al historial', ToastAndroid.SHORT);
 
-                this.setState({terminada: true})
+                this.setState({ terminada: true })
             }
 
             return request.data.success
@@ -164,14 +164,19 @@ class ColaEnCursoPasajero extends React.Component {
                 }
             }
 
-            if(this.state.terminada){
+            if (this.state.terminada) {
                 this._getColasEnCurso()
-                this.setState({terminada: false})
+                this.setState({ terminada: false })
             }
         }
 
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+                {(this.state.loaded == true && this.state.cola == null) && (
+                    <View style={styles.container}>
+                        <Text note style={{ alignSelf: "center" }}>No hay ninguna cola en curso</Text>
+                    </View>
+                )}
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />

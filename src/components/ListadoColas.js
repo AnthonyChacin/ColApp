@@ -81,6 +81,11 @@ class ListadoColas extends React.Component {
         console.warn(this.state.colas)
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+                {(this.state.loaded == true && this.state.colas == null) && (
+                    <View style={styles.container}>
+                        <Text note style={{ alignSelf: "center" }}>Nadie ha pedido la cola</Text>
+                    </View>
+                )}
                 {!this.state.loaded && (
                     <View style={styles.container}>
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
@@ -198,7 +203,7 @@ class ListadoColas extends React.Component {
 
             if (request.data.success) {
                 this.socketColaPedida.emit('Cola Pedida', true);
-                this.socketColaAceptada.emit('Cola Aceptada', {success: true, pasajero: idPasajero, conductor: this.state.currentUser.userId})
+                this.socketColaAceptada.emit('Cola Aceptada', { success: true, pasajero: idPasajero, conductor: this.state.currentUser.userId })
                 this._getColas();
                 ToastAndroid.show('La solicitud ha sido aceptada con éxito', ToastAndroid.SHORT);
                 //ToastAndroid.show('El pasajero está siendo notificado', ToastAndroid.SHORT);

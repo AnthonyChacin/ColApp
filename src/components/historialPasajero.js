@@ -70,11 +70,11 @@ class HistorialPasajero extends React.Component {
 
             if (response.data.success) {
                 this.setState({
-                    loaded: true,
+                    loading: false,
                     historial: response.data.data
                 })
-            }
 
+            }
             return response.data.success
 
         } catch (error) {
@@ -99,13 +99,13 @@ class HistorialPasajero extends React.Component {
     }
 
     render() {
-        if (!this.state.loading) {
+        if (this.state.loading == true) {
             return (
                 <View style={styles.container}>
                     <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                 </View>
             )
-        } else if (this.state.selected !== null) {
+        } else if (this.state.selected != null) {
             return (
                 <View style={{ height: (HEIGHT * 0.9), marginTop: 0 }}>
                     <View style={styles.Container}>
@@ -159,7 +159,7 @@ class HistorialPasajero extends React.Component {
                     </Container>
                 </View>
             )
-        } else {
+        } else if (this.state.historial != null) {
             return (
                 <FlatList
                     data={this.state.historial}
@@ -178,6 +178,14 @@ class HistorialPasajero extends React.Component {
                         />
                     }
                 />
+            )
+        } else if (this.state.historial == null && this.state.loading == false && this.state.selected == null) {
+            return (
+                <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
+                    <View style={styles.container}>
+                        <Text note style={{ alignSelf: "center" }}>No hay ninguna cola en su historial</Text>
+                    </View>
+                </Container>
             )
         }
     }
