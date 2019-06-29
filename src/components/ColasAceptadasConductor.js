@@ -47,7 +47,7 @@ class ColasAceptadasConductor extends React.Component {
     }
 
     async componentDidMount() {
-        
+
         this.socketColaAceptada.on('Cola Aceptada', (obj) => {
             if (!!obj.conductor && !!obj.pasajero) {
                 if (obj.conductor == this.state.currentUser.userId) {
@@ -231,14 +231,19 @@ class ColasAceptadasConductor extends React.Component {
         } else {
             return (
                 <Container>
+
                     <ListItem
                         leftIcon={<Button transparent><Icon name="tint" size={width * 0.1} color='rgba(230,136,15,0.5)' /><Text>   En curso</Text></Button>}
                         rightIcon={<Button transparent><Text>Terminada   </Text><Icon name="tint" size={width * 0.1} color='gray' /></Button>}
+                        containerStyle={{
+                            borderBottomWidth: 0,
+                            marginTop: 0
+                        }}
                     />
-                    <ScrollView>
-                        <FlatList
-                            data={this.state.colasAceptadas}
-                            renderItem={({ item }) =>
+                    <FlatList
+                        data={this.state.colasAceptadas}
+                        renderItem={({ item }) =>
+                            <ScrollView>
                                 <ListItem
                                     leftIcon={
                                         (
@@ -257,14 +262,15 @@ class ColasAceptadasConductor extends React.Component {
                                         marginTop: 2
                                     }}
                                     title={item.destino}
-                                    /* titleStyle={{color: (item.estado == "Terminada" && ('white'))}}
-                                    subtitleStyle={{color: (item.estado == "Terminada" && ('white'))}} */
                                     subtitle={moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}
                                     onPress={() => this._itemSelected(item)}
                                 />
-                            }
-                        />
-                    </ScrollView>
+                                {item._id == this.state.colasAceptadas[this.state.colasAceptadas.length - 1]._id && (
+                                    <Text></Text>
+                                )}
+                            </ScrollView>
+                        }
+                    />
                 </Container>
             )
         }
