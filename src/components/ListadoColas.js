@@ -202,7 +202,8 @@ class ListadoColas extends React.Component {
 
             let request = await axios.post(url, {
                 idCola: idCola,
-                idConductor: this.state.currentUser.userId
+                idConductor: this.state.currentUser.userId,
+                horaLocal: moment().format()
             })
 
             if (request.data.success) {

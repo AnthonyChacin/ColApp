@@ -51,7 +51,8 @@ class FormColaView extends React.Component {
             banco: '',
             hora: new Date(),
             vehiculo: '',
-            cantPasajeros: ''
+            cantPasajeros: '',
+            referencia: ''
         }
         console.warn(this.state.hora)
 
@@ -132,6 +133,10 @@ class FormColaView extends React.Component {
                     cantPasajeros: param
                 })
                 break;
+            case 7: 
+                this.setState({
+                    referencia: param
+                })
         }
     }
 
@@ -158,7 +163,8 @@ class FormColaView extends React.Component {
                     vehiculo: this.state.vehiculo,
                     estado: "Pedida",
                     pasajero: this.state.currentUser.userId,
-                    creacionCola: moment().format()
+                    creacionCola: moment().format(),
+                    referencia: this.state.referencia
                 })
 
                 console.warn(cola.data)
@@ -173,7 +179,8 @@ class FormColaView extends React.Component {
                         banco: '',
                         hora: new Date(),
                         cantPasajeros: '',
-                        vehiculo: ''
+                        vehiculo: '',
+                        referencia: ''
                     })
 
                     ToastAndroid.show('¡Su cola ha sido pedida con éxito!', ToastAndroid.SHORT);
@@ -215,6 +222,18 @@ class FormColaView extends React.Component {
                         <Text>Tu ubicación actual</Text>
                     </View>
                     <View style={styles.container}>
+                        <Text style={styles.Label}>Punto de encuentro</Text>
+                        <TextInput
+                            placeholder="e.g. Frente al Farmatodo"
+                            placeholderTextColor='rgba(20,20,20,0.3)'
+                            style={styles.textInput}
+                            editable={true}
+                            underlineColorAndroid="transparent"
+                            autoFocus={true}
+                            onChangeText={(text) => this.updateValue(text, 7)}
+                            value={this.state.referencia}
+                            enablesReturnKeyAutomatically={true}
+                        />
                         <Text style={styles.Label}>Destino</Text>
                         <TextInput
                             placeholder="e.g. Santa Fe Sur"

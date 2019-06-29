@@ -33,7 +33,8 @@ controller.pedirCola = async function (data, callback) {
 			vehiculo: data.vehiculo,
 			estado: data.estado,
 			pasajero: data.pasajero,
-			creacionCola: data.creacionCola
+			creacionCola: data.creacionCola,
+			referencia: data.referencia
 		}
 		console.log(query)
 		let request = await Cola.insertOne(query);
@@ -56,7 +57,7 @@ controller.darCola = async function (data, callback) {
 		data.idConductor = new ObjectID(data.idConductor)
 		data.idCola = new ObjectID(data.idCola)
 
-		let request = await Cola.updateOne({_id: data.idCola}, {$set: {conductor: data.idConductor, estado: "Aceptada"}});
+		let request = await Cola.updateOne({_id: data.idCola}, {$set: {horaAceptada: data.horaLocal, conductor: data.idConductor, estado: "Aceptada"}});
 		console.log(request)
 
 		if(request.modifiedCount == 1){
@@ -78,7 +79,7 @@ controller.terminarCola = async function (data, callback) {
 
 		data.idCola = new ObjectID(data.idCola)
 
-		let request = await Cola.updateOne({_id: data.idCola}, {$set: {estado: "Terminada"}});
+		let request = await Cola.updateOne({_id: data.idCola}, {$set: {horaTerminada: data.horaLocal, estado: "Terminada"}});
 		console.log(request)
 
 		if(request.modifiedCount == 1){
@@ -143,7 +144,8 @@ controller.getColasPedidas = async function (horaLocal, callback) {
 		            banco: 1,
 		            hora: 1,
 		            cantPasajeros: 1,
-		            vehiculo: 1,
+					vehiculo: 1,
+					referencia: 1,
 		            estado: 1,
 		            'p._id': 1,
 		            'p.email': 1
@@ -187,6 +189,11 @@ controller.getColasAceptadas = async function (idConductor, callback){
 						}
 					]
 				}
+			},
+			{
+				$sort: {
+					horaAceptada: -1
+				}
 			},{
 				$lookup: {
 					from: 'User',
@@ -205,7 +212,8 @@ controller.getColasAceptadas = async function (idConductor, callback){
 		            banco: 1,
 		            hora: 1,
 		            cantPasajeros: 1,
-		            vehiculo: 1,
+					vehiculo: 1,
+					referencia: 1,
 		            estado: 1,
 		            'p._id': 1,
 		            'p.email': 1
@@ -280,7 +288,8 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 		            banco: 1,
 		            hora: 1,
 		            cantPasajeros: 1,
-		            vehiculo: 1,
+					vehiculo: 1,
+					referencia: 1,
 		            estado: 1,
 		            'p._id': 1,
 		            'p.email': 1
@@ -328,6 +337,7 @@ controller.getColasEnCurso = async function (idPasajero, horaLocal, callback){
 						hora: colas[0].hora,
 						cantPasajeros: colas[0].cantPasajeros,
 						vehiculo: colas[0].vehiculo,
+						referencia: colas[0].referencia,
 						estado: colas[0].estado,
 						p: {
 							_id: colas[0].p._id,
@@ -365,6 +375,10 @@ controller.getColasTerminadas = async function (idPasajero, callback) {
 					estado: "Terminada"
 				}
 			},{
+				$sort: {
+					horaTerminada: -1
+				}
+			},{
 				$lookup: {
 					from: 'User',
 					localField: 'conductor',
@@ -382,7 +396,8 @@ controller.getColasTerminadas = async function (idPasajero, callback) {
 		            banco: 1,
 		            hora: 1,
 		            cantPasajeros: 1,
-		            vehiculo: 1,
+					vehiculo: 1,
+					referencia: 1,
 		            estado: 1,
 		            'c._id': 1,
 		            'c.email': 1
