@@ -156,7 +156,7 @@ class ColasAceptadasConductor extends React.Component {
         if (this.state.loaded && this.state.selected == null && this.state.colasAceptadas == null) {
             return (
                 <View style={styles.container}>
-                    <IconVector style={{ margin: 10, color: 'white' }} size={50} name="exclamation" />
+                    <IconVector style={{ margin: 10, color: 'white' }} size={50} name="car-crash" />
                     <Text note style={{ alignSelf: "center", color: "white" }}>No ha aceptado ninguna cola</Text>
                 </View>
             )
