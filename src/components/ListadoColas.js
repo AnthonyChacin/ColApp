@@ -13,6 +13,7 @@ import SockectIOClient from 'socket.io-client';
 import PubNubReact from 'pubnub-react';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
+import IconVector from 'react-native-vector-icons/FontAwesome5';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -83,6 +84,7 @@ class ListadoColas extends React.Component {
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {(this.state.loaded == true && this.state.colas == null) && (
                     <View style={styles.container}>
+                        <IconVector style={{ margin: 10, color: 'white' }} size={50} name="thumbs-down" />
                         <Text note style={{ alignSelf: "center", color: "white" }}>Nadie ha pedido la cola</Text>
                     </View>
                 )}
