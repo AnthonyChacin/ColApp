@@ -88,11 +88,15 @@ class ColasAceptadasConductor extends React.Component {
 
             let response = await axios.get(url);
             console.warn(response.data.data)
-            if (response.data.success) {
+            if (response.data.success && response.data.data.length > 0) {
 
                 this.setState({
                     loaded: true,
                     colasAceptadas: response.data.data
+                })
+            } else {
+                this.setState({
+                    loaded: true
                 })
             }
 
@@ -148,8 +152,14 @@ class ColasAceptadasConductor extends React.Component {
     }
 
     render() {
-
-        if (!this.state.loaded) {
+        if (this.state.loaded && this.state.selected == null && this.state.colasAceptadas == null) {
+            return (
+                <View style={styles.container}>
+                    <Text note style={{ alignSelf: "center", color: "white" }}>No ha aceptado ninguna cola</Text>
+                </View>
+            )
+        }
+        else if (!this.state.loaded) {
             return (
                 <View style={styles.container}>
                     <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />

@@ -83,7 +83,7 @@ class ListadoColas extends React.Component {
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {(this.state.loaded == true && this.state.colas == null) && (
                     <View style={styles.container}>
-                        <Text note style={{ alignSelf: "center" }}>Nadie ha pedido la cola</Text>
+                        <Text note style={{ alignSelf: "center", color: "white" }}>Nadie ha pedido la cola</Text>
                     </View>
                 )}
                 {!this.state.loaded && (
@@ -176,10 +176,14 @@ class ListadoColas extends React.Component {
 
             let response = await axios.get(url);
 
-            if (response.data.success) {
+            if (response.data.success && response.data.data.length > 0) {
                 this.setState({
                     loaded: true,
                     colas: response.data.data
+                })
+            } else {
+                this.setState({
+                    loaded: true
                 })
             }
 

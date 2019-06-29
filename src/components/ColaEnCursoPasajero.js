@@ -174,7 +174,7 @@ class ColaEnCursoPasajero extends React.Component {
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                 {(this.state.loaded == true && this.state.cola == null) && (
                     <View style={styles.container}>
-                        <Text note style={{ alignSelf: "center" }}>No hay ninguna cola en curso</Text>
+                        <Text note style={{ alignSelf: "center", color: "white" }}>No hay ninguna cola en curso</Text>
                     </View>
                 )}
                 {!this.state.loaded && (

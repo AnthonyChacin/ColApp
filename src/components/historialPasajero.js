@@ -68,12 +68,16 @@ class HistorialPasajero extends React.Component {
 
             let response = await axios.get(url);
 
-            if (response.data.success) {
+            if (response.data.success && response.data.data.length > 0) {
                 this.setState({
                     loading: false,
                     historial: response.data.data
                 })
 
+            }else {
+                this.setState({
+                    loading: false
+                })
             }
             return response.data.success
 
@@ -183,7 +187,7 @@ class HistorialPasajero extends React.Component {
             return (
                 <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                     <View style={styles.container}>
-                        <Text note style={{ alignSelf: "center" }}>No hay ninguna cola en su historial</Text>
+                        <Text note style={{ alignSelf: "center", color: "white" }}>No hay ninguna cola en su historial</Text>
                     </View>
                 </Container>
             )
