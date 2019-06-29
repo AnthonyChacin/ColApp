@@ -16,6 +16,8 @@ import moment, { isMoment } from 'moment';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import IconVector from 'react-native-vector-icons/FontAwesome5';
+
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -74,7 +76,7 @@ class HistorialPasajero extends React.Component {
                     historial: response.data.data
                 })
 
-            }else {
+            } else {
                 this.setState({
                     loading: false
                 })
@@ -187,6 +189,7 @@ class HistorialPasajero extends React.Component {
             return (
                 <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                     <View style={styles.container}>
+                        <IconVector style={{ margin: 10, color: 'white' }} size={50} name="sad-tear" />
                         <Text note style={{ alignSelf: "center", color: "white" }}>No hay ninguna cola en su historial</Text>
                     </View>
                 </Container>

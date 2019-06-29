@@ -10,6 +10,7 @@ import { Broadcast } from 'pubnub-react/lib/broadcast';
 import MapView from 'react-native-maps';
 import moment, { isMoment } from 'moment';
 import { thisExpression } from '@babel/types';
+import IconVector from 'react-native-vector-icons/FontAwesome5';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -155,6 +156,7 @@ class ColasAceptadasConductor extends React.Component {
         if (this.state.loaded && this.state.selected == null && this.state.colasAceptadas == null) {
             return (
                 <View style={styles.container}>
+                    <IconVector style={{ margin: 10, color: 'white' }} size={50} name="exclamation" />
                     <Text note style={{ alignSelf: "center", color: "white" }}>No ha aceptado ninguna cola</Text>
                 </View>
             )
