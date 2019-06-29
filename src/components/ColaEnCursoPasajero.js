@@ -4,7 +4,8 @@ import {
     ActivityIndicator,
     Dimensions,
     TouchableOpacity,
-    ProgressBarAndroid
+    ProgressBarAndroid,
+    ToastAndroid
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Container, View, Text, Body, ListItem, CheckBox, Icon } from 'native-base';
@@ -29,7 +30,8 @@ class ColaEnCursoPasajero extends React.Component {
                 userEmail: undefined
             },
             cola: null,
-            isChangeCurrentTime: true
+            isChangeCurrentTime: true,
+            terminada: false
         }
 
         this.socketColaPedida = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
@@ -43,6 +45,11 @@ class ColaEnCursoPasajero extends React.Component {
         });
 
         this.socketLlegadaConductor = SockectIOClient('https://colapp-asa.herokuapp.com/llegadaconductor', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+
+        this.socketTerminarCola = SockectIOClient('https://colapp-asa.herokuapp.com/terminarcola', {
             transports: ['websocket'],
             forceNew: true
         });
@@ -102,6 +109,29 @@ class ColaEnCursoPasajero extends React.Component {
         }
     }
 
+    async _terminarCola(idCola, idConductor){
+        try {
+            console.warn(idConductor)
+            var url = `https://colapp-asa.herokuapp.com/pasajero/terminarCola/`
+
+            let request = await axios.post(url, {
+                idCola
+            })
+
+            if (request.data.success) {
+                this.socketTerminarCola.emit('Terminar Cola', {success: true, pasajero: this.state.currentUser.userId, conductor: idConductor})
+                ToastAndroid.show('Cola terminada con éxito, será enviada al historial', ToastAndroid.SHORT);
+
+                this.setState({terminada: true})
+            }
+
+            return request.data.success
+
+        } catch (error) {
+            return false
+        }
+    }
+
     async _getColasEnCurso() {
         try {
             const horaLocal = moment().format();
@@ -132,6 +162,11 @@ class ColaEnCursoPasajero extends React.Component {
                 if (currentTime > moment(`${this.state.cola.hora}`).format() && this.state.cola.estado == "Pedida") {
                     this._getColasEnCurso()
                 }
+            }
+
+            if(this.state.terminada){
+                this._getColasEnCurso()
+                this.setState({terminada: false})
             }
         }
 
@@ -213,6 +248,7 @@ class ColaEnCursoPasajero extends React.Component {
                         <View style={{ height: 40, alignItems: 'center', marginBottom: 10 }}>
                             {this.state.cola.estado == "LlegoConductor" && (
                                 <TouchableOpacity
+                                    onPress={() => this._terminarCola(this.state.cola._id, this.state.cola.c._id)}
                                     style={{
                                         borderWidth: 1,
                                         borderColor: 'rgba(0,0,0,0.2)',

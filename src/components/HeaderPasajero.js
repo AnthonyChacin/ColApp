@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Dimensions
 } from 'react-native';
 import { Container, Text, Left, Body, Header, Icon, Title, Button, Tab, Tabs, TabHeading } from 'native-base';
 import MenuButton from './MenuButton';
@@ -12,6 +13,8 @@ import HistorialPasajero from './historialPasajero';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
+
+const { width, height } = Dimensions.get('window')
 
 class HeaderPasajero extends React.Component {
 
@@ -26,6 +29,11 @@ class HeaderPasajero extends React.Component {
         }
 
         this.socket = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+
+        this.socketTerminarCola = SockectIOClient('https://colapp-asa.herokuapp.com/terminarcola', {
             transports: ['websocket'],
             forceNew: true
         });
@@ -51,13 +59,23 @@ class HeaderPasajero extends React.Component {
     }
 
     async componentDidMount() {
+
         this.socket.on('Cola Pedida', (obj) => {
             console.warn(obj)
             if (obj.success && !!obj.data) {
-                
+
                 if (obj.data == this.state.currentUser.userId) {
                     this.setState({ currentTab: 1 })
                     console.warn(this.state.currentTab)
+                }
+            }
+        })
+
+        this.socketTerminarCola.on('Terminar Cola', (obj) => {
+            console.warn(obj)
+            if (!!obj.conductor && !!obj.pasajero) {
+                if (obj.pasajero == this.state.currentUser.userId) {
+                    this.setState({ currentTab: 2 })
                 }
             }
         })
@@ -77,8 +95,8 @@ class HeaderPasajero extends React.Component {
                 <Tabs page={this.state.currentTab} initialPage={this.state.currentTab} onChangeTab={({ i }) => this.setState({ currentTab: i })} tabContainerStyle={{ backgroundColor: 'white' }} tabBarUnderlineStyle={{ borderBottomWidth: 5, borderBottomColor: '#E6890F' }}>
                     <Tab
                         heading={
-                            <TabHeading style={{backgroundColor: 'white'}}>
-                                <Icon style={this.state.currentTab == 0 ? { color: '#E6890F' } : { color: 'gray' }} name="compass" />
+                            <TabHeading style={{ backgroundColor: 'white' }}>
+                                <IconVector style={this.state.currentTab == 0 ? { color: '#E6890F' } : { color: 'gray' }} name="compass" size={width * 0.06} />
                                 <Text style={this.state.currentTab == 0 ? { color: '#E6890F' } : { color: 'gray' }}>Solicitud</Text>
                             </TabHeading>
                         }
@@ -89,8 +107,8 @@ class HeaderPasajero extends React.Component {
                     </Tab>
                     <Tab
                         heading={
-                            <TabHeading style={{backgroundColor: 'white'}}>
-                                <Icon style={this.state.currentTab == 1 ? { color: '#E6890F' } : { color: 'gray' }} name="clock" />
+                            <TabHeading style={{ backgroundColor: 'white' }}>
+                                <IconVector style={this.state.currentTab == 1 ? { color: '#E6890F' } : { color: 'gray' }} name="clock" size={width * 0.06} />
                                 <Text style={this.state.currentTab == 1 ? { color: '#E6890F' } : { color: 'gray' }}>En curso</Text>
                             </TabHeading>
                         }
@@ -101,8 +119,8 @@ class HeaderPasajero extends React.Component {
                     </Tab>
                     <Tab
                         heading={
-                            <TabHeading style={{backgroundColor: 'white'}}>
-                                <Icon style={this.state.currentTab == 2 ? { color: '#E6890F' } : { color: 'gray' }} name="checkmark-circle" />
+                            <TabHeading style={{ backgroundColor: 'white' }}>
+                                <IconVector style={this.state.currentTab == 2 ? { color: '#E6890F' } : { color: 'gray' }} name="hourglass-end" size={width * 0.06} />
                                 <Text style={this.state.currentTab == 2 ? { color: '#E6890F' } : { color: 'gray' }}>Historial</Text>
                             </TabHeading>
                         }

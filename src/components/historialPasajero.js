@@ -8,10 +8,14 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import { Icon } from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Container, Content, Button } from 'native-base'
 import { ListItem } from 'react-native-elements'
 import MapView from 'react-native-maps';
 import moment, { isMoment } from 'moment';
+import SockectIOClient from 'socket.io-client';
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -24,18 +28,68 @@ class HistorialPasajero extends React.Component {
 
         this.state = {
             loading: true,
-            historial: [
-
-                { "_id": "5d0cdcd9d8211a0017f0e14e", "origen": { "latitude": 10.460896, "longitude": -66.866109, "latitudeDelta": 0.01, "longitudeDelta": 0.005620608899297424 }, "destino": "Unimet", "tarifa": "6000", "banco": "Provincial", "hora": "2019-06-27T07:00:00-04:30", "cantPasajeros": "1", "vehiculo": "Carro", "estado": "Pedida", "pasajero": "5d091bee68ab9f0017cb51f9", "creacionCola": "2019-06-21T09:35:55-04:30" },
-                { "_id": "5d0d1b4373a65300170aa001", "origen": { "latitude": 10.3998821, "longitude": -66.8865553, "latitudeDelta": 0.01, "longitudeDelta": 0.005625 }, "destino": "Unimet", "tarifa": "2450", "banco": "Mercantil", "hora": "2019-06-21T16:00:00-04:00", "cantPasajeros": "1", "vehiculo": "Moto", "estado": "Pedida", "pasajero": "5d010180e280a601a8314e76", "creacionCola": "2019-06-21T14:00:34-04:00" },
-                { "_id": "5d0cd85bd8211a0017f0e14d", "origen": { "latitude": 10.460896, "longitude": -66.866109, "latitudeDelta": 0.01, "longitudeDelta": 0.005620608899297424 }, "destino": "Unimet", "tarifa": "1000", "banco": "Provincial", "hora": "2019-06-27T07:00:00-04:30", "cantPasajeros": "1", "vehiculo": "Carro", "estado": "Pedida", "pasajero": "5d091bee68ab9f0017cb51f9", "creacionCola": "2019-06-21T09:16:44-04:30" }
-            ],
+            currentUser: {
+                userId: undefined,
+                userEmail: undefined
+            },
+            historial: null,
             selected: null
+        }
+
+        this.socketTerminarCola = SockectIOClient('https://colapp-asa.herokuapp.com/terminarcola', {
+            transports: ['websocket'],
+            forceNew: true
+        });
+    }
+
+    async componentWillMount() {
+        await this.getCurrentUser();
+        await this._getColasTerminadas();
+    }
+
+    async getCurrentUser() {
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            this.setState({
+                currentUser: {
+                    userId: userId,
+                    userEmail: userEmail
+                }
+            })
+        } catch (error) {
+            console.warn(error)
+        }
+    }
+
+    async _getColasTerminadas() {
+        try {
+            var url = `https://colapp-asa.herokuapp.com/pasajero/verHistorial/${this.state.currentUser.userId}`;
+
+            let response = await axios.get(url);
+
+            if (response.data.success) {
+                this.setState({
+                    loaded: true,
+                    historial: response.data.data
+                })
+            }
+
+            return response.data.success
+
+        } catch (error) {
+            return false
         }
     }
 
     componentDidMount() {
-
+        this.socketTerminarCola.on('Terminar Cola', (obj) => {
+            if (!!obj.conductor && !!obj.pasajero) {
+                if (obj.pasajero == this.state.currentUser.userId) {
+                    this._getColasTerminadas()
+                }
+            }
+        })
     }
 
     _itemSelected(selection) {
@@ -93,9 +147,16 @@ class HistorialPasajero extends React.Component {
                     <View style={{ height: 20 }}>
                         <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.selected.cantPasajeros}</Text>
                     </View>
-                    <View style={{ marginTop: 20, alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => this._itemSelected(null)}><Icon name="arrow-round-back" style={{ color: '#E6890F', fontSize: 100 }} /></TouchableOpacity>
+
+                    <View style={{ height: 20 }}>
+                        <Text note style={{ marginLeft: 20 }}>Conductor: {this.state.selected.c.email}</Text>
                     </View>
+
+                    <Container>
+                        <Content style={{ margin: width * 0.05, height: height * 0.3 }}>
+                            <Button style={styles.buttonBack} full light onPress={() => this._itemSelected(null)}><Icon name="angle-left" style={{ color: 'white', fontSize: width * 0.1, marginRight: 10 }} /><Text style={{ fontSize: height * 0.03, color: 'white' }}>Atrás</Text></Button>
+                        </Content>
+                    </Container>
                 </View>
             )
         } else {
@@ -104,6 +165,13 @@ class HistorialPasajero extends React.Component {
                     data={this.state.historial}
                     renderItem={({ item }) =>
                         <ListItem
+                            leftIcon={<Icon name='hourglass-end' size={width * 0.1} />}
+                            rightIcon={<Icon name='check-circle' size={width * 0.1} />}
+                            containerStyle={{
+                                backgroundColor: 'gray',
+                                borderBottomWidth: 2,
+                                marginTop: 2
+                            }}
                             title={item.destino}
                             subtitle={moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}
                             onPress={() => this._itemSelected(item)}
@@ -137,5 +205,11 @@ const styles = StyleSheet.create({
         right: 0,
         ...StyleSheet.absoluteFillObject,
         flex: 1
+    },
+    buttonBack: {
+        height: height * 0.1,
+        marginBottom: height * 0.02,
+        borderRadius: 5,
+        backgroundColor: 'gray'
     }
 })
