@@ -4,7 +4,8 @@ import {
     TouchableOpacity,
     Dimensions
 } from 'react-native';
-import { Text, Left, Body, Header, Icon, Title, Button } from 'native-base';
+import { Text, Left, Body, Header, Title, Button } from 'native-base';
+import IconVector from 'react-native-vector-icons/Entypo';
 const { width, height } = Dimensions.get('window')
 
 class MenuButton extends React.Component {
@@ -14,7 +15,7 @@ class MenuButton extends React.Component {
             <Button transparent
                 onPress={() => { this.props.navigation.openDrawer() }}
             >
-                <Icon name='menu' style={{fontSize: 40}}/>
+                <IconVector name='menu' color="white" size={width*0.1} />
             </Button>
         )
     }

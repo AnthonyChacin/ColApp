@@ -74,6 +74,25 @@ class ColasAceptadasConductor extends React.Component {
             if (!!obj.conductor && !!obj.pasajero) {
                 if (obj.conductor == this.state.currentUser.userId) {
                     this._getColasAceptadas()
+                    ToastAndroid.show('El pasajero ha marcado la cola como finalizada.', ToastAndroid.SHORT);
+                    this.setState({
+                        selected: {
+                            _id: this.state.selected._id,
+                            origen: this.state.selected.origen,
+                            destino: this.state.selected.destino,
+                            tarifa: this.state.selected.tarifa,
+                            banco: this.state.selected.banco,
+                            hora: this.state.selected.hora,
+                            cantPasajeros: this.state.selected.cantPasajeros,
+                            vehiculo: this.state.selected.vehiculo,
+                            referencia: this.state.selected.referencia,
+                            estado: "Terminada",
+                            p: {
+                                _id: this.state.selected.p._id,
+                                email: this.state.selected.p.email
+                            }
+                        }
+                    })
                 }
             }
         })
