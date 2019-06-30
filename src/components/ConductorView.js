@@ -14,6 +14,12 @@ class ConductorView extends React.Component {
     super(props)
   }
 
+  componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', () =>{
+      BackHandler.exitApp();
+    })
+  }
+
   render() {
     return (
       <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>

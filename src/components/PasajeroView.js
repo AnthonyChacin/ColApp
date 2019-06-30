@@ -10,6 +10,12 @@ class PasajeroView extends React.Component {
   static navigationOptions = {
     header: null
   }
+
+  componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', () =>{
+      BackHandler.exitApp();
+    })
+  }
   
   render() {
     return (
