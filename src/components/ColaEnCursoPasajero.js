@@ -8,7 +8,7 @@ import {
     ToastAndroid
 } from 'react-native';
 import MapView from 'react-native-maps';
-import { Container, View, Text, Body, ListItem, CheckBox, Icon } from 'native-base';
+import { Container, View, Text, Body, ListItem, CheckBox, Icon, Button } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -199,95 +199,138 @@ class ColaEnCursoPasajero extends React.Component {
                     </View>
                 )}
                 {!!this.state.cola && (
-                    <View style={{ marginTop: 0, marginBottom: 20 }}>
-                        <View style={styles.Container}>
-                            <MapView style={styles.map}
-                                region={{
-                                    latitude: this.state.cola.origen.latitude,
-                                    longitude: this.state.cola.origen.longitude,
-                                    latitudeDelta: this.state.cola.origen.latitudeDelta,
-                                    longitudeDelta: this.state.cola.origen.longitudeDelta
-                                }}>
-                                <MapView.Marker
-                                    coordinate={{
+                    ((!!this.state.puntoEncuentro.idCola && !!this.state.puntoEncuentro.referencia && this.state.puntoEncuentro.idCola == this.state.cola._id) ?
+                        (<View style={{ marginTop: 0, marginBottom: 20 }}>
+                            <View style={styles.Container}>
+                                <MapView style={styles.map}
+                                    region={{
                                         latitude: this.state.cola.origen.latitude,
-                                        longitude: this.state.cola.origen.longitude
+                                        longitude: this.state.cola.origen.longitude,
+                                        latitudeDelta: this.state.cola.origen.latitudeDelta,
+                                        longitudeDelta: this.state.cola.origen.longitudeDelta
                                     }}>
-                                </MapView.Marker>
-                            </MapView>
-                        </View>
-                        <Text note style={{ marginLeft: 10, height: 20, marginTop: 0 }}>Punto de encuentro</Text>
-                        <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Destino: {this.state.cola.destino}</Text>
-                        </View>
-                        <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Tarifa: {this.state.cola.tarifa} Bs.</Text>
-                        </View>
-
-                        <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Fecha y Hora: {moment(`${this.state.cola.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
-                        </View>
-
-                        <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Vehículo: {this.state.cola.vehiculo}</Text>
-                        </View>
-
-                        <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Banco: {this.state.cola.banco}</Text>
-                            <Text></Text>
-                        </View>
-
-                        <View style={{ height: 20 }}>
-                            <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.cola.cantPasajeros}</Text>
-                        </View>
-                        <View style={{ height: 20 }}>
-                            {(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor')
-                                ?
-                                <Text note style={{ marginLeft: 20, fontSize: 12 }}>Conductor: {this.state.cola.c.email}</Text>
-                                :
-                                <Text note style={{ marginLeft: 20 }}>Conductor: esperando por alguno ...</Text>
-                            }
-                        </View>
-                        <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={(this.state.cola.estado == 'Pedida' || this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor') ? true : false} color="#E6880F" />
-                            <Body>
-                                <Text style={{ color: 'white' }}>Pedida</Text>
-                            </Body>
-                        </ListItem>
-                        <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor') ? true : false} color="#E6880F" />
-                            <Body>
-                                <Text style={{ color: 'white' }}>Aceptada</Text>
-                            </Body>
-                        </ListItem>
-                        <ListItem style={{ marginLeft: 1 }}>
-                            <CheckBox checked={this.state.cola.estado == 'LlegoConductor' ? true : false} color="#E6880F" />
-                            <Body>
-                                <Text style={{ color: 'white' }}>El conductor llegó</Text>
-                            </Body>
-                        </ListItem>
-                        <View style={{ height: 30, alignItems: 'center', marginBottom: 30 }}>
-                            {this.state.cola.estado == "LlegoConductor" && (
-                                <TouchableOpacity
-                                    onPress={() => this._terminarCola(this.state.cola._id, this.state.cola.c._id)}
-                                    style={{
-
-                                        borderColor: 'rgba(0,0,0,0.2)',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        width: 100,
-                                        height: 30,
-                                        backgroundColor: '#E6880F',
-                                        borderRadius: 50,
-                                        marginBottom: 20,
-                                        marginTop: 10
-                                    }}
+                                    <MapView.Marker
+                                        coordinate={{
+                                            latitude: this.state.cola.origen.latitude,
+                                            longitude: this.state.cola.origen.longitude
+                                        }}>
+                                    </MapView.Marker>
+                                </MapView>
+                            </View>
+                            <Text note style={{ marginLeft: 20, height: 20, marginRight: 20, alignSelf: 'center' }}>Ubicación actual del pasajero</Text>
+                            <IconVector color="#E6880F" style={{ alignSelf: 'center', marginBottom: width * 0.05, marginTop: width * 0.05 }} name="map-signs" size={width * 0.1} />
+                            <View style={{
+                                alignItems: 'center',
+                            }}>
+                                <TouchableOpacity><Text style={{ alignSelf: 'center', color: 'white', marginLeft: width*0.05, marginRight: width*0.05, textAlign: 'center' }}>{this.state.puntoEncuentro.referencia}</Text></TouchableOpacity>
+                                <Button
+                                    style={styles.back}
+                                    onPress={() => this.setState({
+                                        puntoEncuentro: {
+                                            idCola: undefined,
+                                            referencia: undefined
+                                        }
+                                    })}
                                 >
-                                    <Icon name={"checkmark-circle"} size={30} color="#01a699" />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                    </View>
+                                    <IconVector style={{ color: '#E6880F', marginLeft: width * 0.08 }} name="angle-left" size={width * 0.08} />
+                                </Button>
+                            </View>
+                        </View>)
+                        : (
+                            <View style={{ marginTop: 0, marginBottom: 20 }}>
+                                <View style={styles.Container}>
+                                    <MapView style={styles.map}
+                                        region={{
+                                            latitude: this.state.cola.origen.latitude,
+                                            longitude: this.state.cola.origen.longitude,
+                                            latitudeDelta: this.state.cola.origen.latitudeDelta,
+                                            longitudeDelta: this.state.cola.origen.longitudeDelta
+                                        }}>
+                                        <MapView.Marker
+                                            coordinate={{
+                                                latitude: this.state.cola.origen.latitude,
+                                                longitude: this.state.cola.origen.longitude
+                                            }}>
+                                        </MapView.Marker>
+                                    </MapView>
+                                </View>
+                                <Button
+                                    onPress={() => this._selectedPuntoEncuentro(this.state.cola._id, this.state.cola.referencia)}
+                                    style={styles.buttonPE} transparent><IconVector style={{ color: '#E6880F' }} name="walking" size={width * 0.08} /><Text style={{ color: '#E6880F' }}>Punto de encuentro</Text><IconVector style={{ color: '#E6880F' }} name="car-side" size={width * 0.08} />
+                                </Button>
+                                <View style={{ height: 20 }}>
+                                    <Text note style={{ marginLeft: 20 }}>Destino: {this.state.cola.destino}</Text>
+                                </View>
+                                <View style={{ height: 20 }}>
+                                    <Text note style={{ marginLeft: 20 }}>Tarifa: {this.state.cola.tarifa} Bs.</Text>
+                                </View>
+
+                                <View style={{ height: 20 }}>
+                                    <Text note style={{ marginLeft: 20 }}>Fecha y Hora: {moment(`${this.state.cola.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
+                                </View>
+
+                                <View style={{ height: 20 }}>
+                                    <Text note style={{ marginLeft: 20 }}>Vehículo: {this.state.cola.vehiculo}</Text>
+                                </View>
+
+                                <View style={{ height: 20 }}>
+                                    <Text note style={{ marginLeft: 20 }}>Banco: {this.state.cola.banco}</Text>
+                                    <Text></Text>
+                                </View>
+
+                                <View style={{ height: 20 }}>
+                                    <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: {this.state.cola.cantPasajeros}</Text>
+                                </View>
+                                <View style={{ height: 20 }}>
+                                    {(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor')
+                                        ?
+                                        <Text note style={{ marginLeft: 20, fontSize: 12 }}>Conductor: {this.state.cola.c.email}</Text>
+                                        :
+                                        <Text note style={{ marginLeft: 20 }}>Conductor: esperando por alguno ...</Text>
+                                    }
+                                </View>
+                                <ListItem style={{ marginLeft: 1 }}>
+                                    <CheckBox checked={(this.state.cola.estado == 'Pedida' || this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor') ? true : false} color="#E6880F" />
+                                    <Body>
+                                        <Text style={{ color: 'white' }}>Pedida</Text>
+                                    </Body>
+                                </ListItem>
+                                <ListItem style={{ marginLeft: 1 }}>
+                                    <CheckBox checked={(this.state.cola.estado == 'Aceptada' || this.state.cola.estado == 'LlegoConductor') ? true : false} color="#E6880F" />
+                                    <Body>
+                                        <Text style={{ color: 'white' }}>Aceptada</Text>
+                                    </Body>
+                                </ListItem>
+                                <ListItem style={{ marginLeft: 1 }}>
+                                    <CheckBox checked={this.state.cola.estado == 'LlegoConductor' ? true : false} color="#E6880F" />
+                                    <Body>
+                                        <Text style={{ color: 'white' }}>El conductor llegó</Text>
+                                    </Body>
+                                </ListItem>
+                                <View style={{ height: 30, alignItems: 'center', marginBottom: 30 }}>
+                                    {this.state.cola.estado == "LlegoConductor" && (
+                                        <TouchableOpacity
+                                            onPress={() => this._terminarCola(this.state.cola._id, this.state.cola.c._id)}
+                                            style={{
+
+                                                borderColor: 'rgba(0,0,0,0.2)',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: 100,
+                                                height: 30,
+                                                backgroundColor: '#E6880F',
+                                                borderRadius: 50,
+                                                marginBottom: 20,
+                                                marginTop: 10
+                                            }}
+                                        >
+                                            <Icon name={"checkmark-circle"} size={30} color="#01a699" />
+                                        </TouchableOpacity>
+                                    )}
+                                </View>
+                            </View>
+                        )
+                    )
                 )}
             </Container>
         )
@@ -330,5 +373,29 @@ const styles = StyleSheet.create({
         right: 0,
         ...StyleSheet.absoluteFillObject,
         flex: 1
-    }
+    },
+    buttonPE: {
+        paddingHorizontal: 16,
+        paddingTop: 0,
+        paddingBottom: 0,
+        backgroundColor: "white",
+        alignItems: "center",
+        color: "white",
+        alignSelf: "center",
+        marginTop: 5,
+        marginBottom: 0,
+        borderRadius: 25,
+        width: (width * 0.8)
+    },
+    back: {
+        marginTop: height * 0.1,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: "white",
+        color: "white",
+        alignItems: 'center',
+        alignSelf: "center",
+        borderRadius: 25,
+        width: (width * 0.2)
+    },
 })

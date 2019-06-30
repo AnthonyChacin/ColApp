@@ -209,7 +209,7 @@ class ColasAceptadasConductor extends React.Component {
                                 flex: 1,
                                 alignItems: 'center',
                             }}>
-                                <TouchableOpacity><Text style={{ alignSelf: 'center', color: 'rgb(20,20,20)', width: width * 0.85 }}>{this.state.puntoEncuentro.referencia}</Text></TouchableOpacity>
+                                <TouchableOpacity><Text style={{ alignSelf: 'center', color: 'rgb(20,20,20)', marginLeft: width*0.05, marginRight: width*0.05, textAlign: 'center' }}>{this.state.puntoEncuentro.referencia}</Text></TouchableOpacity>
                                 <Button
                                     style={styles.back}
                                     onPress={() => this.setState({
