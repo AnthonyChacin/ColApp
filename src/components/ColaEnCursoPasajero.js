@@ -32,7 +32,11 @@ class ColaEnCursoPasajero extends React.Component {
             },
             cola: null,
             isChangeCurrentTime: true,
-            terminada: false
+            terminada: false,
+            puntoEncuentro: {
+                idCola: undefined,
+                referencia: undefined
+            }
         }
 
         this.socketColaPedida = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
@@ -55,6 +59,15 @@ class ColaEnCursoPasajero extends React.Component {
             forceNew: true
         });
 
+    }
+
+    _selectedPuntoEncuentro(idCola, referencia) {
+        this.setState({
+            puntoEncuentro: {
+                idCola: idCola,
+                referencia: referencia
+            }
+        })
     }
 
     async componentWillMount() {

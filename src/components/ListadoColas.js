@@ -7,13 +7,14 @@ import {
     ToastAndroid
 } from 'react-native';
 import MapView from 'react-native-maps';
-import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body } from 'native-base';
+import { Container, DeckSwiper, Card, CardItem, View, Text, Left, Body, Button } from 'native-base';
 import axios from 'axios';
 import SockectIOClient from 'socket.io-client';
 import PubNubReact from 'pubnub-react';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import IconVector from 'react-native-vector-icons/FontAwesome5';
+import { ListItem } from 'react-native-elements'
 
 const { width, height } = Dimensions.get('window')
 const halfHeight = height / 3
@@ -33,7 +34,11 @@ class ListadoColas extends React.Component {
         this.state = {
             loaded: false,
             colas: null,
-            currentUser: { userId: undefined, userEmail: undefined }
+            currentUser: { userId: undefined, userEmail: undefined },
+            puntoEncuentro: {
+                idCola: undefined,
+                referencia: undefined
+            }
         }
 
         this.socketColaPedida = SockectIOClient('https://colapp-asa.herokuapp.com/colapedida', {
@@ -78,6 +83,15 @@ class ListadoColas extends React.Component {
         })
     }
 
+    _selectedPuntoEncuentro(idCola, referencia) {
+        this.setState({
+            puntoEncuentro: {
+                idCola: idCola,
+                referencia: referencia
+            }
+        })
+    }
+
     render() {
         console.warn(this.state.colas)
         return (
@@ -97,73 +111,117 @@ class ListadoColas extends React.Component {
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
-                            <Card>
-                                <CardItem>
-                                    <View style={styles.Container}>
-                                        <MapView style={styles.map}
-                                            region={{
-                                                latitude: item.origen.latitude,
-                                                longitude: item.origen.longitude,
-                                                latitudeDelta: item.origen.latitudeDelta,
-                                                longitudeDelta: item.origen.longitudeDelta
-                                            }}>
-                                            <MapView.Marker
-                                                coordinate={{
+                            ((!!this.state.puntoEncuentro.idCola && !!this.state.puntoEncuentro.referencia && this.state.puntoEncuentro.idCola == item._id) ?
+                                <Card>
+                                    <CardItem>
+                                        <View style={styles.Container}>
+                                            <MapView style={styles.map}
+                                                region={{
                                                     latitude: item.origen.latitude,
-                                                    longitude: item.origen.longitude
+                                                    longitude: item.origen.longitude,
+                                                    latitudeDelta: item.origen.latitudeDelta,
+                                                    longitudeDelta: item.origen.longitudeDelta
                                                 }}>
-                                            </MapView.Marker>
-                                        </MapView>
-                                    </View>
-                                </CardItem>
-                                <Container style={{ flex: 1 }}>
-                                    <Text note style={{ marginLeft: 20, height: 20 }}>Ubicación actual del pasajero</Text>
-                                    <CardItem style={{ height: 30 }}>
-                                        <Text>Destino: </Text>
-                                        <Text style={{ color: '#E6880F' }}>{item.destino}</Text>
+                                                <MapView.Marker
+                                                    coordinate={{
+                                                        latitude: item.origen.latitude,
+                                                        longitude: item.origen.longitude
+                                                    }}>
+                                                </MapView.Marker>
+                                            </MapView>
+                                        </View>
                                     </CardItem>
-
-                                    <CardItem cardBody style={{ height: 20 }}>
-                                        <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
-                                        <Text style={{ fontSize: 12 }}> {item.p.email} </Text>
-                                    </CardItem>
-
-                                    <CardItem cardBody style={{ height: 20 }}>
-                                        <Text note style={{ marginLeft: 20 }}>Tarifa: </Text>
-                                        <Text>{item.tarifa} Bs.</Text>
-                                    </CardItem>
-
-                                    <CardItem cardBody style={{ height: 20 }}>
-                                        <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
-                                        <Text>{moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
-                                    </CardItem>
-
-                                    <CardItem cardBody style={{ height: 20 }}>
-                                        <Text note style={{ marginLeft: 20 }}>Vehículo: </Text>
-                                        <Text>{item.vehiculo}</Text>
-                                    </CardItem>
-
-                                    <CardItem cardBody style={{ height: 20 }}>
-                                        <Text note style={{ marginLeft: 20 }}>Banco: </Text>
-                                        <Text>{item.banco}</Text>
-                                    </CardItem>
-
-                                    <CardItem cardBody style={{ height: 20 }}>
-                                        <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: </Text>
-                                        <Text>{item.cantPasajeros}</Text>
-                                    </CardItem>
-
-                                    <CardItem style={{ justifyContent: 'center' }}>
-                                        <TouchableOpacity
-                                            disabled={this.state.currentUser.userEmail == item.p.email ? true : false}
-                                            style={this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
-                                            onPress={() => this.darCola(item._id, item.p._id)}
+                                    <Container style={styles.puntoEncuentro}>
+                                        <Text note style={{ marginLeft: 20, height: 20, marginRight: 20 }}>Ubicación actual del pasajero</Text>
+                                        <IconVector color="#E6880F" style={{ marginBottom: width * 0.05, marginTop: width * 0.05 }} name="map-signs" size={width * 0.1} />
+                                        <CardItem style={{ height: 30, alignSelf: 'center' }}>
+                                            <TouchableOpacity><Text style={{ alignSelf: 'center', color: 'rgb(20,20,20)', width: width * 0.85 }}>{item.referencia}</Text></TouchableOpacity>
+                                        </CardItem>
+                                        <Button
+                                            style={styles.back}
+                                            onPress={() => this.setState({
+                                                puntoEncuentro: {
+                                                    idCola: undefined,
+                                                    referencia: undefined
+                                                }
+                                            })}
                                         >
-                                            <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
-                                        </TouchableOpacity>
+                                            <IconVector style={{ color: 'white', marginLeft: width * 0.08 }} name="angle-left" size={width * 0.08} />
+                                        </Button>
+                                    </Container>
+                                </Card>
+                                :
+                                <Card>
+                                    <CardItem>
+                                        <View style={styles.Container}>
+                                            <MapView style={styles.map}
+                                                region={{
+                                                    latitude: item.origen.latitude,
+                                                    longitude: item.origen.longitude,
+                                                    latitudeDelta: item.origen.latitudeDelta,
+                                                    longitudeDelta: item.origen.longitudeDelta
+                                                }}>
+                                                <MapView.Marker
+                                                    coordinate={{
+                                                        latitude: item.origen.latitude,
+                                                        longitude: item.origen.longitude
+                                                    }}>
+                                                </MapView.Marker>
+                                            </MapView>
+                                        </View>
                                     </CardItem>
-                                </Container>
-                            </Card>
+                                    <Container style={{ flex: 1 }}>
+                                        <Button
+                                            onPress={() => this._selectedPuntoEncuentro(item._id, item.referencia)}
+                                            style={styles.buttonPE} transparent><IconVector style={{ color: 'white' }} name="walking" size={width * 0.08} /><Text style={{ color: 'white' }}>Punto de encuentro</Text><IconVector style={{ color: 'white' }} name="car-side" size={width * 0.08} />
+                                        </Button>
+                                        <CardItem style={{ height: 30 }}>
+                                            <Text>Destino: </Text>
+                                            <Text style={{ color: '#E6880F' }}>{item.destino}</Text>
+                                        </CardItem>
+
+                                        <CardItem cardBody style={{ height: 20 }}>
+                                            <Text note style={{ marginLeft: 20 }}>Pasajero: </Text>
+                                            <Text style={{ fontSize: 12 }}> {item.p.email} </Text>
+                                        </CardItem>
+
+                                        <CardItem cardBody style={{ height: 20 }}>
+                                            <Text note style={{ marginLeft: 20 }}>Tarifa: </Text>
+                                            <Text>{item.tarifa} Bs.</Text>
+                                        </CardItem>
+
+                                        <CardItem cardBody style={{ height: 20 }}>
+                                            <Text note style={{ marginLeft: 20 }}>Fecha y Hora: </Text>
+                                            <Text>{moment(`${item.hora}`).format('DD-MM-YYYY, hh:mm a')}</Text>
+                                        </CardItem>
+
+                                        <CardItem cardBody style={{ height: 20 }}>
+                                            <Text note style={{ marginLeft: 20 }}>Vehículo: </Text>
+                                            <Text>{item.vehiculo}</Text>
+                                        </CardItem>
+
+                                        <CardItem cardBody style={{ height: 20 }}>
+                                            <Text note style={{ marginLeft: 20 }}>Banco: </Text>
+                                            <Text>{item.banco}</Text>
+                                        </CardItem>
+
+                                        <CardItem cardBody style={{ height: 20 }}>
+                                            <Text note style={{ marginLeft: 20 }}>Cantidad de Pasajeros: </Text>
+                                            <Text>{item.cantPasajeros}</Text>
+                                        </CardItem>
+
+                                        <CardItem style={{ justifyContent: 'center' }}>
+                                            <TouchableOpacity
+                                                disabled={this.state.currentUser.userEmail == item.p.email ? true : false}
+                                                style={this.state.currentUser.userEmail == item.p.email ? styles.buttonDisabled : styles.button}
+                                                onPress={() => this.darCola(item._id, item.p._id)}
+                                            >
+                                                <Text style={{ color: "white", fontSize: 20 }}>Dar Cola</Text>
+                                            </TouchableOpacity>
+                                        </CardItem>
+                                    </Container>
+                                </Card>
+                            )
                         }
                     />
                 )}
@@ -241,6 +299,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(20,20,20)',
         ...StyleSheet.absoluteFillObject,
     },
+    puntoEncuentro: {
+        flex: 1,
+        alignItems: 'center'
+    },
     map: {
         left: 0,
         right: 0,
@@ -277,6 +339,30 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 2,
         marginBottom: 10,
+        borderRadius: 25,
+        width: (width * 0.8)
+    },
+    back: {
+        marginTop: height * 0.1,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: "gray",
+        alignItems: "center",
+        color: "white",
+        alignSelf: "center",
+        borderRadius: 25,
+        width: (width * 0.2)
+    },
+    buttonPE: {
+        paddingHorizontal: 16,
+        paddingTop: 0,
+        paddingBottom: 0,
+        backgroundColor: "gray",
+        alignItems: "center",
+        color: "white",
+        alignSelf: "center",
+        marginTop: 0,
+        marginBottom: 0,
         borderRadius: 25,
         width: (width * 0.8)
     },
