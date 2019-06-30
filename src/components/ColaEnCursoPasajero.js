@@ -319,12 +319,13 @@ class ColaEnCursoPasajero extends React.Component {
                                                     justifyContent: 'center',
                                                     backgroundColor: '#E6880F',
                                                     borderRadius: 50,
-                                                    width: width*0.4,
-                                                    marginRight: 0
+                                                    width: width * 0.4,
+                                                    marginRight: 0,
+                                                    marginBottom: 1
                                                 }}
                                             >
-                                                <Text>Finalizar</Text>
-                                                <IconVector name={"check-circle"} size={30} color="white" />
+                                                <Text style={{ marginRight: 0, paddingRight: 7, paddingLeft: 7 }}>Finalizar</Text>
+                                                <IconVector style={{ marginLeft: 0 }} name={"check-circle"} size={30} color="white" />
                                             </Button>
                                         )}
                                     </Right>
