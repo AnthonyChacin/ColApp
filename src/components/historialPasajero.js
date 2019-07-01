@@ -70,11 +70,13 @@ class HistorialPasajero extends React.Component {
 
             let response = await axios.get(url);
 
-            if (response.data.success && response.data.data.length > 0) {
-                this.setState({
+            if (response.data.success) {
+                this.setState(previousState => (
+                    {
                     loading: false,
-                    historial: response.data.data
-                })
+                    historial: (response.data.data == previousState.historial ? previousState.historial : response.data.data)
+                    }
+                ))
 
             } else {
                 this.setState({
@@ -96,6 +98,10 @@ class HistorialPasajero extends React.Component {
                 }
             }
         })
+
+        setInterval(() => (
+            this._getColasTerminadas()
+        ), 1000);
     }
 
     _itemSelected(selection) {
@@ -165,7 +171,7 @@ class HistorialPasajero extends React.Component {
                     </Container>
                 </View>
             )
-        } else if (this.state.historial != null) {
+        } else if (this.state.historial != null && this.state.historial.length > 0) {
             return (
                 <FlatList
                     data={this.state.historial}
@@ -185,7 +191,7 @@ class HistorialPasajero extends React.Component {
                     }
                 />
             )
-        } else if (this.state.historial == null && this.state.loading == false && this.state.selected == null) {
+        } else if (this.state.loading == false && this.state.selected == null && (this.state.historial == null || (!!this.state.historial && this.state.historial.length == 0))) {
             return (
                 <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
                     <View style={styles.container}>

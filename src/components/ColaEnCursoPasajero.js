@@ -31,8 +31,6 @@ class ColaEnCursoPasajero extends React.Component {
                 userEmail: undefined
             },
             cola: null,
-            isChangeCurrentTime: true,
-            terminada: false,
             puntoEncuentro: {
                 idCola: undefined,
                 referencia: undefined
@@ -99,13 +97,8 @@ class ColaEnCursoPasajero extends React.Component {
         })
 
         setInterval(() => (
-            this.setState(previousState => (
-                {
-                    isChangeCurrentTime: !previousState.isChangeCurrentTime
-                }
-            ))
+            this._getColasEnCurso()
         ), 1000);
-
     }
 
     async getCurrentUser() {
@@ -136,8 +129,6 @@ class ColaEnCursoPasajero extends React.Component {
             if (request.data.success) {
                 this.socketTerminarCola.emit('Terminar Cola', { success: true, pasajero: this.state.currentUser.userId, conductor: idConductor })
                 ToastAndroid.show('Cola terminada con éxito, será enviada al historial', ToastAndroid.SHORT);
-
-                this.setState({ terminada: true })
             }
 
             return request.data.success
@@ -156,10 +147,12 @@ class ColaEnCursoPasajero extends React.Component {
             let response = await axios.get(url);
             console.warn(response)
             if (response.data.success) {
-                this.setState({
-                    loaded: true,
-                    cola: response.data.data
-                })
+                this.setState(previousState => (
+                    {
+                        loaded: true,
+                        cola: (response.data.data == previousState.cola ? previousState.cola : response.data.data)
+                    }
+                ))
             }
 
             return response.data.success
@@ -170,20 +163,6 @@ class ColaEnCursoPasajero extends React.Component {
     }
 
     render() {
-
-        if (!this.state.isChangeCurrentTime) {
-            let currentTime = moment().format()
-            if (!!this.state.cola) {
-                if (currentTime > moment(`${this.state.cola.hora}`).format() && this.state.cola.estado == "Pedida") {
-                    this._getColasEnCurso()
-                }
-            }
-
-            if (this.state.terminada) {
-                this._getColasEnCurso()
-                this.setState({ terminada: false })
-            }
-        }
 
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>

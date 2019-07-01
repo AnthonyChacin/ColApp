@@ -75,27 +75,33 @@ class ColasAceptadasConductor extends React.Component {
                 if (obj.conductor == this.state.currentUser.userId) {
                     this._getColasAceptadas()
                     ToastAndroid.show('El pasajero ha marcado la cola como finalizada.', ToastAndroid.SHORT);
-                    this.setState({
-                        selected: {
-                            _id: this.state.selected._id,
-                            origen: this.state.selected.origen,
-                            destino: this.state.selected.destino,
-                            tarifa: this.state.selected.tarifa,
-                            banco: this.state.selected.banco,
-                            hora: this.state.selected.hora,
-                            cantPasajeros: this.state.selected.cantPasajeros,
-                            vehiculo: this.state.selected.vehiculo,
-                            referencia: this.state.selected.referencia,
-                            estado: "Terminada",
-                            p: {
-                                _id: this.state.selected.p._id,
-                                email: this.state.selected.p.email
+                    if(this.state.selected != null){
+                        this.setState({
+                            selected: {
+                                _id: this.state.selected._id,
+                                origen: this.state.selected.origen,
+                                destino: this.state.selected.destino,
+                                tarifa: this.state.selected.tarifa,
+                                banco: this.state.selected.banco,
+                                hora: this.state.selected.hora,
+                                cantPasajeros: this.state.selected.cantPasajeros,
+                                vehiculo: this.state.selected.vehiculo,
+                                referencia: this.state.selected.referencia,
+                                estado: "Terminada",
+                                p: {
+                                    _id: this.state.selected.p._id,
+                                    email: this.state.selected.p.email
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
         })
+
+        setInterval(() => (
+            this._getColasAceptadas()
+        ), 1000);
     }
 
     async componentWillMount() {
@@ -121,12 +127,14 @@ class ColasAceptadasConductor extends React.Component {
 
             let response = await axios.get(url);
             console.warn(response.data.data)
-            if (response.data.success && response.data.data.length > 0) {
+            if (response.data.success) {
 
-                this.setState({
-                    loaded: true,
-                    colasAceptadas: response.data.data
-                })
+                this.setState(previousState => (
+                    {
+                        loaded: true,
+                        colasAceptadas: (response.data.data == previousState.colasAceptadas ? previousState.colasAceptadas : response.data.data)
+                    }
+                ))
             } else {
                 this.setState({
                     loaded: true
@@ -186,7 +194,7 @@ class ColasAceptadasConductor extends React.Component {
     }
 
     render() {
-        if (this.state.loaded && this.state.selected == null && this.state.colasAceptadas == null) {
+        if (this.state.loaded && this.state.selected == null && (this.state.colasAceptadas == null || (!!this.state.colasAceptadas && this.state.colasAceptadas.length == 0))) {
             return (
                 <View style={styles.container}>
                     <IconVector style={{ margin: 10, color: 'white' }} size={50} name="car-crash" />
@@ -204,7 +212,7 @@ class ColasAceptadasConductor extends React.Component {
             console.warn(this.state.selected.p.email)
             return (
                 <View style={{ height: (HEIGHT * 0.9), marginTop: 0 }}>
-                    {(!!this.state.puntoEncuentro.idCola && !!this.state.puntoEncuentro.referencia && this.state.puntoEncuentro.idCola == this.state.selected._id) ? (
+                    {(!!this.state.puntoEncuentro.idCola && !!this.state.puntoEncuentro.referencia && this.state.puntoEncuentro.idCola == this.state.selected._id  && this.state.colasAceptadas.length > 0) ? (
                         <Container>
                             <View style={styles.Container}>
                                 <MapView style={styles.map}

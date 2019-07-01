@@ -81,6 +81,10 @@ class ListadoColas extends React.Component {
                 this._getColas();
             }
         })
+
+        setInterval(() => (
+            this._getColas()
+        ), 5000);
     }
 
     _selectedPuntoEncuentro(idCola, referencia) {
@@ -96,7 +100,7 @@ class ListadoColas extends React.Component {
         console.warn(this.state.colas)
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>
-                {(this.state.loaded == true && this.state.colas == null) && (
+                {(this.state.loaded == true && (this.state.colas == null || (!!this.state.colas && this.state.colas.length == 0))) && (
                     <View style={styles.container}>
                         <IconVector style={{ margin: 10, color: 'white' }} size={50} name="thumbs-down" />
                         <Text note style={{ alignSelf: "center", color: "white" }}>Nadie ha pedido la cola</Text>
@@ -107,7 +111,7 @@ class ListadoColas extends React.Component {
                         <ActivityIndicator size='large' color="orange" style={{ padding: 20 }} />
                     </View>
                 )}
-                {(this.state.colas != null && !!this.state.currentUser.userEmail) && (
+                {(this.state.colas != null && !!this.state.currentUser.userEmail && this.state.colas.length > 0) && (
                     <DeckSwiper
                         dataSource={this.state.colas}
                         renderItem={item =>
@@ -236,11 +240,13 @@ class ListadoColas extends React.Component {
 
             let response = await axios.get(url);
 
-            if (response.data.success && response.data.data.length > 0) {
-                this.setState({
-                    loaded: true,
-                    colas: response.data.data
-                })
+            if (response.data.success) {
+                this.setState(previousState => (  
+                    {
+                        loaded: true,
+                        colas: (response.data.data == previousState.colas ? previousState.colas : response.data.data)
+                    }
+                ))
             } else {
                 this.setState({
                     loaded: true
