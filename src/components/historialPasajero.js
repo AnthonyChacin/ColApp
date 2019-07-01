@@ -101,7 +101,7 @@ class HistorialPasajero extends React.Component {
 
         setInterval(() => (
             this._getColasTerminadas()
-        ), 1000);
+        ), 30000);
     }
 
     _itemSelected(selection) {

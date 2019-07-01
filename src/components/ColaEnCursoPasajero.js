@@ -31,6 +31,8 @@ class ColaEnCursoPasajero extends React.Component {
                 userEmail: undefined
             },
             cola: null,
+            isChangeCurrentTime: true,
+            terminada: false,
             puntoEncuentro: {
                 idCola: undefined,
                 referencia: undefined
@@ -97,7 +99,11 @@ class ColaEnCursoPasajero extends React.Component {
         })
 
         setInterval(() => (
-            this._getColasEnCurso()
+            this.setState(previousState => (
+                {
+                    isChangeCurrentTime: !previousState.isChangeCurrentTime
+                }
+            ))
         ), 1000);
     }
 
@@ -129,6 +135,9 @@ class ColaEnCursoPasajero extends React.Component {
             if (request.data.success) {
                 this.socketTerminarCola.emit('Terminar Cola', { success: true, pasajero: this.state.currentUser.userId, conductor: idConductor })
                 ToastAndroid.show('Cola terminada con éxito, será enviada al historial', ToastAndroid.SHORT);
+
+                this.setState({ terminada: true })
+
             }
 
             return request.data.success
@@ -163,6 +172,20 @@ class ColaEnCursoPasajero extends React.Component {
     }
 
     render() {
+
+        if (!this.state.isChangeCurrentTime) {
+            let currentTime = moment().format()
+            if (!!this.state.cola) {
+                if (currentTime > moment(`${this.state.cola.hora}`).format() && this.state.cola.estado == "Pedida") {
+                    this._getColasEnCurso()
+                }
+            }
+
+            if (this.state.terminada) {
+                this._getColasEnCurso()
+                this.setState({ terminada: false })
+            }
+        }
 
         return (
             <Container style={{ backgroundColor: 'rgb(20,20,20)' }}>

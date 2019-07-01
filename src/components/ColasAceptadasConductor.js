@@ -101,7 +101,7 @@ class ColasAceptadasConductor extends React.Component {
 
         setInterval(() => (
             this._getColasAceptadas()
-        ), 1000);
+        ), 30000);
     }
 
     async componentWillMount() {

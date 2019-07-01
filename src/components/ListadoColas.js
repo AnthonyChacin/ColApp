@@ -84,7 +84,7 @@ class ListadoColas extends React.Component {
 
         setInterval(() => (
             this._getColas()
-        ), 5000);
+        ), 30000);
     }
 
     _selectedPuntoEncuentro(idCola, referencia) {

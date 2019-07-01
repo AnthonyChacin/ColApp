@@ -13,7 +13,13 @@ class PasajeroView extends React.Component {
 
   componentDidMount(){
     BackHandler.addEventListener('hardwareBackPress', () =>{
-      BackHandler.exitApp();
+      const parent = this.props.navigation.dangerouslyGetParent();
+      const isDrawerOpen = parent && parent.state && parent.state.isDrawerOpen;
+
+      if(!isDrawerOpen){
+        BackHandler.exitApp();
+      }
+      
     })
   }
   
